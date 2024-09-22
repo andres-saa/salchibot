@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="info.css">
+</head>
+<body>
+    <div class="container">
+        <div class="datos">
+
+            <img src="logo.png" alt="">
+            <input class="inputText" id="nombre" type="text" placeholder="Ingresa tu nombre">
+
+            <input class="inputText" id="telefono" type="text" placeholder="Ingresa tu teléfono">
+
+            <input class="inputText" id="direccion" type="text" placeholder="Ingresa tu dirección">
+
+            <div class="dropdown">
+                <input type="text" autocomplete="off" class="dropdown-input" placeholder="Selecciona una ciudad..." id="city-input">
+                <div class="dropdown-list" id="city-list">
+                    <!-- Los elementos se añadirán dinámicamente aquí -->
+                </div>
+            </div>
+            
+            <div class="dropdown">
+                <input type="text" autocomplete="off" class="dropdown-input" placeholder="Selecciona un barrio..." id="neighborhood-input">
+                <div class="dropdown-list" id="neighborhood-list">
+                </div>
+            </div>
+
+            <button id="finalize-button">Listo</button>
+
+        </div>
+    </div>
+
+    <script src="info.js"></script>
+</body>
+</html>

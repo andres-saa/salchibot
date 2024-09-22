@@ -1,0 +1,92 @@
+{
+    "clientes_registrados": {
+        "1234567": {
+            "nombre": "Andr\u00e9s",
+            "tel\u00e9fono": "3226892988",
+            "direcci\u00f3n": "calle 4 # 93-54",
+            "ciudad": "Bogot\u00e1",
+            "barrio": "Usaqu\u00e9n"
+        },
+        "7654321": {
+            "nombre": "Maria",
+            "tel\u00e9fono": "3101234567",
+            "direcci\u00f3n": "avenida 5 # 12-34",
+            "ciudad": "Cali",
+            "barrio": "Granada"
+        },
+        "8379847": {
+            "nombre": "andres",
+            "tel\u00e9fono": "3226892988",
+            "direcci\u00f3n": "calle 4 # 93-54",
+            "ciudad": "Bogot\u00e1",
+            "barrio": "Chapinero"
+        },
+        "6022017": {
+            "nombre": "andres",
+            "tel\u00e9fono": "3226892988",
+            "direcci\u00f3n": "calle 4 # 93-54",
+            "ciudad": "Bogot\u00e1",
+            "barrio": "Chapinero"
+        },
+        "2760460": {
+            "nombre": "andres",
+            "tel\u00e9fono": "3226892988",
+            "direcci\u00f3n": "calle 4 # 93-54",
+            "ciudad": "Bogot\u00e1",
+            "barrio": "Chapinero"
+        },
+        "7811975": {
+            "nombre": "andres",
+            "tel\u00e9fono": "3226892988",
+            "direcci\u00f3n": "calle 4 # 93-54",
+            "ciudad": "Bogot\u00e1",
+            "barrio": "Chapinero"
+        }
+    },
+    "productos_disponibles": [
+        {
+            "id": 1,
+            "nombre": "hamburguesa",
+            "precio": 12000
+        },
+        {
+            "id": 2,
+            "nombre": "pizza",
+            "precio": 18000
+        },
+        {
+            "id": 3,
+            "nombre": "perro caliente",
+            "precio": 10000
+        },
+        {
+            "id": 4,
+            "nombre": "papas fritas",
+            "precio": 5000
+        }
+    ],
+    "carrito": {
+        "1234567": [
+            {
+                "id": 1,
+                "nombre": "hamburguesa",
+                "precio": 12000,
+                "cantidad": 2
+            },
+            {
+                "id": 4,
+                "nombre": "papas fritas",
+                "precio": 5000,
+                "cantidad": 1
+            }
+        ],
+        "7654321": [
+            {
+                "id": 2,
+                "nombre": "pizza",
+                "precio": 18000,
+                "cantidad": 1
+            }
+        ]
+    }
+}
