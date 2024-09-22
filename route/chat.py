@@ -82,7 +82,7 @@ base = {
 class UserInput(BaseModel):
     answer: str  # Respuesta del usuario
     question: str  # Pregunta previa que se le hizo al usuario
-    client_id: int = None  # ID del cliente para verificar si está registrado
+    client_id: str = None  # ID del cliente para verificar si está registrado
 
 # Iniciar el archivo data.json si no existe
 def init_data():
