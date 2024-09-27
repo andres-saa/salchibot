@@ -3,6 +3,21 @@ import os
 import random
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
+from fastapi import Depends, HTTPException, Security
+from fastapi.security import APIKeyHeader
+import secrets
+
+
+
+API_KEY_NAME = "Authorization"
+api_key_header = APIKeyHeader(name=API_KEY_NAME, auto_error=False)
+
+def verify_api_key(api_key: str = Security(api_key_header)):
+    expected_api_key = os.getenv("API_SECRET_TOKEN")
+    print(expected_api_key)
+    if api_key != expected_api_key:
+        raise HTTPException(status_code=403, detail="Invalid API Key")
+    return api_key
 
 chat_router = APIRouter()
 
@@ -174,10 +189,10 @@ def match_pattern(user_input: str, client_id: str):
     update_last_response("Lo siento, no entiendo tu solicitud. ¿Puedes repetirla?",client_id)
     return "Lo siento, no entiendo tu solicitud. ¿Puedes repetirla?"
 
-@chat_router.post('/chat')
+@chat_router.post('/chat', dependencies=[Depends(verify_api_key)])
 def chatbot(userInput: UserInput):
     if not data_responses.get(userInput.client_id):
-        update_last_response('hola',userInput.client_id)
+        update_last_response('hola', userInput.client_id)
     response = match_pattern(userInput.answer, userInput.client_id)
     return {"response": response}
 

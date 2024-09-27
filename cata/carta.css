@@ -1,0 +1,265 @@
+*{
+    margin: 0;
+    padding: 0;
+    font-family: roboto;
+}
+
+
+h1{
+    color: #fff;
+    width: auto;
+    text-align: center;
+    font-weight: 900;
+    text-transform: uppercase;
+}
+
+#App{
+   
+    background-color:#ff6200;
+    min-height:100vh;
+}
+
+
+
+.products{
+    display: grid;
+    grid-template-columns: repeat(4,1fr);  
+    /* gap: 1rem; */
+    /* width: 100%; */
+    min-width:100%;
+    height: min-content;
+ 
+    /* margin: 0 auto; */
+}
+
+#cart-total{
+    font-size: 2rem;
+}
+
+.card_container{
+    /* padding: 1rem; */
+    background-color: red;
+    margin: .5rem;
+    overflow: hidden;
+
+    box-shadow: 0 0 .3rem rgba(0, 0, 0, .2);
+    background-color: white;
+    border-radius: .5rem;
+    
+}
+
+.product_card {
+    /* background-color: red; */
+    
+
+
+    
+
+    display: flex;
+    flex-direction: column;
+    /* overflow: hidden; */
+   
+    padding:1rem;
+    height: 100%;
+    /* margin: .5\2rem; */
+
+
+
+}
+
+.product_image{
+    width: 100%;
+    aspect-ratio: 1 / 1;
+}
+
+.product_name, .product_price{
+
+    font-size: .7rem;
+    font-weight: bold;
+    margin: 1rem 0;
+    
+}
+
+.product_price{
+    text-align: end;
+    font-size: 1rem;
+}
+
+.product_description{
+
+    font-size: .7rem;
+    /* font-weight: bold; */
+    text-transform: lowercase;
+    padding:  1rem 0;
+    
+    
+}
+
+@media (width<860px) {
+    .products{
+        grid-template-columns: repeat(3,1fr);
+    }
+}
+
+@media (width<650px) {
+    .products{
+        grid-template-columns: repeat(2,1fr);
+    }
+}
+
+.logo{
+    margin: 1rem auto;
+    width: 4rem;
+    
+}
+
+button{
+    cursor: pointer;
+}
+
+.cabezera{
+    display: flex;flex-direction:column;
+    position: sticky;
+    background-color: #ff6200;
+    width: 100%;
+    z-index: 900;
+    padding:  1rem 0;
+    left: 0;
+    top: 0;
+}
+
+.carousel{
+    display: flex;
+    justify-content: start;
+    /* gap: 1rem; */
+    transition: all .3s ease;
+    align-items: start;
+    padding: 0rem;
+    margin: 0;
+    
+   
+}
+
+.container_corousel{
+    overflow: hidden;
+    
+    margin: auto;
+    padding-top: 1rem;
+    padding-bottom: 4rem;
+    align-items: start;
+    width: 100%;
+    max-width: 900px;
+    /* background-color: red; */
+
+
+}
+
+
+.container_corousel button {
+    position: fixed;
+    padding: .3rem;
+    font-weight: bold;
+    border-radius: 1rem;
+    border: .3rem solid #ff6200 ;
+    background: black;
+    color: white;
+    width: 4rem;
+    aspect-ratio: 1 / 1  ;
+    top: calc(50vh - 1.5rem);
+    z-index: 900;
+   
+}
+
+#btn_atras{
+    left: -2rem;
+    text-align: right;
+    font-size: 1.4rem;
+   
+
+}
+
+#btn_adelante{
+    right: -2rem;
+    text-align: left;
+    font-size: 1.4rem;
+}
+
+i{
+    display: inline;
+}
+
+.selected{
+    
+    /* box-shadow: 0 0 10px rgb(255, 0, 0); */
+    /* opacity: .5; */
+    
+    transform: scale(1.02);
+    /* filter: brightness(1.05); */
+    background-color: rgba(30, 255, 0, 0.767);
+    
+
+}
+
+
+@keyframes parpadeo {
+
+    0%{
+        /* outline: 5px solid red; */
+        box-shadow: 0 0 10px rgb(255, 0, 0);
+    }
+
+    50%{
+        /* outline: 5px solid rgb(0, 0, 0);; */
+        box-shadow: 0 0 10px rgb(255, 0, 0);
+  
+        transform: scale(1.02);
+    }
+    
+}
+
+
+.barra_abajo{
+    width: 100%;
+    height: 3rem;
+    background-color: rgb(255, 255, 255);
+    position: fixed;
+    justify-content: space-between;
+    bottom: 0;
+    display: flex;
+    align-items: center;
+    padding:0;
+    border-top: .5rem solid #ff6200;
+
+}
+
+.aviso{
+    opacity: .5;
+    font-size: .8rem;
+}
+
+.productos-barra{
+    padding-left: .3rem;
+}
+#listo{
+    padding: .3rem;
+    font-weight: bold;
+    border-radius: .3rem;
+   
+    /* border: .3rem solid orange; */
+    border: none;
+    background: rgb(0, 186, 12);
+    color: white;
+    width: 4rem;
+    height: 2.5rem;
+    margin-right: .3rem;
+    
+    z-index: 900;
+
+}
+
+.barra_abajo_botonera{
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+    font-weight: bold;
+}
