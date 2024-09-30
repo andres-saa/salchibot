@@ -4,20 +4,15 @@ import random
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
 from fastapi import Depends, HTTPException, Security
-from fastapi.security import APIKeyHeader
+
 import secrets
+from models.secure.security import verify_api_key
+from models.chatbot import Chatbot
 
 
 
-API_KEY_NAME = "Authorization"
-api_key_header = APIKeyHeader(name=API_KEY_NAME, auto_error=False)
 
-def verify_api_key(api_key: str = Security(api_key_header)):
-    expected_api_key = os.getenv("API_SECRET_TOKEN")
-    print(expected_api_key)
-    if api_key != expected_api_key:
-        raise HTTPException(status_code=403, detail="Invalid API Key")
-    return api_key
+
 
 chat_router = APIRouter()
 
@@ -28,61 +23,42 @@ productos_disponibles = [
     {"id": 4, "nombre": "papas fritas", "precio": 5000}
 ]
 
-base = {
-    "pedido": {   
-        "patterns": [
-            ['hola', 'hacer', 'pedido'],
-            ['hola','para','un', 'pedido'],
-            ['para','un', 'pedido'],
-            ['hacer', 'pedido'],
-            ['buenas', 'hacer', 'pedido'],
-            ['hola', 'gustaria', 'hacer', 'pedido']
-        ],
-        "responses": [
-            "Claro, te comparto nuestra carta inteligente, al agregas los productos y le das a finalizar, eso te traera de vuelta aca",
-            "De una, solo dime qué vas a pedir."
-        ]
-    },
-    "saludos": {
-        "patterns": [
-            ['hola'],
-            ['buenos', 'dias'],
-            ['buenas', 'tardes'],
-            ['buenas', 'noches']
-        ],
-        "responses": [
-            "¡Hola! ¿En qué puedo ayudarte?",
-            "¡Buen día! ¿Qué te gustaría hacer hoy?",
-            "¡Buenas tardes! ¿Cómo puedo asistirte?",
-        ]
-    },
-    "despedidas": {
-        "patterns": [
-            ['adios'],
-            ['hasta', 'luego'],
-            ['nos', 'vemos'],
-            ['gracias', 'adios']
-        ],
-        "responses": [
-            "¡Adiós! ¡Que tengas un buen día!",
-            "¡Hasta luego! Gracias por tu visita.",
-            "¡Nos vemos pronto!",
-            "Gracias, ¡adiós!"
-        ]
-    },
-    "agradecimientos": {
-        "patterns": [
-            ['gracias'],
-            ['muchas', 'gracias'],
-            ['te', 'agradezco']
-        ],
-        "responses": [
-            "¡De nada! Estoy aquí para ayudar.",
-            "¡Con mucho gusto!",
-            "¡Siempre es un placer ayudarte!"
-        ]
-    }
-}
+
+
+
+chat_response_model = Chatbot()
+
+datos = chat_response_model.get_patters()
+
+base = datos
+
+def change_base(data):
+    global base
+    base = data
+
+def get_intent(data,name):
+    for item in data:
+        if (item['intent'] == name):
+            return item
+    return None
+
+
+def get_intent_patterns(data,name):
+    for item in data:
+        if (item['intent'] == name):
+            return item['data']['patterns']
+    return None
+
+
+def get_intent_responses(data,name):
+    for item in data:
+        if (item['intent'] == name):
+            return item['data']['responses']
+    return None
+
+
+
+
 
 class UserInput(BaseModel):
     answer: str  # Respuesta del usuario
@@ -102,8 +78,6 @@ def init_data():
     else:
         with open("data.json", "r") as file:
             return json.load(file)
-        
-
 
 
 
@@ -127,8 +101,6 @@ def save_data_responses(data):
 
 data = load_data()
 data_responses = load_data_responses()
-
-print(data_responses)
 
 def register_client(user_info, client_id):
     info_parts = user_info.split('\n')
@@ -164,27 +136,27 @@ def match_pattern(user_input: str, client_id: str):
         return response
     
     user_input_set = set(user_input_lower.split())
-    for pattern in base['pedido']['patterns']:
+
+    for pattern in get_intent_patterns(base,'pedido'):
         pattern_set = set(pattern)
         if pattern_set.issubset(user_input_set):
             if not check_client_registration(client_id):
                 update_last_response("Parece que aún no estás registrado. Por favor, proporciona tu información para registrarte.",client_id)
-                return "Parece que aún no estás registrado. Por favor, proporciona tu información para registrarte."
+                return "Parece que aún no estás registrado. llename esta info y le das a listo. el sistema te registra de manera automatica http://127.0.0.1:5500/info/info.html"
 
-            response = random.choice(base['pedido']['responses'])
+            response = random.choice(get_intent_responses(base,'pedido'))
             update_last_response(response,client_id)  # Actualiza la última respuesta
             return response
 
 
-    for category, content in base.items():
-        if category != 'pedido':  # Evitar duplicar la comprobación de 'pedido'
-            for pattern in content['patterns']:
+                
+    for intent in base:
+        if intent['intent'] != 'pedido':
+            for pattern in  intent["data"]['patterns']:
                 pattern_set = set(pattern)
                 if pattern_set.issubset(user_input_set):
-                    
-                    response  = random.choice(content['responses'])
-                    update_last_response(response,client_id)  # Actualiza la última respuesta
-                    return response
+                    return random.choice(intent['data']['responses'])
+
                 
     update_last_response("Lo siento, no entiendo tu solicitud. ¿Puedes repetirla?",client_id)
     return "Lo siento, no entiendo tu solicitud. ¿Puedes repetirla?"

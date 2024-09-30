@@ -11,6 +11,20 @@
             "direcci\u00f3n": "calle 4 # 93-54",
             "ciudad": "Bogot\u00e1",
             "barrio": "Chapinero"
+        },
+        "DWafEUsQVpj8fe3Ia1Co": {
+            "nombre": "andres",
+            "tel\u00e9fono": "3226892988",
+            "direcci\u00f3n": "calle 4 # 93-54",
+            "ciudad": "Bogot\u00e1",
+            "barrio": "Suba"
+        },
+        "12345": {
+            "nombre": "andres",
+            "tel\u00e9fono": "3226892988",
+            "direcci\u00f3n": "calle 4 # 93-54",
+            "ciudad": "Medell\u00edn",
+            "barrio": "Laureles"
         }
     },
     "productos_disponibles": [
