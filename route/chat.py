@@ -51,25 +51,25 @@ variables = {
         "*Salchimonster Laureles* - Transversal 39 #74 B-14 Primer Piso\n"
     ),
 
-
     "horarios": (
-        "\n\n*CALI*\n"
-        "*Salchimonster Bretaña*: Lunes a miércoles de 5:30 PM a 11:00 PM, jueves de 5:30 PM a 11:00 PM, viernes a domingo de 5:30 PM a 11:30 PM\n"
-        "*Salchimonster Flora*: Lunes a domingo de 5:00 PM a 11:59 PM\n"
-        "*Salchimonster Caney*: Lunes a domingo de 5:30 PM a 11:30 PM\n\n"
+        "\n\n*🔥 SEDES CALI 🔥*\n"
+        "*Flora*\n"
+        "*Caney*\n"
+        "*Bretaña*\n"
+        "*Jamundí*\n\n"
+        "⏰ Horario: Lunes a domingo 5:00 PM a 11:30 PM\n\n"
         
-        "*BOGOTÁ*\n"
-        "*Salchimonster Montes*: Lunes a domingo de 12:00 PM a 11:30 PM\n"
-        "*Salchimonster Modelia*: Lunes a domingo de 12:00 PM a 11:30 PM\n"
-        "*Salchimonster Suba*: Lunes a domingo de 12:00 PM a 11:30 PM\n"
-        "*Salchimonster Kennedy*: Lunes de 12:00 PM a 11:30 PM, miércoles y jueves de 12:30 PM a 11:30 PM, viernes a domingo de 12:00 PM a 11:30 PM\n"
-        "*Salchimonster Chapinero*: Lunes a viernes de 12:00 PM a 11:30 PM, sábado y domingo de 12:00 PM a 11:30 PM\n\n"
+        "*🔥 SEDES BOGOTÁ 🔥*\n"
+        "*Modelia*\n"
+        "*Kennedy*\n"
+        "*Suba*\n"
+        "*Montes*\n\n"
+        "⏰ Horario: Lunes a domingo 12:00 PM a 11:30 PM\n\n"
         
-        "*JAMUNDÍ*\n"
-        "*Salchimonster Jamundí*: Lunes a domingo de 5:00 PM a 11:30 PM\n\n"
-        
-        "*MEDELLÍN*\n"
-        "*Salchimonster Laureles*: Lunes de 12:00 PM a 11:30 PM, martes de 12:13 PM a 11:30 PM, miércoles a viernes de 5:00 PM a 11:30 PM, sábado y domingo de 12:00 PM a 11:30 PM\n"
+        "*🔥 SEDE MEDELLÍN LAURELES 🔥*\n"
+        "*Laureles*\n\n"
+        "⏰ Horario: Lunes a jueves 5:00 PM a 11:30 PM\n"
+        "⏰ Horario: Viernes a domingo 12:00 PM a 11:30 PM\n"
     )
 }
 
