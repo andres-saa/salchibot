@@ -28,26 +28,30 @@ productos_disponibles = [
     # Cargar variables (suponiendo que están definidas)
 variables = {
     "sedes": (
-        "\n\n*Cali*\n"
+        "\n\n*CALI*\n"
         "En Cali tenemos estas sedes:\n"
-        "*SALCHIMONSTER BRETAÑA* - Calle 10#21-42 Bretaña\n"
-        "*SALCHIMONSTER FLORA* - Calle 44 Norte Av 3E-89 la Flora\n"
-        "*SALCHIMONSTER CANEY* - Carrera 85 # 37-10. Caney\n\n\n"
-        "*Bogotá*\n"
+        "*Salchimonster Bretaña* - Calle 10#21-42 Bretaña\n"
+        "*Salchimonster Flora* - Calle 44 Norte Av 3E-89 la Flora\n"
+        "*Salchimonster Caney* - Carrera 85 # 37-10, Caney\n\n"
+        
+        "*BOGOTÁ*\n"
         "En Bogotá tenemos estas sedes:\n"
-        "*SALCHIMONSTER MONTES* - Calle 8sur #32a -08\n"
-        "*SALCHIMONSTER MODELIA* - Carera 75 # 25C - 45\n"
-        "*SALCHIMONSTER SUBA* - Carera 92 # 147B -17\n"
-        "*SALCHIMONSTER KENNEDY* - Carrera 78b # 38sur-79\n"
-        "*SALCHIMONSTER CHAPINERO* - Cra 10 A # 70-24\n\n\n"
-        "*Jamundí*\n"
+        "*Salchimonster Montes* - Calle 8 sur #32a-08\n"
+        "*Salchimonster Modelia* - Carrera 75 # 25C-45\n"
+        "*Salchimonster Suba* - Carrera 92 # 147B-17\n"
+        "*Salchimonster Kennedy* - Carrera 78B # 38 sur-79\n"
+        "*Salchimonster Chapinero* - Cra 10 A # 70-24\n\n"
+        
+        "*JAMUNDÍ*\n"
         "En Jamundí tenemos esta sede:\n"
-        "*SALCHIMONSTER JAMUNDI* - Carrera 22 # 5A sur - 60\n\n\n"
-        "*Medellín*\n"
+        "*Salchimonster Jamundí* - Carrera 22 # 5A sur-60\n\n"
+        
+        "*MEDELLÍN*\n"
         "En Medellín tenemos esta sede:\n"
-        "*SALCHIMONSTER LAURELES* - Transversal 39 #74 B-14 PRIMER PISO\n"
+        "*Salchimonster Laureles* - Transversal 39 #74 B-14 Primer Piso\n"
     )
 }
+
 
 
 
