@@ -11,7 +11,6 @@ import { create_carta } from "./service/cardService.js"
 import { carrito } from "./carro.js";
 
 
-
 carrito
 let current_index = 0
 let current_pos = 0

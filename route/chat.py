@@ -8,7 +8,7 @@ from fastapi import Depends, HTTPException, Security
 import secrets
 from models.secure.security import verify_api_key
 from models.chatbot import Chatbot
-
+import re
 
 
 
@@ -25,16 +25,37 @@ productos_disponibles = [
 
 
 
+    # Cargar variables (suponiendo que están definidas)
+variables = {
+    "sedes": (
+        "\n\n*Cali*\n"
+        "En Cali tenemos estas sedes:\n"
+        "*SALCHIMONSTER BRETAÑA* - Calle 10#21-42 Bretaña\n"
+        "*SALCHIMONSTER FLORA* - Calle 44 Norte Av 3E-89 la Flora\n"
+        "*SALCHIMONSTER CANEY* - Carrera 85 # 37-10. Caney\n\n\n"
+        "*Bogotá*\n"
+        "En Bogotá tenemos estas sedes:\n"
+        "*SALCHIMONSTER MONTES* - Calle 8sur #32a -08\n"
+        "*SALCHIMONSTER MODELIA* - Carera 75 # 25C - 45\n"
+        "*SALCHIMONSTER SUBA* - Carera 92 # 147B -17\n"
+        "*SALCHIMONSTER KENNEDY* - Carrera 78b # 38sur-79\n"
+        "*SALCHIMONSTER CHAPINERO* - Cra 10 A # 70-24\n\n\n"
+        "*Jamundí*\n"
+        "En Jamundí tenemos esta sede:\n"
+        "*SALCHIMONSTER JAMUNDI* - Carrera 22 # 5A sur - 60\n\n\n"
+        "*Medellín*\n"
+        "En Medellín tenemos esta sede:\n"
+        "*SALCHIMONSTER LAURELES* - Transversal 39 #74 B-14 PRIMER PISO\n"
+    )
+}
 
-chat_response_model = Chatbot()
 
-datos = chat_response_model.get_patters()
 
-base = datos
 
-def change_base(data):
-    global base
-    base = data
+
+def change_datos(data):
+    global datos
+    datos = data
 
 def get_intent(data,name):
     for item in data:
@@ -80,7 +101,6 @@ def init_data():
             return json.load(file)
 
 
-
 def load_data():
     if not os.path.exists("data.json"):
         return init_data()
@@ -103,15 +123,25 @@ data = load_data()
 data_responses = load_data_responses()
 
 def register_client(user_info, client_id):
-    info_parts = user_info.split('\n')
-    client_data = {}
-    for part in info_parts:
-        key, value = part.split(': ')
-        client_data[key.strip().lower()] = value.strip()
+    # Comprueba si la información del usuario comienza con la cadena de inicio esperada
+    if user_info.startswith('registro cliente'):
+        # Separa la información en partes usando el salto de línea
+        info_parts = user_info.split('\n')
+
+        # Ignora la primera línea, que es el título, y comienza a procesar desde la segunda línea
+        client_data = {}
+        for part in info_parts[1:]:  # Comienza desde el segundo elemento de la lista
+            key, value = part.split(': ')
+            client_data[key.strip().lower()] = value.strip()
+        
+        # Suponiendo que 'data' es un diccionario que ya ha sido inicializado en algún lugar de tu código
+        data["clientes_registrados"][client_id] = client_data  # Usar el ID proporcionado
+        save_data(data)  # Asegúrate de que la función save_data esté definida y funcione correctamente
+        return "¡Registro completado exitosamente! Aquí está tu ID de cliente: " + client_id
     
-    data["clientes_registrados"][client_id] = client_data  # Usar el ID proporcionado
-    save_data(data)
-    return "¡Registro completado exitosamente! Aquí está tu ID de cliente: " + client_id
+    # Retorna un mensaje si el formato no es correcto
+    return 'Estoy a la espera de los datos, el formato no es correcto, por favor use el link proporcionado http://127.0.0.1:5500/info/info.html'
+
 
 def check_client_registration(client_id):
     return client_id in data["clientes_registrados"]
@@ -124,7 +154,7 @@ def update_last_response(response,user_id:str):
     data_responses[user_id] = response
     save_data_responses(data_responses)
 
-def match_pattern(user_input: str, client_id: str):
+def match_pattern(user_input: str, client_id: str, datos):
     user_input_lower = user_input.lower()
     
     # Obtener la última respuesta desde el archivo
@@ -137,20 +167,20 @@ def match_pattern(user_input: str, client_id: str):
     
     user_input_set = set(user_input_lower.split())
 
-    for pattern in get_intent_patterns(base,'pedido'):
+    for pattern in get_intent_patterns(datos,'pedido'):
         pattern_set = set(pattern)
         if pattern_set.issubset(user_input_set):
             if not check_client_registration(client_id):
                 update_last_response("Parece que aún no estás registrado. Por favor, proporciona tu información para registrarte.",client_id)
                 return "Parece que aún no estás registrado. llename esta info y le das a listo. el sistema te registra de manera automatica http://127.0.0.1:5500/info/info.html"
 
-            response = random.choice(get_intent_responses(base,'pedido'))
+            response = random.choice(get_intent_responses(datos,'pedido'))
             update_last_response(response,client_id)  # Actualiza la última respuesta
             return response
 
 
                 
-    for intent in base:
+    for intent in datos:
         if intent['intent'] != 'pedido':
             for pattern in  intent["data"]['patterns']:
                 pattern_set = set(pattern)
@@ -161,11 +191,28 @@ def match_pattern(user_input: str, client_id: str):
     update_last_response("Lo siento, no entiendo tu solicitud. ¿Puedes repetirla?",client_id)
     return "Lo siento, no entiendo tu solicitud. ¿Puedes repetirla?"
 
+
+
+
 @chat_router.post('/chat', dependencies=[Depends(verify_api_key)])
 def chatbot(userInput: UserInput):
-    if not data_responses.get(userInput.client_id):
-        update_last_response('hola', userInput.client_id)
-    response = match_pattern(userInput.answer, userInput.client_id)
+    # Cargar datos de un archivo JSON local
+    with open('data_patterns.json', 'r') as file:
+        datos = json.load(file)
+
+
+
+    # Generar respuesta inicial
+    response = match_pattern(userInput.answer, userInput.client_id, datos)
+
+    # Buscar y reemplazar variables en la respuesta
+    def replace_variables(text):
+        pattern = re.compile(r'\{(\w+)\}')  # Patrón para identificar variables dentro de llaves
+        return pattern.sub(lambda match: variables.get(match.group(1), f"{match.group(0)}"), text)
+
+    # Aplicar reemplazo de variables a la respuesta
+    response = replace_variables(response)
+
     return {"response": response}
 
 init_data()

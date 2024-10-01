@@ -13,7 +13,7 @@ class Chatbot:
         self.db = DataBase()
 
     def get_patters(self):
-        query =  self.db.build_select_query(table_name='chatbot.intent_data_views',fields=['*'])
+        query =  self.db.build_select_query(table_name='chatbot.intent_data_view',fields=['*'])
         return self.db.fetch_all(query)
     
 
