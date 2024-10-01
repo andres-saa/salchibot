@@ -200,6 +200,8 @@ def chatbot(userInput: UserInput):
     with open('data_patterns.json', 'r') as file:
         datos = json.load(file)
 
+    if not data_responses.get(userInput.client_id):
+        update_last_response('hola', userInput.client_id)
 
 
     # Generar respuesta inicial
@@ -216,3 +218,5 @@ def chatbot(userInput: UserInput):
     return {"response": response}
 
 init_data()
+
+
