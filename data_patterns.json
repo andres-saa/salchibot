@@ -36,6 +36,10 @@
                     "en"
                 ],
                 [
+                    "mis",
+                    "sedes"
+                ],
+                [
                     "sedes",
                     "en"
                 ],
@@ -45,7 +49,9 @@
                 ]
             ],
             "responses": [
-                "estas son las sedes {sedes}"
+                "estas son las sedes {sedes}",
+                "estas son tus sedes {sedes}",
+                "mis sedes"
             ]
         }
     },
@@ -679,6 +685,20 @@
                 "Todo relax, ve! \ud83c\udfd6\ufe0f \u00bfTe preparo unas salchipapas para acompa\u00f1ar la tarde?",
                 "Todo tranqui, papi! \ud83d\ude0c \u00bfTe provoca una salchipapa con hartas papitas?",
                 " ya esta"
+            ]
+        }
+    },
+    {
+        "intent": "horarios",
+        "data": {
+            "patterns": [
+                [
+                    "mis",
+                    "horarios"
+                ]
+            ],
+            "responses": [
+                " estos son los horarios {horarios}"
             ]
         }
     },

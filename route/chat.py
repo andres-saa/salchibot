@@ -49,6 +49,27 @@ variables = {
         "*MEDELLÍN*\n"
         "En Medellín tenemos esta sede:\n"
         "*Salchimonster Laureles* - Transversal 39 #74 B-14 Primer Piso\n"
+    ),
+
+
+    "horarios": (
+        "\n\n*CALI*\n"
+        "*Salchimonster Bretaña*: Lunes a miércoles de 5:30 PM a 11:00 PM, jueves de 5:30 PM a 11:00 PM, viernes a domingo de 5:30 PM a 11:30 PM\n"
+        "*Salchimonster Flora*: Lunes a domingo de 5:00 PM a 11:59 PM\n"
+        "*Salchimonster Caney*: Lunes a domingo de 5:30 PM a 11:30 PM\n\n"
+        
+        "*BOGOTÁ*\n"
+        "*Salchimonster Montes*: Lunes a domingo de 12:00 PM a 11:30 PM\n"
+        "*Salchimonster Modelia*: Lunes a domingo de 12:00 PM a 11:30 PM\n"
+        "*Salchimonster Suba*: Lunes a domingo de 12:00 PM a 11:30 PM\n"
+        "*Salchimonster Kennedy*: Lunes de 12:00 PM a 11:30 PM, miércoles y jueves de 12:30 PM a 11:30 PM, viernes a domingo de 12:00 PM a 11:30 PM\n"
+        "*Salchimonster Chapinero*: Lunes a viernes de 12:00 PM a 11:30 PM, sábado y domingo de 12:00 PM a 11:30 PM\n\n"
+        
+        "*JAMUNDÍ*\n"
+        "*Salchimonster Jamundí*: Lunes a domingo de 5:00 PM a 11:30 PM\n\n"
+        
+        "*MEDELLÍN*\n"
+        "*Salchimonster Laureles*: Lunes de 12:00 PM a 11:30 PM, martes de 12:13 PM a 11:30 PM, miércoles a viernes de 5:00 PM a 11:30 PM, sábado y domingo de 12:00 PM a 11:30 PM\n"
     )
 }
 
@@ -91,6 +112,15 @@ class UserInput(BaseModel):
 
 # Iniciar el archivo data.json si no existe
 def init_data():
+
+    Chatbot_instance = Chatbot()
+    updated_patterns = Chatbot_instance.get_patters()
+
+    # Escribir los patrones actualizados al archivo JSON
+    with open('data_patterns.json', 'w') as file:
+        json.dump(updated_patterns, file, indent=4)
+
+
     if not os.path.exists("data.json"):
         data = {
             "clientes_registrados": {},
