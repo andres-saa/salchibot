@@ -27,6 +27,7 @@ productos_disponibles = [
 
     # Cargar variables (suponiendo que están definidas)
 variables = {
+
     "sedes": (
         "\n\n*CALI*\n"
         "En Cali tenemos estas sedes:\n"
@@ -50,6 +51,8 @@ variables = {
         "En Medellín tenemos esta sede:\n"
         "*Salchimonster Laureles* - Transversal 39 #74 B-14 Primer Piso\n"
     ),
+    
+
 
     "horarios": (
         "\n\n*🔥 SEDES CALI 🔥*\n"
@@ -71,6 +74,8 @@ variables = {
         "⏰ Horario: Lunes a jueves 5:00 PM a 11:30 PM\n"
         "⏰ Horario: Viernes a domingo 12:00 PM a 11:30 PM\n"
     )
+
+
 }
 
 

@@ -85,7 +85,7 @@ function enviarPedidoWhatsApp(indicativoPais, telefono) {
 }
 
 enviar.addEventListener('click', () => {
-    enviarPedidoWhatsApp('57','3226892988')
+    enviarPedidoWhatsApp('57','3053447255')
 })
 
 
