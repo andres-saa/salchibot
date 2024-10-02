@@ -1,6 +1,6 @@
 async function fetchCategories(restaurantId) {
     try {
-        const response = await fetch(`https://chatbot.salchimonster.com/${restaurantId}`);
+        const response = await fetch(`https://chatbot.salchimonster.com/products/${restaurantId}`);
         const data = await response.json();
         return data;
     } catch (error) {
