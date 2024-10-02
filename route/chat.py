@@ -79,7 +79,7 @@ variables = {
     "registro":("registro-bot.salchimonster.com"),
     "cambio direccion":("dir-bot.salchimonster.com"),
 
-    
+
 
 }
 
@@ -238,9 +238,37 @@ def match_pattern(user_input: str, client_id: str, datos):
 
 
 
+
+# Función para extraer los productos del pedido
+def extraer_productos(texto):
+    # Verifica que el texto empiece con "Mi pedido:"
+    if not texto.strip().startswith("Mi pedido:"):
+        return "El texto no comienza con 'Mi pedido:'"
+
+    # Regex para extraer nombre del producto, cantidad y precio
+    pattern = re.compile(r'-\s(.+?)\sx\s(\d+)\s=\s\$\d+[.,]?\d*')
+
+    # Buscar todos los matches
+    matches = pattern.findall(texto)
+
+    # Crear una lista de diccionarios con la información extraída
+    productos = [{'nombre': match[0], 'cantidad': int(match[1])} for match in matches]
+    return productos
+
+
+
+
+
+
 @chat_router.post('/chat', dependencies=[Depends(verify_api_key)])
 def chatbot(userInput: UserInput):
     # Cargar datos de un archivo JSON local
+
+
+    if  userInput.answer.strip().startswith("Mi pedido:"):
+        return extraer_productos(userInput.answer)
+    
+
     with open('data_patterns.json', 'r') as file:
         datos = json.load(file)
 
@@ -260,6 +288,7 @@ def chatbot(userInput: UserInput):
     response = replace_variables(response)
 
     return {"response": response}
+
 
 init_data()
 

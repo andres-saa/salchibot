@@ -2,7 +2,8 @@ const carousel = document.querySelector('.carousel')
 const button_left =  document.getElementById('btn_atras')
 const button_right =  document.getElementById('btn_adelante')
 const categoryHeader = document.querySelector('h1'); // Selecciona el elemento h1
-
+button_left.classList.add('change-category')
+button_right.classList.add('change-category')
 
 
 

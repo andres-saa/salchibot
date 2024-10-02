@@ -8,6 +8,7 @@
 h1{
     color: #fff;
     width: auto;
+    padding: 0 4rem;
     text-align: center;
     font-weight: 900;
     text-transform: uppercase;
@@ -45,6 +46,7 @@ h1{
     box-shadow: 0 0 .3rem rgba(0, 0, 0, .2);
     background-color: white;
     border-radius: .5rem;
+    position: relative
     
 }
 
@@ -134,7 +136,7 @@ button{
     /* gap: 1rem; */
     transition: all .3s ease;
     align-items: start;
-    padding: 0rem;
+    padding: 2rem 0;
     margin: 0;
     
    
@@ -155,33 +157,80 @@ button{
 }
 
 
-.container_corousel button {
+.change-category {
     position: fixed;
     padding: .3rem;
     font-weight: bold;
     border-radius: 1rem;
-    border: .3rem solid #ff6200 ;
+    /* border: .3rem solid #ff6200 ; */
     background: black;
     color: white;
-    width: 4rem;
+    width: 5rem;
     aspect-ratio: 1 / 1  ;
-    top: calc(50vh - 1.5rem);
+    top: calc(-1rem);
     z-index: 900;
    
 }
 
+
+.container-quantity{
+    height: 2rem; display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    z-index: 10;
+    width: 100%;
+    position: absolute;
+    bottom: -5rem;
+    height: 4rem;
+    left: 0;
+    /* outline: 2px solid #ff6200; */
+    box-shadow: 0 0 1rem ;
+    transition: all ease .3s;
+}
+
+.visible-quantity{
+    bottom: 0;
+}
+
+.quantity{
+    width: 100%;
+    text-align: center;
+    font-weight: bold;
+    font-size: 2rem;
+
+    border: none;
+    /* outline: 2px solid #ff6200; */
+    outline: none;
+    display: flex;
+    justify-content: center;
+    
+   
+}
+
+.button-quantity{
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.789);
+    /* outline: 2px solid #ff6200; */
+    border: none;
+    font-size: 2rem;
+    color: white;
+}
+
 #btn_atras{
-    left: -2rem;
-    text-align: right;
-    font-size: 1.4rem;
+    left: -1rem;
+    text-align: center;
+    font-size: 1.5rem;
+    border: none;
+
    
 
 }
 
 #btn_adelante{
-    right: -2rem;
-    text-align: left;
-    font-size: 1.4rem;
+    right: -1rem;
+    text-align: center;
+    font-size: 1.5rem;
+    border: none;
 }
 
 i{
@@ -193,7 +242,7 @@ i{
     /* box-shadow: 0 0 10px rgb(255, 0, 0); */
     /* opacity: .5; */
     
-    transform: scale(1.02);
+    /* transform: scale(1.02); */
     /* filter: brightness(1.05); */
     background-color: rgba(30, 255, 0, 0.767);
     
@@ -220,14 +269,15 @@ i{
 
 .barra_abajo{
     width: 100%;
-    height: 3rem;
+    height: 5rem;
     background-color: rgb(255, 255, 255);
     position: fixed;
     justify-content: space-between;
     bottom: 0;
     display: flex;
     align-items: center;
-    padding:0;
+    padding:0   ;
+    z-index: 1000;
     border-top: .5rem solid #ff6200;
 
 }
@@ -241,18 +291,41 @@ i{
     padding-left: .3rem;
 }
 #listo{
-    padding: .3rem;
+    padding: 0 1rem;
     font-weight: bold;
     border-radius: .3rem;
+    font-size: 1.4rem;
+    min-width: max-content;
    
     /* border: .3rem solid orange; */
     border: none;
     background: rgb(0, 186, 12);
     color: white;
-    width: 4rem;
-    height: 2.5rem;
-    margin-right: .3rem;
+    width: 6rem;
+    height: 4rem;
+    margin-right: 1rem;
     
+    z-index: 900;
+
+}
+
+#trash{
+    padding: 0 1rem;
+    font-weight: bold;
+    border-radius: .3rem;
+    font-size: 1.4rem;
+    min-width: max-content;
+   
+    /* border: .3rem solid orange; */
+    border: none;
+    background: rgb(255, 0, 0);
+    color: white;
+    width: 6rem;
+    height: 3rem;
+    margin-right: 1rem;
+    display: none;
+    max-width: min-content;
+
     z-index: 900;
 
 }
