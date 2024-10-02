@@ -239,27 +239,24 @@ def match_pattern(user_input: str, client_id: str, datos):
 
 
 
-
-
 def extraer_productos(texto):
-    # Quita todos los asteriscos del texto
-    texto = texto.replace('*', '')
-
     # Verifica que el texto empiece con "Mi pedido:"
     if not texto.strip().startswith("Mi pedido:"):
         return "El texto no comienza con 'Mi pedido:'"
-
+    
+    # Limpiar el texto eliminando los asteriscos y reemplazando comas por puntos en los precios
+    texto_limpio = texto.replace('*', '').replace(',', '.')
+    
     # Regex para extraer nombre del producto, cantidad y precio
-    pattern = re.compile(r'-\s(.+?)\sx\s(\d+)\s=\s\$\d+[.,]?\d*')
-
+    pattern = re.compile(r'-\s(.+?)\sx\s(\d+)\s=\s\$(\d+[.,]?\d*)')
+    
     # Buscar todos los matches
-    matches = pattern.findall(texto)
-
+    matches = pattern.findall(texto_limpio)
+    
     # Crear una lista de diccionarios con la información extraída
-    productos = [{'nombre': match[0], 'cantidad': int(match[1])} for match in matches]
+    productos = [{'nombre': match[0].strip(), 'cantidad': int(match[1])} for match in matches]
+    
     return productos
-
-
 
 
 
@@ -271,7 +268,7 @@ def chatbot(userInput: UserInput):
 
 
     if  userInput.answer.strip().startswith("Mi pedido:"):
-        return extraer_productos(userInput.answer)
+       return {"response":extraer_productos(userInput.answer)}
     
 
     with open('data_patterns.json', 'r') as file:
