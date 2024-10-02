@@ -240,14 +240,17 @@ def match_pattern(user_input: str, client_id: str, datos):
 
 
 
-# Función para extraer los productos del pedido
+
 def extraer_productos(texto):
+    # Quita todos los asteriscos del texto
+    texto = texto.replace('*', '')
+
     # Verifica que el texto empiece con "Mi pedido:"
     if not texto.strip().startswith("Mi pedido:"):
         return "El texto no comienza con 'Mi pedido:'"
 
-    # Regex para extraer nombre del producto, cantidad y precio, incluyendo productos con paréntesis
-    pattern = re.compile(r'-\s([\w\s()]+)\sx\s(\d+)\s=\s\$\d+[.,]?\d*')
+    # Regex para extraer nombre del producto, cantidad y precio
+    pattern = re.compile(r'-\s(.+?)\sx\s(\d+)\s=\s\$\d+[.,]?\d*')
 
     # Buscar todos los matches
     matches = pattern.findall(texto)
@@ -255,6 +258,9 @@ def extraer_productos(texto):
     # Crear una lista de diccionarios con la información extraída
     productos = [{'nombre': match[0], 'cantidad': int(match[1])} for match in matches]
     return productos
+
+
+
 
 
 
