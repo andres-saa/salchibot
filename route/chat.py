@@ -51,7 +51,7 @@ variables = {
         "En Medellín tenemos esta sede:\n"
         "*Salchimonster Laureles* - Transversal 39 #74 B-14 Primer Piso\n"
     ),
-    
+
 
 
     "horarios": (
@@ -73,8 +73,13 @@ variables = {
         "*Laureles*\n\n"
         "⏰ Horario: Lunes a jueves 5:00 PM a 11:30 PM\n"
         "⏰ Horario: Viernes a domingo 12:00 PM a 11:30 PM\n"
-    )
+    ),
 
+    "carta":("carta-bot.salchimonster.com"),
+    "registro":("registro-bot.salchimonster.com"),
+    "cambio direccion":("dir-bot.salchimonster.com"),
+
+    
 
 }
 

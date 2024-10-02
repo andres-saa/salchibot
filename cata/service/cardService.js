@@ -13,7 +13,7 @@ const create_carta = (product) => {
 
     // Configurar imagen con lazy loading
     imagen.src = img_source_low_res;
-    imagen.loading = "lazy";
+    // imagen.loading = "lazy";
     imagen.classList.add('product_image');
 
     // Utilizar Intersection Observer para cambiar a imagen de alta resolución
@@ -24,7 +24,7 @@ const create_carta = (product) => {
                 observer.unobserve(entry.target);
             }
         });
-    }, {threshold: 0.1});
+    }, {threshold: 1});
 
     observer.observe(imagen);
 
