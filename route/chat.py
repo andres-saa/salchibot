@@ -8,10 +8,49 @@ from fastapi import Depends, HTTPException, Security
 import secrets
 from models.secure.security import verify_api_key
 from models.chatbot import Chatbot
+from models.products import Products
 import re
+import requests
 
 
 
+
+class User(BaseModel):
+    user_name:str
+    user_phone:str
+    user_address:str
+    
+
+
+
+def build_json(order_products: list, order_aditionals: list, user, site_id: int, payment_method_id: int, delivery_price: int, order_notes: str):
+   
+    order = {
+        "order_products": order_products,
+        "site_id": site_id,
+        "delivery_person_id": 4,
+        "payment_method_id": payment_method_id,
+        "delivery_price": delivery_price,
+        "order_notes": order_notes,
+        "user_data": {
+            "user_name": user.user_name,
+            "user_phone": user.user_phone,
+            "user_address": user.user_address
+        },
+        "order_aditionals": order_aditionals  # Agregar los adicionales
+    }
+
+    return order
+
+
+
+
+    
+   
+   
+
+   
+   
 
 
 chat_router = APIRouter()
@@ -75,12 +114,9 @@ variables = {
         "⏰ Horario: Viernes a domingo 12:00 PM a 11:30 PM\n"
     ),
 
-    "carta":("carta-bot.salchimonster.com"),
-    "registro":("registro-bot.salchimonster.com"),
-    "cambio direccion":("dir-bot.salchimonster.com"),
-
-
-
+    "carta":("https://bot.salchimonster.com/carta/"),
+    "registro":("https://bot.salchimonster.com/registro/"),
+    "cambio_direccion":("https://bot.salchimonster.com/direccion/"),
 }
 
 
@@ -239,7 +275,7 @@ def match_pattern(user_input: str, client_id: str, datos):
 
 
 
-def extraer_productos(texto):
+def extraer_productos(texto,wsp_id):
     # Verifica que el texto empiece con "Mi pedido:"
     if not texto.strip().startswith("Mi pedido:"):
         return "El texto no comienza con 'Mi pedido:'"
@@ -247,35 +283,165 @@ def extraer_productos(texto):
     # Limpiar el texto eliminando los asteriscos y reemplazando comas por puntos en los precios
     texto_limpio = texto.replace('*', '').replace(',', '.')
     
-    # Regex para extraer nombre del producto, cantidad y precio
+    # Regex para extraer nombre del producto, cantidad y precio (aunque el precio no es necesario aquí)
     pattern = re.compile(r'-\s(.+?)\sx\s(\d+)\s=\s\$(\d+[.,]?\d*)')
     
     # Buscar todos los matches
     matches = pattern.findall(texto_limpio)
     
-    # Crear una lista de diccionarios con la información extraída
-    productos = [{'nombre': match[0].strip(), 'cantidad': int(match[1])} for match in matches]
+    if not matches:
+        return "No se encontraron productos en el texto."
     
-    return productos
+    # Extraer nombres y cantidades
+    nombres_productos = [match[0].strip() for match in matches]
+    cantidades = [int(match[1]) for match in matches]
+
+    # Instancia de la clase Products para obtener los IDs de los productos
+    chabot_instance = Products()
+    productos_con_id = chabot_instance.getProductsIdByNames(nombres_productos, site_id=1, restaurant_id=1)
+    
+    # Verificar si se encontraron los IDs correspondientes
+    if not productos_con_id:
+        return "No se encontraron productos coincidentes en la base de datos."
+    
+    # Crear una lista de diccionarios combinando los nombres, cantidades e IDs
+    productos_finales = []
+    for i, producto in enumerate(productos_con_id):
+        productos_finales.append({
+            'nombre': nombres_productos[i],
+            'quantity': cantidades[i],
+            'product_instance_id': producto['id']  # Asumiendo que 'producto' es un diccionario con el campo 'id'
+        })
+    
+    
+    order_json = build_json(productos_finales,[], User(user_name='andres',user_phone='11111111',user_address='esta direcccion'),12,5,5000,'prueba de wps')
+    return chabot_instance.create_temp_order(wsp_id=wsp_id,json_data=order_json)
 
 
+
+def generar_mensaje_pedido(pedido):
+    # Verificar que el pedido contenga productos
+    if not pedido['pedido_temporal']['order_products']:
+        return "El carrito está vacío. Agrega productos antes de enviar el pedido."
+
+    # Inicializar el mensaje
+    mensaje = 'Hola tienes un pedido en proceso si vas a realizar otro o necesitas eleminarlo escribe *cancelar* o "confirmar para seguir con el \n"  \n *PRODUCTOS* \n'
+    
+    # Recorrer los productos y agregar su información al mensaje
+    for producto in pedido['pedido_temporal']['order_products']:
+        nombre = producto['nombre']
+        cantidad = producto['quantity']
+        precio = producto.get('price', 0)  # Suponer que el precio puede no estar en los datos
+        mensaje += f"- {nombre} x *{cantidad}* = *${precio:,.2f}*\n"
+    
+    # Añadir el total al mensaje (en este caso asumimos que el total está en el 'delivery_price' como ejemplo)
+    total = pedido['pedido_temporal']['delivery_price']  # Usar el precio del delivery como ejemplo de total
+    mensaje += f"*Total: ${total:,.2f}*\n"
+    
+    # Añadir notas adicionales si existen
+    notas = pedido['pedido_temporal'].get('order_notes')
+    if notas:
+        mensaje += f"*Notas adicionales*: {notas}\n"
+    
+    return mensaje
+
+
+
+
+def extraer_datos_usuario(cadena: str) -> dict:
+    # Expresión regular para extraer los datos
+    patron = r"Nombre:\s*(?P<name>.+)\s*Teléfono:\s*(?P<phone>\d+)\s*Dirección:\s*(?P<address>[\w\s#-]+)\s*Ciudad:\s*(?P<city>[\w\s]+)\s*Barrio:\s*(?P<neighborhood>[\w\s]+)"
+    
+    # Buscar coincidencias
+    coincidencias = re.search(patron, cadena.replace("*",''))
+    
+    if coincidencias:
+        # Limpiar los valores extraídos (eliminar espacios o saltos de línea al inicio y final)
+        return {
+            "user_name": coincidencias.group("name").strip(),
+            "user_phone": coincidencias.group("phone").strip(),
+            "user_address": coincidencias.group("address").strip(),
+            "city": coincidencias.group("city").strip(),  # Incluido por si se necesita
+            "neighborhood": coincidencias.group("neighborhood").strip()
+        }
+    else:
+        # Retornar un diccionario vacío si no se encuentran datos
+        return {}
+    
+
+
+
+
+def confirm_order(wsp_id:str,data):
+    chatbot_instance = Products()
+    
+    json_data = data[0]
+    
+    order_id = chatbot_instance.insert_order(
+        json_data["pedido_temporal"]["order_products"],
+        json_data["pedido_temporal"]["order_aditionals"],
+        json_data["pedido_temporal"]['user_data'],
+        json_data["pedido_temporal"]['site_id'],
+        json_data["pedido_temporal"]['payment_method_id'],
+        json_data["pedido_temporal"]['delivery_person_id'],
+        json_data["pedido_temporal"]["order_notes"])
+    
+    
+    if order_id:
+        chatbot_instance.deleteMyTempOrder(wsp_id)
+    return order_id
+
+    
 
 
 
 @chat_router.post('/chat', dependencies=[Depends(verify_api_key)])
 def chatbot(userInput: UserInput):
-    # Cargar datos de un archivo JSON local
+    # Cargar datos de un archivo JSON loca
 
+    if not data_responses.get(userInput.client_id):
+            update_last_response('hola', userInput.client_id)
+    chatbot_instance = Products()
+    
+    I = chatbot_instance.i_am_registered(userInput.client_id)
+    
+    if (not I and userInput.answer.strip().replace("*","").startswith('Resgistrame papi:')):
+        
+        user = extraer_datos_usuario(userInput.answer)
+        
+        if user:
+            created_user =  chatbot_instance.create_temp_user(user["user_name"],user["user_phone"],user["user_address"],userInput.client_id)
+            return {"response":f"Listo *{user['user_name'].capitalize()}* Tu registro ha sido exitoso\n como te gustaria proceder?\n, Te armamos un pedido?\n, deseas consultar el estado de tu orden?\n"}
+    
+    
+    if not I:
+        return {"response":"No estas registrado aun ayudame llenando estos daticos breve https://bot.salchimonster.com/registro/"}
+    
+   
+    
+    
+    my_current_order = chatbot_instance.i_have_temp_order(userInput.client_id)
+    
+    if (my_current_order and userInput.answer.strip().startswith('cancelar')):
+        chatbot_instance.deleteMyTempOrder(userInput.client_id)
+        return {"response":"listo vamos desde cero"}
+    
+    if (my_current_order and userInput.answer.strip().startswith('confirmar')):
+        response = confirm_order(userInput.client_id,my_current_order)
+        return {"response":response}
+    
+    
+    
+    if my_current_order:
+        return {"response":generar_mensaje_pedido(my_current_order[0])}
 
     if  userInput.answer.strip().startswith("Mi pedido:"):
-       return {"response":extraer_productos(userInput.answer)}
+       return {"response":extraer_productos(userInput.answer,userInput.client_id)}
     
-
     with open('data_patterns.json', 'r') as file:
         datos = json.load(file)
 
-    if not data_responses.get(userInput.client_id):
-        update_last_response('hola', userInput.client_id)
+    
 
 
     # Generar respuesta inicial

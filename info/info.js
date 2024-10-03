@@ -112,13 +112,15 @@ document.addEventListener("DOMContentLoaded", function() {
         }
 
         // Construir el mensaje con formato específico
-        const mensaje = `Nombre: ${nombre}\n` +
-                        `Teléfono: ${telefono}\n` +
-                        `Dirección: ${direccion}\n` +
-                        `Ciudad: ${ciudad}\n` +
-                        `Barrio: ${barrio}`;
+        const mensaje = 
+                        `*Resgistrame papi:*\n`+
+                        `*Nombre:* ${nombre}\n` +
+                        `*Teléfono:* ${telefono}\n` +
+                        `*Dirección:* ${direccion}\n` +
+                        `*Ciudad:* ${ciudad}\n` +
+                        `*Barrio:* ${barrio}`;
         const encodedMessage = encodeURIComponent(mensaje);
-        const whatsappUrl = `https://wa.me/573226892988?text=${encodedMessage}`;
+        const whatsappUrl = `https://wa.me/573053447255?text=${encodedMessage}`;
 
         window.open(whatsappUrl, '_blank');
     });
