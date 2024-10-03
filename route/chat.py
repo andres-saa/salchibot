@@ -284,7 +284,7 @@ def extraer_productos(texto,wsp_id):
     texto_limpio = texto.replace('*', '').replace(',', '.')
     
     # Regex para extraer nombre del producto, cantidad y precio (aunque el precio no es necesario aquí)
-    pattern = re.compile(r'-\s(.+?)\sx\s(\d+)\s=\s\$(\d+[.,]?\d*)')
+    pattern = re.compile(r'-\s(.+?)\sx\s(\d+)')
     
     # Buscar todos los matches
     matches = pattern.findall(texto_limpio)
@@ -353,7 +353,9 @@ def extraer_datos_usuario(cadena: str) -> dict:
     patron = r"Nombre:\s*(?P<name>.+)\s*Teléfono:\s*(?P<phone>\d+)\s*Dirección:\s*(?P<address>[\w\s#-]+)\s*Ciudad:\s*(?P<city>[\w\s]+)\s*Barrio:\s*(?P<neighborhood>[\w\s]+)"
     
     # Buscar coincidencias
-    coincidencias = re.search(patron, cadena.replace("*",''))
+    coincidencias = re.search(patron, cadena)
+    
+    print(patron)
     
     if coincidencias:
         # Limpiar los valores extraídos (eliminar espacios o saltos de línea al inicio y final)
@@ -405,9 +407,11 @@ def chatbot(userInput: UserInput):
     
     I = chatbot_instance.i_am_registered(userInput.client_id)
     
+    
     if (not I and userInput.answer.strip().replace("*","").startswith('Resgistrame papi:')):
-        
-        user = extraer_datos_usuario(userInput.answer)
+        print('here')
+        user = extraer_datos_usuario(userInput.answer.replace('*',''))
+        print(user)
         
         if user:
             created_user =  chatbot_instance.create_temp_user(user["user_name"],user["user_phone"],user["user_address"],userInput.client_id)

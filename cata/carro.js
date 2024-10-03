@@ -64,7 +64,9 @@ function toggleProducto(producto) {
     if (productoExistente) {
         // Si el producto ya existe en el carrito, disminuye su cantidad
         if (productoExistente.cantidad >= 1) {
-            productoExistente.cantidad = 0;
+            carrito.productos = carrito.productos.filter(p => p.id !== producto.id);
+
+            
         } else {
             // Si la cantidad llega a 1 y se quiere quitar, elimina el producto del carrito
             productoExistente.cantidad = 1
@@ -95,11 +97,10 @@ function enviarPedidoWhatsApp(indicativoPais, telefono) {
     
     // Iterar sobre cada producto y añadir su cantidad, nombre y precio al mensaje
     carrito.productos.forEach(producto => {
-        mensaje += `- ${producto.product_name} x *${producto.cantidad}* = *$${producto.price.toLocaleString('es-CO')}*\n`;
+        mensaje += `- ${producto.product_name} x *${producto.cantidad}*\n`;
     });
     
-    // Añadir el total al mensaje
-    mensaje += `*Total: $${carrito.total.toLocaleString('es-CO')}*\n`;
+    
     
     // Incluir notas adicionales si existen
     if (carrito.notas) {
