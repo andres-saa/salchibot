@@ -436,9 +436,7 @@ def chatbot(userInput: UserInput):
     
 
     
-    
-    
-    if (userInput.answer.strip().startswith('Resgistrame')):
+    if (not I and userInput.answer.strip().replace("*","").startswith('Resgistrame papi:')):
         print('here')
         user = extraer_datos_usuario(userInput.answer.replace('*',''))
         print(user)
@@ -447,13 +445,15 @@ def chatbot(userInput: UserInput):
             created_user =  chatbot_instance.create_temp_user(user["user_name"],user["user_phone"],user["user_address"],userInput.client_id)
             return {"response":f"Listo *{user['user_name'].capitalize()}* Tu registro ha sido exitoso\n como te gustaria proceder?\n, Te armamos un pedido?\n, deseas consultar el estado de tu orden?\n"}
     
-
+    
     if not I:
+        
         for intent in datos:
             if intent["intent"] == "no registrado":   
                 data =  random.choice(intent["data"]["responses"])
                 clean = replace_variables(data)
                 return {"response":clean}
+    
     
 
 
