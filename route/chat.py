@@ -459,11 +459,11 @@ def chatbot(userInput: UserInput):
     
     my_current_order = chatbot_instance.i_have_temp_order(userInput.client_id)
     
-    if (my_current_order and userInput.answer.strip().startswith('cancelar')):
+    if (my_current_order and userInput.answer.lower().strip().startswith('cancelar')):
         chatbot_instance.deleteMyTempOrder(userInput.client_id)
         return {"response":"listo vamos desde cero"}
     
-    if (my_current_order and userInput.answer.strip().startswith('confirmar')):
+    if (my_current_order and userInput.answer.strip().lower().startswith('confirmar')):
         response = confirm_order(userInput.client_id,my_current_order)
         output = replace_variables("Listo {nombre} Tu pedido ha sido resitrado exitoxamente con este codigo puedes rastrearlo en https://salchimonster.com/rastrear-pedido  *Tu codigo* " + response )
         return {"response":f"Listo {output}"}
