@@ -1,55 +1,11 @@
 {
     "clientes_registrados": {
-        "1234567": {
-            "nombre": "Juan Perez",
-            "telefono": "3001234567",
-            "direccion": "Calle 123"
-        },
-        "3333": {
-            "nombre": "andres",
-            "tel\u00e9fono": "3226892988",
-            "direcci\u00f3n": "calle 4 # 93-54",
-            "ciudad": "Bogot\u00e1",
-            "barrio": "Chapinero"
-        },
-        "DWafEUsQVpj8fe3Ia1Co": {
-            "nombre": "andres",
-            "tel\u00e9fono": "3226892988",
-            "direcci\u00f3n": "calle 4 # 93-54",
-            "ciudad": "Bogot\u00e1",
-            "barrio": "Suba"
-        },
-        "12345": {
-            "nombre": "andres",
-            "tel\u00e9fono": "3226892988",
-            "direcci\u00f3n": "calle 4 # 93-54",
-            "ciudad": "Medell\u00edn",
-            "barrio": "Laureles"
-        },
-        "andres": {}
+        
     },
     "productos_disponibles": [
-        {
-            "id": 1,
-            "nombre": "hamburguesa",
-            "precio": 12000
-        },
-        {
-            "id": 2,
-            "nombre": "pizza",
-            "precio": 18000
-        },
-        {
-            "id": 3,
-            "nombre": "perro caliente",
-            "precio": 10000
-        },
-        {
-            "id": 4,
-            "nombre": "papas fritas",
-            "precio": 5000
-        }
+       
     ],
     "carrito": {},
+    
     "ultima_respuesta": "\u00a1Hola! \u00bfEn qu\u00e9 puedo ayudarte?"
 }

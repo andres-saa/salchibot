@@ -64,64 +64,84 @@ productos_disponibles = [
 
 
 
-    # Cargar variables (suponiendo que están definidas)
-variables = {
-
-    "sedes": (
-        "\n\n*CALI*\n"
-        "En Cali tenemos estas sedes:\n"
-        "*Salchimonster Bretaña* - Calle 10#21-42 Bretaña\n"
-        "*Salchimonster Flora* - Calle 44 Norte Av 3E-89 la Flora\n"
-        "*Salchimonster Caney* - Carrera 85 # 37-10, Caney\n\n"
-        
-        "*BOGOTÁ*\n"
-        "En Bogotá tenemos estas sedes:\n"
-        "*Salchimonster Montes* - Calle 8 sur #32a-08\n"
-        "*Salchimonster Modelia* - Carrera 75 # 25C-45\n"
-        "*Salchimonster Suba* - Carrera 92 # 147B-17\n"
-        "*Salchimonster Kennedy* - Carrera 78B # 38 sur-79\n"
-        "*Salchimonster Chapinero* - Cra 10 A # 70-24\n\n"
-        
-        "*JAMUNDÍ*\n"
-        "En Jamundí tenemos esta sede:\n"
-        "*Salchimonster Jamundí* - Carrera 22 # 5A sur-60\n\n"
-        
-        "*MEDELLÍN*\n"
-        "En Medellín tenemos esta sede:\n"
-        "*Salchimonster Laureles* - Transversal 39 #74 B-14 Primer Piso\n"
-    ),
-
-
-
-    "horarios": (
-        "\n\n*🔥 SEDES CALI 🔥*\n"
-        "*Flora*\n"
-        "*Caney*\n"
-        "*Bretaña*\n"
-        "*Jamundí*\n\n"
-        "⏰ Horario: Lunes a domingo 5:00 PM a 11:30 PM\n\n"
-        
-        "*🔥 SEDES BOGOTÁ 🔥*\n"
-        "*Modelia*\n"
-        "*Kennedy*\n"
-        "*Suba*\n"
-        "*Montes*\n\n"
-        "⏰ Horario: Lunes a domingo 12:00 PM a 11:30 PM\n\n"
-        
-        "*🔥 SEDE MEDELLÍN LAURELES 🔥*\n"
-        "*Laureles*\n\n"
-        "⏰ Horario: Lunes a jueves 5:00 PM a 11:30 PM\n"
-        "⏰ Horario: Viernes a domingo 12:00 PM a 11:30 PM\n"
-    ),
-
-    "carta":("https://bot.salchimonster.com/carta/"),
-    "registro":("https://bot.salchimonster.com/registro/"),
-    "cambio_direccion":("https://bot.salchimonster.com/direccion/"),
-}
+def computed_variables(user_id:str):
+    variables = {
+        "sedes": (
+            "\n\n*CALI*\n"
+            "En Cali tenemos estas sedes:\n"
+            "*Salchimonster Bretaña* - Calle 10#21-42 Bretaña\n"
+            "*Salchimonster Flora* - Calle 44 Norte Av 3E-89 la Flora\n"
+            "*Salchimonster Caney* - Carrera 85 # 37-10, Caney\n\n"
+            
+            "*BOGOTÁ*\n"
+            "En Bogotá tenemos estas sedes:\n"
+            "*Salchimonster Montes* - Calle 8 sur #32a-08\n"
+            "*Salchimonster Modelia* - Carrera 75 # 25C-45\n"
+            "*Salchimonster Suba* - Carrera 92 # 147B-17\n"
+            "*Salchimonster Kennedy* - Carrera 78B # 38 sur-79\n"
+            "*Salchimonster Chapinero* - Cra 10 A # 70-24\n\n"
+            
+            "*JAMUNDÍ*\n"
+            "En Jamundí tenemos esta sede:\n"
+            "*Salchimonster Jamundí* - Carrera 22 # 5A sur-60\n\n"
+            
+            "*MEDELLÍN*\n"
+            "En Medellín tenemos esta sede:\n"
+            "*Salchimonster Laureles* - Transversal 39 #74 B-14 Primer Piso\n"
+        ),
 
 
 
+        "horarios": (
+            "\n\n*🔥 SEDES CALI 🔥*\n"
+            "*Flora*\n"
+            "*Caney*\n"
+            "*Bretaña*\n"
+            "*Jamundí*\n\n"
+            "⏰ Horario: Lunes a domingo 5:00 PM a 11:30 PM\n\n"
+            
+            "*🔥 SEDES BOGOTÁ 🔥*\n"
+            "*Modelia*\n"
+            "*Kennedy*\n"
+            "*Suba*\n"
+            "*Montes*\n\n"
+            "⏰ Horario: Lunes a domingo 12:00 PM a 11:30 PM\n\n"
+            
+            "*🔥 SEDE MEDELLÍN LAURELES 🔥*\n"
+            "*Laureles*\n\n"
+            "⏰ Horario: Lunes a jueves 5:00 PM a 11:30 PM\n"
+            "⏰ Horario: Viernes a domingo 12:00 PM a 11:30 PM\n"
+        ),
 
+        "carta":("https://bot.salchimonster.com/carta/"),
+        "registro":("https://bot.salchimonster.com/registro/"),
+        "cambio_direccion":("https://bot.salchimonster.com/direccion/"),
+        "nombre":f'*{get_my_self(user_id).capitalize()}*'
+    }
+
+    return variables
+
+
+
+def get_my_self(user_id):
+    chat_instance = Products()
+    
+    return chat_instance.i_am_registered(user_id)[0]["user_name"]
+
+
+
+def get_my_data(user_id):
+    chat_instance = Products()
+    
+    user = chat_instance.i_am_registered(user_id)[0]
+    
+    response = f"""\n
+    *Nombre*: {user["user_name"]} \n
+    *Direccion*: {user["user_address"]} \n
+    *Telefono*: {user["user_phone"]}
+    """ 
+    
+    return response
 
 
 def change_datos(data):
@@ -234,38 +254,23 @@ def update_last_response(response,user_id:str):
     data_responses[user_id] = response
     save_data_responses(data_responses)
 
+
+
 def match_pattern(user_input: str, client_id: str, datos):
     user_input_lower = user_input.lower()
     
     # Obtener la última respuesta desde el archivo
     previous_question = get_previous_question(client_id)
     
-    if previous_question and previous_question.startswith("Parece que aún no estás registrado"):
-        response = register_client(user_input, client_id)
-        update_last_response(response,client_id)
-        return response
+   
     
     user_input_set = set(user_input_lower.split())
-
-    for pattern in get_intent_patterns(datos,'pedido'):
-        pattern_set = set(pattern)
-        if pattern_set.issubset(user_input_set):
-            if not check_client_registration(client_id):
-                update_last_response("Parece que aún no estás registrado. Por favor, proporciona tu información para registrarte.",client_id)
-                return "Parece que aún no estás registrado. llename esta info y le das a listo. el sistema te registra de manera automatica http://127.0.0.1:5500/info/info.html"
-
-            response = random.choice(get_intent_responses(datos,'pedido'))
-            update_last_response(response,client_id)  # Actualiza la última respuesta
-            return response
-
-
                 
     for intent in datos:
-        if intent['intent'] != 'pedido':
-            for pattern in  intent["data"]['patterns']:
-                pattern_set = set(pattern)
-                if pattern_set.issubset(user_input_set):
-                    return random.choice(intent['data']['responses'])
+        for pattern in  intent["data"]['patterns']:
+            pattern_set = set(pattern)
+            if pattern_set.issubset(user_input_set):
+                return random.choice(intent['data']['responses'])
 
                 
     update_last_response("Lo siento, no entiendo tu solicitud. ¿Puedes repetirla?",client_id)
@@ -315,7 +320,9 @@ def extraer_productos(texto,wsp_id):
     
     
     order_json = build_json(productos_finales,[], User(user_name='andres',user_phone='11111111',user_address='esta direcccion'),12,5,5000,'prueba de wps')
-    return chabot_instance.create_temp_order(wsp_id=wsp_id,json_data=order_json)
+    
+    chabot_instance.create_temp_order(wsp_id=wsp_id,json_data=order_json)
+    return f"Listo papi, Ya tengo tu pedido registrado {productos_finales} \n {get_my_data(wsp_id)} \n\n si todo es correcto porfa ingresa la palabra confirmar para enviarlo a preparacion"
 
 
 
@@ -399,8 +406,17 @@ def confirm_order(wsp_id:str,data):
 
 @chat_router.post('/chat', dependencies=[Depends(verify_api_key)])
 def chatbot(userInput: UserInput):
+    
+    def replace_variables(text):
+        pattern = re.compile(r'\{(\w+)\}')  # Patrón para identificar variables dentro de llaves
+        return pattern.sub(lambda match: computed_variables(userInput.client_id).get(match.group(1), f"{match.group(0)}"), text)
     # Cargar datos de un archivo JSON loca
 
+
+    with open('data_patterns.json', 'r') as file:
+        datos = json.load(file)
+        
+        
     if not data_responses.get(userInput.client_id):
             update_last_response('hola', userInput.client_id)
     chatbot_instance = Products()
@@ -418,8 +434,17 @@ def chatbot(userInput: UserInput):
             return {"response":f"Listo *{user['user_name'].capitalize()}* Tu registro ha sido exitoso\n como te gustaria proceder?\n, Te armamos un pedido?\n, deseas consultar el estado de tu orden?\n"}
     
     
+    
+
+
     if not I:
-        return {"response":"No estas registrado aun ayudame llenando estos daticos breve https://bot.salchimonster.com/registro/"}
+        
+        for intent in datos:
+            if intent["intent"] == "no registrado":   
+                data =  random.choice(intent["data"]["responses"])
+                
+                clean = replace_variables(data)
+                return {"response":clean}
     
    
     
@@ -432,7 +457,8 @@ def chatbot(userInput: UserInput):
     
     if (my_current_order and userInput.answer.strip().startswith('confirmar')):
         response = confirm_order(userInput.client_id,my_current_order)
-        return {"response":response}
+        output = replace_variables("Listo {nombre} Tu pedido ha sido resitrado exitoxamente con este codigo puedes rastrearlo en https://salchimonster.com/rastrear-pedido  *Tu codigo* " + response )
+        return {"response":f"Listo {output}"}
     
     
     
@@ -442,9 +468,7 @@ def chatbot(userInput: UserInput):
     if  userInput.answer.strip().startswith("Mi pedido:"):
        return {"response":extraer_productos(userInput.answer,userInput.client_id)}
     
-    with open('data_patterns.json', 'r') as file:
-        datos = json.load(file)
-
+    
     
 
 
@@ -452,9 +476,7 @@ def chatbot(userInput: UserInput):
     response = match_pattern(userInput.answer, userInput.client_id, datos)
 
     # Buscar y reemplazar variables en la respuesta
-    def replace_variables(text):
-        pattern = re.compile(r'\{(\w+)\}')  # Patrón para identificar variables dentro de llaves
-        return pattern.sub(lambda match: variables.get(match.group(1), f"{match.group(0)}"), text)
+    
 
     # Aplicar reemplazo de variables a la respuesta
     response = replace_variables(response)

@@ -22,6 +22,21 @@
         }
     },
     {
+        "intent": "no registrado",
+        "data": {
+            "patterns": [
+                [
+                    "no",
+                    "estoy",
+                    "registrado"
+                ]
+            ],
+            "responses": [
+                "Hola Papi, coloborame porfa con estos datos, para registrate en nuestro sistema, solo por esta vez {registro}"
+            ]
+        }
+    },
+    {
         "intent": "pedido",
         "data": {
             "patterns": [
@@ -33,6 +48,21 @@
             ],
             "responses": [
                 "Listo papi, aca te comparto nuestra carta inteligente, si das click en las foticos se va agregando a tu carrito, apenas estes ready le das en el boton que dice listo {carta}"
+            ]
+        }
+    },
+    {
+        "intent": "saludos",
+        "data": {
+            "patterns": [
+                [
+                    "hola",
+                    "buen",
+                    "dia"
+                ]
+            ],
+            "responses": [
+                "dimelo {nombre} que se cuenta papi, como te puedo ayudar"
             ]
         }
     }
