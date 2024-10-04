@@ -65,5 +65,31 @@
                 "dimelo {nombre} que se cuenta papi, como te puedo ayudar"
             ]
         }
+    },
+    {
+        "intent": "saludos dia",
+        "data": {
+            "patterns": [
+                [
+                    "hola",
+                    "buen",
+                    "dia"
+                ],
+                [
+                    "hola",
+                    "buenos",
+                    "dias"
+                ],
+                [
+                    "hola",
+                    "buenos",
+                    "d\u00edas"
+                ]
+            ],
+            "responses": [
+                "Hola {nombre}, buenos dias. contamelo que se te ofrece",
+                "Que te contas {nombre}? en que te puedo ayudar?"
+            ]
+        }
     }
 ]

@@ -125,8 +125,10 @@ def computed_variables(user_id:str):
 
 def get_my_self(user_id):
     chat_instance = Products()
-    
-    return chat_instance.i_am_registered(user_id)[0]["user_name"]
+    i = chat_instance.i_am_registered(user_id)
+    if i :
+        return i[0]["user_name"]
+    return ""
 
 
 
@@ -432,6 +434,16 @@ def chatbot(userInput: UserInput):
     I = chatbot_instance.i_am_registered(userInput.client_id)
     
     
+    if not I:
+        
+        for intent in datos:
+            if intent["intent"] == "no registrado":   
+                data =  random.choice(intent["data"]["responses"])
+                clean = replace_variables(data)
+                return {"response":clean}
+    
+    
+    
     if (not I and userInput.answer.strip().replace("*","").startswith('Resgistrame papi:')):
         print('here')
         user = extraer_datos_usuario(userInput.answer.replace('*',''))
@@ -445,15 +457,6 @@ def chatbot(userInput: UserInput):
     
 
 
-    if not I:
-        
-        for intent in datos:
-            if intent["intent"] == "no registrado":   
-                data =  random.choice(intent["data"]["responses"])
-                
-                clean = replace_variables(data)
-                return {"response":clean}
-    
    
     
     
