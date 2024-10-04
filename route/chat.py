@@ -443,7 +443,7 @@ def chatbot(userInput: UserInput):
         
         if user:
             created_user =  chatbot_instance.create_temp_user(user["user_name"],user["user_phone"],user["user_address"],userInput.client_id)
-            return {"response":f"Listo *{user['user_name'].capitalize()}* Tu registro ha sido exitoso\n como te gustaria proceder?\n, Te armamos un pedido?\n, deseas consultar el estado de tu orden?\n"}
+            return {"response":f"Listo *{user['user_name'].capitalize()}* Tu registro ha sido exitoso\n como te gustaria proceder?\n, Te armamos un pedido?\n, deseas consultar el estado de tu orden?\n ¡Papi! 🔥💥 ¡Activemos ese pedido ya! Mira, por aquí te dejo nuestra carta inteligente 👉 https://bot.salchimonster.com/carta/ 🚀. Si le das click a la fotico de los productos, se van agregando de una. Cuando todo esté ready, solo le das al botón verde que dice *Listo* y ¡Booom! 🎉 ¡Pedido en marcha! 💣🔥"}
     
     
     if not I:
