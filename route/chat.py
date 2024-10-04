@@ -330,7 +330,7 @@ def extraer_productos(texto,wsp_id):
         return "\n".join(resultado)
     
     chabot_instance.create_temp_order(wsp_id=wsp_id,json_data=order_json)
-    return f"Listo papi, Ya tengo tu pedido registrado {convertir_pedido(productos_finales)} \n {get_my_data(wsp_id)} \n\n si todo es correcto porfa ingresa la palabra confirmar para enviarlo a preparacion"
+    return f"Listo papi, Ya tengo tu pedido registrado \n {convertir_pedido(productos_finales)} \n {get_my_data(wsp_id)} \n\n si todo es correcto porfa ingresa la palabra confirmar para enviarlo a preparacion"
 
 
 
