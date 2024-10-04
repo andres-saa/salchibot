@@ -321,8 +321,16 @@ def extraer_productos(texto,wsp_id):
     
     order_json = build_json(productos_finales,[], User(user_name='andres',user_phone='11111111',user_address='esta direcccion'),12,5,5000,'prueba de wps')
     
+    
+    def convertir_pedido(productos):
+        resultado = []
+        for producto in productos:
+            linea = f"- {producto['nombre']} x *{producto['quantity']}* =  *$0.00*"
+            resultado.append(linea)
+        return "\n".join(resultado)
+    
     chabot_instance.create_temp_order(wsp_id=wsp_id,json_data=order_json)
-    return f"Listo papi, Ya tengo tu pedido registrado {productos_finales} \n {get_my_data(wsp_id)} \n\n si todo es correcto porfa ingresa la palabra confirmar para enviarlo a preparacion"
+    return f"Listo papi, Ya tengo tu pedido registrado {convertir_pedido(productos_finales)} \n {get_my_data(wsp_id)} \n\n si todo es correcto porfa ingresa la palabra confirmar para enviarlo a preparacion"
 
 
 
