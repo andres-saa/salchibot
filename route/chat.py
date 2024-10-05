@@ -397,7 +397,7 @@ def generar_mensaje_pedido(pedido):
     # Recorrer los productos y agregar su información al mensaje
     total_productos = 0
     for producto in pedido['pedido_temporal']['order_products']:
-        nombre = producto['nombre']
+        nombre = producto['nombre'].title()  # Capitaliza la primera letra de cada palabra
         cantidad = producto['quantity']
         precio = producto.get('price', 0)  # Suponer que el precio puede no estar en los datos
         subtotal = precio * cantidad
