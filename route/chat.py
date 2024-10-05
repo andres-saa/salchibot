@@ -138,9 +138,9 @@ def get_my_data(user_id):
     user = chat_instance.i_am_registered(user_id)[0]
     
     response = f"""\n
-    *Nombre*: {user["user_name"]} \n
-    *Direccion*: {user["user_address"]} \n
-    *Telefono*: {user["user_phone"]} \n
+    *Nombre*: {user["user_name"]}
+    *Direccion*: {user["user_address"]}
+    *Telefono*: {user["user_phone"]}
     *Metodo de pago*: {user["payment_method"]}
     """ 
     
@@ -375,8 +375,8 @@ def extraer_productos(texto,wsp_id):
         for producto in productos:
             subtotal = producto['quantity'] * producto['price']
             total += subtotal
-            linea = f"- {producto['nombre']} x *{producto['quantity']}* = ${int(subtotal):,}"
-            resultado.append(linea)
+            linea = f"{producto['nombre']} x *{producto['quantity']}* = ${int(subtotal):,}"
+            resultado.append(linea.title())  # Capitaliza la primera letra de cada palabra
         resultado.append(f"\nTotal = ${int(total):,}")
         return "\n".join(resultado)
 
