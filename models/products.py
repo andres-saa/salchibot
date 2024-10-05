@@ -55,27 +55,39 @@ class Products:
             # print(data(id_wsp_customer=wsp_id, pedido_temporal=json_data))
 
 
-    def create_temp_user(self, user_name: str,user_phone:str, user_address: str,id_wsp_customer:str):
-        
+    def create_temp_user(self, user_name: str, user_phone: str, user_address: str, id_wsp_customer: str):
         class User(BaseModel):
             user_name: str
             user_phone: str
             user_address: str
-            id_wsp_customer:str# Almacenar como string en lugar de dict
+            id_wsp_customer: str  # Almacenar como string en lugar de dict
 
-        query, params = self.db.build_insert_query(
-            'orders.temp_user',
-            User(
-                user_name=user_name,
-                user_phone=user_phone,
-                user_address=user_address,
-                id_wsp_customer=id_wsp_customer),
-            returning='id'
+        # Crear el objeto User
+        user = User(
+            user_name=user_name,
+            user_phone=user_phone,
+            user_address=user_address,
+            id_wsp_customer=id_wsp_customer
         )
-        
+
+        # Construir la consulta SQL para insertar o actualizar si el ID ya existe
+        query = """
+        INSERT INTO orders.temp_user (user_name, user_phone, user_address, id_wsp_customer)
+        VALUES (%(user_name)s, %(user_phone)s, %(user_address)s, %(id_wsp_customer)s)
+        ON CONFLICT (id_wsp_customer) 
+        DO UPDATE SET
+            user_name = EXCLUDED.user_name,
+            user_phone = EXCLUDED.user_phone,
+            user_address = EXCLUDED.user_address
+        RETURNING id;
+        """
+
+        # Ejecutar la consulta con los parámetros del objeto User
+        params = user.dict()  # Convertir el objeto en un diccionario de parámetros
         id = self.db.execute_query(query, params, fetch=True)
+        
         return id
-    
+
     
 
     def i_have_temp_order(self,customer_id:str):

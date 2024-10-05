@@ -1,33 +1,51 @@
-document.addEventListener("DOMContentLoaded", function() {
-    
+document.addEventListener("DOMContentLoaded", function () {
     const cityInput = document.getElementById('city-input');
     const cityList = document.getElementById('city-list');
     const neighborhoodInput = document.getElementById('neighborhood-input');
     const neighborhoodList = document.getElementById('neighborhood-list');
 
-    const data = {
-        'Bogotá': ['Chapinero', 'Usaquén', 'Suba'],
-        'Medellín': ['El Poblado', 'Laureles', 'Belén'],
-        'Cali': ['San Nicolás', 'Granada', 'El Peñón']
-    };
+    let cities = [];
+    let neighborhoods = [];
 
     // Inicialmente deshabilitar el input de barrios hasta que se seleccione una ciudad
     neighborhoodInput.disabled = true;
 
+    // Función para obtener las ciudades del backend
+    async function fetchCities() {
+        try {
+            const response = await fetch('https://backend.salchimonster.com/cities');
+            const data = await response.json();
+            cities = data.filter(city => city.visible); // Filtrar solo las ciudades visibles
+        } catch (error) {
+            console.error("Error al obtener las ciudades:", error);
+        }
+    }
+
+    // Función para obtener los barrios de una ciudad específica
+    async function fetchNeighborhoods(cityId) {
+        try {
+            const response = await fetch(`https://backend.salchimonster.com/neighborhoods/by-city/${cityId}`);
+            neighborhoods = await response.json();
+            updateDropdownList(neighborhoodInput, neighborhoodList, neighborhoods, true);
+        } catch (error) {
+            console.error("Error al obtener los barrios:", error);
+        }
+    }
+
     function updateDropdownList(input, list, items, forceDisplay = false) {
         const filter = input.value.toLowerCase();
         list.innerHTML = '';
-        const filteredItems = items.filter(item => item.toLowerCase().includes(filter));
+        const filteredItems = items.filter(item => item.name.toLowerCase().includes(filter));
         filteredItems.forEach(item => {
             const div = document.createElement('div');
-            div.textContent = item;
-            div.onclick = function() {
-                input.value = item;
+            div.textContent = item.name;
+            div.onclick = function () {
+                input.value = item.name;
                 list.style.display = 'none';
                 if (input === cityInput) {
                     neighborhoodInput.value = '';
                     neighborhoodInput.disabled = false; // Habilitar el input de barrios al seleccionar una ciudad
-                    updateNeighborhoodList(item);
+                    fetchNeighborhoods(item.city_id); // Pasar el city_id para obtener los barrios
                 }
             };
             list.appendChild(div);
@@ -40,37 +58,36 @@ document.addEventListener("DOMContentLoaded", function() {
         }
     }
 
-    function updateNeighborhoodList(selectedCity) {
-        if (data[selectedCity]) {
-            updateDropdownList(neighborhoodInput, neighborhoodList, data[selectedCity], true);
-        } else {
-            neighborhoodList.innerHTML = '';
-            neighborhoodList.style.display = 'none';
-            neighborhoodInput.disabled = true; // Deshabilitar el input de barrios si no hay barrios disponibles
-        }
-    }
+    cityInput.addEventListener('input', () => {
+        updateDropdownList(cityInput, cityList, cities.map(city => ({ city_id: city.city_id, name: city.city_name })));
+    });
 
-    cityInput.addEventListener('input', () => updateDropdownList(cityInput, cityList, Object.keys(data)));
     neighborhoodInput.addEventListener('input', () => {
-        const selectedCity = cityInput.value;
-        if (data[selectedCity]) {
-            updateDropdownList(neighborhoodInput, neighborhoodList, data[selectedCity]);
+        const selectedCityName = cityInput.value;
+        const selectedCity = cities.find(city => city.city_name === selectedCityName);
+        if (selectedCity) {
+            updateDropdownList(neighborhoodInput, neighborhoodList, neighborhoods.map(neighborhood => ({
+                name: neighborhood.name
+            })), true);
         }
     });
 
-    // Mostrar la lista cuando el input gane foco
+    // Mostrar la lista de ciudades cuando el input gane foco y ocultar la lista de barrios
     cityInput.addEventListener('focus', () => {
-        updateDropdownList(cityInput, cityList, Object.keys(data), true);
+        updateDropdownList(cityInput, cityList, cities.map(city => ({ city_id: city.city_id, name: city.city_name })), true);
+        neighborhoodList.style.display = 'none'; // Ocultar la lista de barrios al seleccionar una ciudad
     });
+
     neighborhoodInput.addEventListener('focus', () => {
-        const selectedCity = cityInput.value;
-        if (selectedCity && data[selectedCity]) {
-            updateDropdownList(neighborhoodInput, neighborhoodList, data[selectedCity], true);
+        const selectedCityName = cityInput.value;
+        const selectedCity = cities.find(city => city.city_name === selectedCityName);
+        if (selectedCity) {
+            fetchNeighborhoods(selectedCity.city_id);
         }
     });
 
     cityInput.addEventListener('blur', () => {
-        if (!Object.keys(data).includes(cityInput.value)) {
+        if (!cities.some(city => city.city_name === cityInput.value)) {
             cityInput.value = '';
             neighborhoodInput.value = '';
             neighborhoodList.innerHTML = '';
@@ -80,25 +97,32 @@ document.addEventListener("DOMContentLoaded", function() {
     });
 
     neighborhoodInput.addEventListener('blur', () => {
-        const selectedCity = cityInput.value;
-        if (selectedCity && !data[selectedCity].includes(neighborhoodInput.value)) {
-            neighborhoodInput.value = '';
+        const selectedCityName = cityInput.value;
+        const selectedCity = cities.find(city => city.city_name === selectedCityName);
+        if (selectedCity) {
+            const relatedNeighborhoods = neighborhoods.map(neighborhood => neighborhood.name);
+            if (!relatedNeighborhoods.includes(neighborhoodInput.value)) {
+                neighborhoodInput.value = '';
+            }
         }
     });
 
     // Evento para manejar clics fuera de los dropdowns para cerrarlos
-    document.addEventListener('click', function(event) {
+    document.addEventListener('click', function (event) {
         if (!event.target.matches('.dropdown-input')) {
             cityList.style.display = 'none';
             neighborhoodList.style.display = 'none';
         }
     });
+
+    // Inicializar las ciudades al cargar la página
+    fetchCities();
 });
 
-
-document.addEventListener("DOMContentLoaded", function() {
+// Segunda parte: Manejar el evento de finalizar
+document.addEventListener("DOMContentLoaded", function () {
     const finalizeButton = document.getElementById('finalize-button');
-    finalizeButton.addEventListener('click', function() {
+    finalizeButton.addEventListener('click', function () {
         const nombre = document.getElementById('nombre').value.trim();
         const telefono = document.getElementById('telefono').value.trim();
         const direccion = document.getElementById('direccion').value.trim();
@@ -112,16 +136,24 @@ document.addEventListener("DOMContentLoaded", function() {
         }
 
         // Construir el mensaje con formato específico
-        const mensaje = 
-                        `*Resgistrame papi:*\n`+
-                        `*Nombre:* ${nombre}\n` +
-                        `*Teléfono:* ${telefono}\n` +
-                        `*Dirección:* ${direccion}\n` +
-                        `*Ciudad:* ${ciudad}\n` +
-                        `*Barrio:* ${barrio}`;
+        function toTitleCase(str) {
+            return str.replace(/\w\S*/g, function(txt){
+                return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+            });
+        }
+        
+        const mensaje =
+            `*Resgistrame papi:*\n` +
+            `*Nombre:* ${toTitleCase(nombre)}\n` +
+            `*Teléfono:* ${toTitleCase(telefono)}\n` +
+            `*Dirección:* ${toTitleCase(direccion)}\n` +
+            `*Ciudad:* ${toTitleCase(ciudad)}\n` +
+            `*Barrio:* ${toTitleCase(barrio)}`;
+        
         const encodedMessage = encodeURIComponent(mensaje);
         const whatsappUrl = `https://wa.me/573053447255?text=${encodedMessage}`;
-
+        
         window.open(whatsappUrl, '_blank');
     });
 });
+
