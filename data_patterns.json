@@ -4,6 +4,14 @@
         "data": {
             "patterns": [
                 [
+                    "dame",
+                    "horarios"
+                ],
+                [
+                    "Dame",
+                    "horarios"
+                ],
+                [
                     "a",
                     "que",
                     "hora",
@@ -17,7 +25,8 @@
                 ]
             ],
             "responses": [
-                "estos son los horarios de nuestras sedes monstruo {horarios}"
+                "estos son los horarios de nuestras sedes monstruo {horarios}",
+                "Estos son los horarios papi {horarios}"
             ]
         }
     },
@@ -71,6 +80,46 @@
         "data": {
             "patterns": [
                 [
+                    "hola"
+                ],
+                [
+                    "Hola"
+                ],
+                [
+                    "Hole"
+                ],
+                [
+                    "holi"
+                ],
+                [
+                    "Holi"
+                ],
+                [
+                    "buen",
+                    "d\u00eda"
+                ],
+                [
+                    "Buen",
+                    "d\u00eda"
+                ],
+                [
+                    "buenos",
+                    "dias"
+                ],
+                [
+                    "buenos",
+                    "d\u00edas"
+                ],
+                [
+                    "Buenos",
+                    "d\u00edas"
+                ],
+                [
+                    "buen",
+                    "dia",
+                    ""
+                ],
+                [
                     "hola",
                     "buen",
                     "dia"
@@ -84,11 +133,284 @@
                     "hola",
                     "buenos",
                     "d\u00edas"
+                ],
+                [
+                    "Hola,",
+                    "buen",
+                    "d\u00eda"
+                ],
+                [
+                    "Hola,",
+                    "buenos",
+                    "d\u00edas"
+                ],
+                [
+                    "hole,",
+                    "buen",
+                    "dia"
+                ],
+                [
+                    "hole,",
+                    "buenos",
+                    "dias"
+                ],
+                [
+                    "Hole,",
+                    "buen",
+                    "dia"
+                ],
+                [
+                    "Hole,",
+                    "buen",
+                    "d\u00eda"
+                ],
+                [
+                    "Hole,",
+                    "buenos",
+                    "dias"
+                ],
+                [
+                    "Hole,",
+                    "buenos",
+                    "d\u00edas"
+                ],
+                [
+                    "Holi,",
+                    "buen",
+                    "dia"
+                ],
+                [
+                    "Holi,",
+                    "buen",
+                    "d\u00eda"
+                ],
+                [
+                    "Holi,",
+                    "buenos",
+                    "dias"
+                ],
+                [
+                    "Holi,",
+                    "buenos",
+                    "d\u00edas"
+                ],
+                [
+                    "Quiubo,",
+                    "buen",
+                    "dia"
+                ],
+                [
+                    "Quiubo,",
+                    "buenos",
+                    "dias"
                 ]
             ],
             "responses": [
+                "",
+                "\"\u00a1Epa, {nombre}! \ud83d\ude0e \u00bfQu\u00e9 m\u00e1s, todo bien? \u00a1Estamos ready para activar ese pedido! \ud83d\udd25 Revisa la carta \ud83c\udf54 {carta}, solo toca las foticos \ud83d\udcf8 y se van sumando. Dale al bot\u00f3n verde \u2705 cuando est\u00e9s listo y \u00a1BAM! \ud83d\udca5 \u00a1Listo para despachar! \ud83d\ude80\"",
+                "\"\u00a1Epa, {nombre}! \ud83d\ude0e \u00bfTodo bien? Vamos a ponerle power a ese pedido \ud83d\udd25. Te paso la carta \ud83c\udf54 {carta}, toca la fotico \ud83d\udcf8 y \u00a1pam! \ud83d\udca5 se va sumando. Cuando est\u00e9s ready, solo le das al botoncito verde \u2705 y \u00a1BOOM! Pedido activado, pap\u00e1 \ud83d\ude80.\"",
+                "\"\u00a1Hey, {nombre}! \ud83d\udca3 \u00bfC\u00f3mo va todo, mijo? \ud83d\ude0e Ya sabes, revisa la carta melo \ud83c\udf7d\ufe0f {carta}, toca la fotico \ud83d\udcf8 y \u00a1BOOM! se agrega todo de una. Cuando est\u00e9 todo, dale al verde \u2705 y \u00a1pum! pedido activado y en camino \ud83d\udd25\ud83d\ude80.\"",
+                "\"\u00a1Hey, {nombre}! \ud83d\ude01 \u00bfC\u00f3mo va todo, parcero? \u00bfActivo para el pedido? \ud83c\udf55 Mira la carta melo \ud83d\udd25 {carta}, toca la foto y va sumando todo solito \ud83d\udcf8. Le das al bot\u00f3n verde cuando tengas todo ready \u2705 y \u00a1pum! \ud83d\udca5 \u00a1Pedido activado, mijo! \ud83d\ude80\"",
+                "\"\u00a1Hey, {nombre}! \ud83d\ude01 \u00bfQu\u00e9 hay, todo bien? Vamos a ponerle melo a ese pedido \ud83c\udf54. Aqu\u00ed te dejo la carta \ud83d\udc47 {carta}, toca la foto \ud83d\udcf8 y \u00a1pum! \ud83d\udca5 se agrega al toque. Cuando est\u00e9 todo listo, dale al botoncito verde \u2705 y \u00a1BAM! activado \ud83d\ude80.\"",
                 "Hola {nombre}, buenos dias. contamelo que se te ofrece",
-                "Que te contas {nombre}? en que te puedo ayudar?"
+                "\"\u00a1Oe, {nombre}! \ud83e\udd19 \u00bfC\u00f3mo va esa energ\u00eda? \ud83d\udd25 Vamos a activar ese pedido \ud83d\udca5. Te paso la carta \ud83c\udf55 {carta}, toca la foto \ud83d\udcf8 y se suma de una. Cuando lo tengas listo, le das al botoncito verde \u2705 y \u00a1BAM! pedido activado y volando \ud83d\ude80.\"",
+                "\"\u00a1Oe, {nombre}! \ud83e\udd19 \u00bfC\u00f3mo vamos, papi? \ud83d\ude0e \u00bfListo para activar ese pedido? \ud83d\udd25 Mira la carta melo \ud83c\udf54 {carta}, toca la fotico y \u00a1pum! \ud83d\udca5 se va sumando todo. Cuando est\u00e9 todo listo, le das al verde \u2705 y \u00a1BOOM! Pedido activado al toque \ud83d\ude80.\"",
+                "\"\u00a1Oe, {nombre}! \ud83d\udca5 \u00bfC\u00f3mo va todo? \u00bfActivo para el pedido? \ud83c\udf55 Te paso la carta melo \ud83d\udccb {carta}, solo toca las foticos \ud83d\udcf8 y se van sumando. Cuando est\u00e9 todo ready, le das al verde \u2705 y \u00a1BOOM! \ud83d\udca3 \u00a1Pedido listo para llegar en una! \ud83d\ude80.\"",
+                "\"\u00a1Papi, {nombre}! \ud83e\udd19 \u00bfEstamos activos o qu\u00e9? \ud83d\ude01 Vamos a darle fuego a ese pedido \ud83d\udd25. Mira la carta \ud83c\udf55 {carta}, toca las fotos \ud83d\udcf8 y van sumando. Cuando tengas todo ready, le das al verde \u2705 y \u00a1pum! \ud83d\udca5 \u00a1todo listo para que te llegue al toque! \ud83d\ude80.\"",
+                "\"\u00a1Papi, {nombre}! \ud83d\ude0e \u00bfTodo melo? \ud83c\udf1e Vamos a activar ese pedido \ud83d\udd25. Te dejo la carta \ud83c\udf55 {carta}, toca las foticos \ud83d\udcf8 y se van sumando. Cuando est\u00e9 todo ready, le das al bot\u00f3n verde \u2705 y \u00a1BOOM! \ud83d\udca5 pedido activado, pap\u00e1 \ud83d\ude80.\"",
+                "Que te contas {nombre}? en que te puedo ayudar?",
+                "\"\u00a1Quiubo, {nombre}! \ud83e\udd19 \u00bfC\u00f3mo amaneces, parcero? \u00bfListo para pedir? \ud83c\udf7d\ufe0f Te paso la carta melo \ud83d\udcdd {carta}, solo toca la fotico y se va agregando \ud83d\udca5. Cuando tengas todo activado, le das al verde \u2705 y \u00a1pum! pedido on fire \ud83d\udd25\ud83d\ude80.\"",
+                "\"\u00a1Quiubo, {nombre}! \ud83d\udca5 \u00a1Estamos activos, papi! \u00bfQu\u00e9 vamos a pedir hoy? \ud83c\udf55 Te paso la carta \ud83c\udf54 {carta}, toca las fotos \ud83d\udcf8 y se van agregando. Cuando est\u00e9 todo ready, solo le das al botoncito verde \u2705 y \u00a1BOOM! \u00a1Todo listo para que te llegue al toque! \ud83d\ude80\"",
+                "\"\u00a1Quiubo, {nombre}! \ud83d\udca5 \u00bfListo para romperla con ese pedido? \ud83c\udf54 Aqu\u00ed tienes la carta melo \ud83d\udcdd {carta}, toca las foticos y \u00a1BOOM! \ud83d\udcf8 se van sumando. Cuando est\u00e9s ready, solo dale al bot\u00f3n verde \u2705 y \u00a1pum! \ud83d\udca5 \u00a1activado, pap\u00e1! \ud83d\ude80.\"",
+                "\"\u00a1Quiubo, {nombre}! \ud83d\ude0e Muy buenos d\u00edas, papi, \u00bfc\u00f3mo vamos? \ud83d\ude01 \u00bfEstamos activos para activar ese pedido? \ud83d\udd25 Te paso la carta melo \ud83c\udf7d\ufe0f {carta}, solo toca la fotico \ud83d\udcf8 y se va agregando solito. Cuando tengas todo ready, le das al botoncito verde \u2705 que dice 'Listo' y \u00a1BOOM! \ud83d\udca5 \u00a1Pedido activado! \ud83d\ude80\""
+            ]
+        }
+    },
+    {
+        "intent": "saludos noche",
+        "data": {
+            "patterns": [
+                [
+                    "hola"
+                ],
+                [
+                    "Hola"
+                ],
+                [
+                    "noches"
+                ],
+                [
+                    "Noches"
+                ],
+                [
+                    "buenas",
+                    "noches"
+                ],
+                [
+                    "Buenas",
+                    "noches"
+                ],
+                [
+                    "hey",
+                    "buenas",
+                    "noches"
+                ],
+                [
+                    "hey,",
+                    "buenas",
+                    "noches"
+                ],
+                [
+                    "Hey",
+                    "buenas",
+                    "noches"
+                ],
+                [
+                    "Hey,",
+                    "buenas",
+                    "noches"
+                ],
+                [
+                    "hola",
+                    "buenas",
+                    "noches"
+                ],
+                [
+                    "hola,",
+                    "buenas",
+                    "noches"
+                ],
+                [
+                    "Hola",
+                    "buenas",
+                    "noches"
+                ],
+                [
+                    "Hola,",
+                    "buenas",
+                    "noches"
+                ],
+                [
+                    "holi",
+                    "buenas",
+                    "noches"
+                ],
+                [
+                    "holi,",
+                    "buenas",
+                    "noches"
+                ],
+                [
+                    "Holi,",
+                    "buenas",
+                    "noches"
+                ]
+            ],
+            "responses": [
+                "",
+                "\"\u00a1Epa, bro! \ud83c\udf19 \u00bfC\u00f3mo va esa energ\u00eda esta noche? \ud83d\ude0e \u00a1Estamos full activos pa' romperla con ese pedido! \ud83d\udd25 Mira la carta melo \ud83d\udccb {carta}, toca la fotico \ud83d\udcf8 y \u00a1pam! se va sumando al toque. Cuando teng\u00e1s todo listo, dale al botoncito verde \u2705 y \u00a1BOOM! \ud83d\udca5 \u00a1Pa' esa, pedido activado full, papi! \ud83d\ude80\"",
+                "\"\u00a1Epa, mi parcero! \ud83c\udf1c \u00bfC\u00f3mo va la noche? \ud83d\udd25 \u00a1Aqu\u00ed estamos super activos, listos pa\u2019 romperla con ese pedido, papi! \ud83d\udca3 Te paso la carta melo \ud83c\udf55 {carta}, toca la fotico \ud83d\udcf8 y \u00a1pam! \ud83d\udca5 se va sumando de una. Cuando lo teng\u00e1s ready, le das al verde \u2705 y \u00a1BOOM! \ud83d\ude80 \u00a1Vamos pa\u2019 esa, pedido encendido, papi!\"",
+                "\"\u00a1Epa, {nombre}! \ud83c\udf1b Buenas noches, papi, \u00bfc\u00f3mo va esa noche prendida? \ud83d\udd25 Estamos activos pa\u2019 lo que necesit\u00e9s. Te paso la carta melo \ud83d\udccb {carta}, toca la fotico \ud83d\udcf8 y \u00a1BOOM! se va agregando todo. Cuando lo teng\u00e1s listo, le das al bot\u00f3n verde \u2705 y \u00a1pum! \u00a1Pedido activado! \ud83d\udca5\ud83d\ude80.\"",
+                "\"\u00a1Epa, {nombre}! \ud83c\udf1b \u00bfC\u00f3mo va la noche, papi? \ud83d\ude01 \u00a1Estamos activad\u00edsimos pa' lo que necesit\u00e9s! \ud83d\udd25 Mira la carta melo \ud83c\udf54 {carta}, toca las foticos \ud83d\udcf8 y \u00a1pam! \ud83d\udca5 todo se va agregando. Cuando est\u00e9 todo listo, dale al bot\u00f3n verde \u2705 y \u00a1BOOM! \u00a1Vamos pa' esa, pedido activado, papi! \ud83d\ude80\"",
+                "\"\u00a1Hey, mi bro! \ud83c\udf1b \u00bfC\u00f3mo va esa vuelta esta noche? \ud83d\ude0e \u00a1Estamos activ\u00edsimos, ready pa\u2019 activar ese pedido full power! \ud83d\udca5 Mira la carta melo \ud83c\udf7d\ufe0f {carta}, solo toca la fotico \ud83d\udcf8 y \u00a1pum! se va sumando de una. Cuando teng\u00e1s todo, dale al verde \u2705 y \u00a1BOOM! \ud83d\udca3 \u00a1Vamos pa' esa, pedido activado, papi! \ud83d\ude80\"",
+                "\"\u00a1Hey, {nombre}! \ud83c\udf19 Buenas noches, \u00bfc\u00f3mo va la vuelta, mijo? \ud83d\ude0e Estamos ready pa' activar ese pedido \ud83d\udd25. Te dejo la carta \ud83c\udf7d\ufe0f {carta}, toca la fotico \ud83d\udcf8 y \u00a1pum! \ud83d\udca3 se va sumando. Dale al botoncito verde \u2705 cuando est\u00e9 listo y \u00a1BOOM! \ud83d\ude80 \u00a1Pedido activado!\"",
+                "\"\u00a1Hey, {nombre}! \ud83c\udf19 Buenas noches, papi, \u00bfc\u00f3mo va esa energ\u00eda? \ud83d\udd25 Estamos ready pa' romperla con ese pedido. \ud83d\udca5 Aqu\u00ed te dejo la carta \ud83c\udf54 {carta}, toca la fotico \ud83d\udcf8 y \u00a1pam! \ud83d\udca3 se va sumando todo. Dale al verde \u2705 cuando est\u00e9 listo y \u00a1pum! \ud83d\ude80 \u00a1Pedido activado, pap\u00e1!\"",
+                "\"\u00a1Hey, papi! \ud83c\udf19 \u00bfC\u00f3mo va la vuelta esta noche? \ud83d\ude0e \u00a1Estamos super activos pa\u2019 prender ese pedido ya mismo! \ud83d\udd25 Te paso la carta melo \ud83d\udccb {carta}, toca la fotico \ud83d\udcf8 y \u00a1pum! se va sumando todo. Cuando lo teng\u00e1s ready, le das al verde \u2705 y \u00a1BOOM! \ud83d\udca5 \u00a1Pedido on fire, vamos pa' esa! \ud83d\ude80\"",
+                "\"\u00a1Hey, parcero! \ud83c\udf1b \u00bfQu\u00e9 tal la noche, mijo? \ud83d\udd25 \u00a1Aqu\u00ed estamos ready y activos pa\u2019 lo que venga! \ud83d\udca5 Te dejo la carta melo \ud83c\udf54 {carta}, toca la fotico \ud83d\udcf8 y \u00a1pum! \ud83d\udca5 todo va sum\u00e1ndose. Cuando teng\u00e1s todo ready, le das al verde \u2705 y \u00a1BOOM! \ud83d\ude80 \u00a1Vamos con toda, pedido activado, papi!\"",
+                "\"\u00a1Oe, {nombre}! \ud83c\udf19 \u00bfQu\u00e9 m\u00e1s, parcero? \u00a1Buenas noches! \ud83d\ude01 Estamos activos pa\u2019 romperla con ese pedido \ud83d\udd25. Aqu\u00ed te dejo la carta melo \ud83c\udf54 {carta}, toca las foticos \ud83d\udcf8 y \u00a1pam! \ud83d\udca5 se van sumando. Cuando est\u00e9 todo listo, le das al verde \u2705 y \u00a1BAM! Pedido activado \ud83d\ude80.\"",
+                "\"\u00a1Oe, {nombre}! \ud83c\udf19 \u00bfQu\u00e9 m\u00e1s, parcero? \u00a1Buenas noches! \ud83d\ude0e Estamos full activos pa' prender ese pedido. \ud83d\udd25 Mira la carta melo \ud83c\udf55 {carta}, toca las fotos \ud83d\udcf8 y \u00a1pum! todo se va sumando. Cuando est\u00e9 todo listo, dale al botoncito verde \u2705 y \u00a1BAM! \u00a1Pedido activado al toque! \ud83d\ude80\"",
+                "\"\u00a1Oe, papi! \ud83c\udf1c \u00bfC\u00f3mo va la vuelta esta noche? \ud83d\ude01 \u00a1Estamos activos y on fire pa\u2019 romperla con ese pedido! \ud83d\udd25 Te paso la carta melo \ud83c\udf7d\ufe0f {carta}, toca la fotico \ud83d\udcf8 y \u00a1pam! \ud83d\udca5 se va sumando todo solito. Dale al botoncito verde \u2705 cuando lo teng\u00e1s listo y \u00a1BAM! \ud83d\ude80 \u00a1Pedido activado al 100, vamos pa\u2019 esa, papi!\"",
+                "\"\u00a1Oe, parcero! \ud83c\udf19 \u00bfQu\u00e9 m\u00e1s, papi? \u00a1La noche est\u00e1 on fire y estamos ready pa\u2019 lo que sea! \ud83d\udd25 Aqu\u00ed te paso la carta melo \ud83c\udf54 {carta}, toca la fotico \ud83d\udcf8 y \u00a1pam! todo se va sumando. Cuando lo teng\u00e1s listo, dale al verde \u2705 y \u00a1BOOM! \ud83d\udca3 \u00a1Pa' esa, activamos ese pedido ya, papi! \ud83d\ude80\"",
+                "\"\u00a1Oe, parcero! \ud83c\udf1c \u00bfQu\u00e9 tal va esa noche? \ud83d\ude01 \u00a1Estamos on fire pa' romperla con ese pedido! \ud83d\udd25 Te dejo la carta melo \ud83c\udf55 {carta}, toca la fotico \ud83d\udcf8 y \u00a1pam! \ud83d\udca5 se va sumando solito. Cuando est\u00e9 todo listo, le das al botoncito verde \u2705 y \u00a1BOOM! \u00a1Pa' esa, pedido activado! \ud83d\ude80\"",
+                "\"\u00a1Quiubo, mi llave! \ud83c\udf19 \u00bfC\u00f3mo va esa noche prendida, papi? \ud83d\ude0e \u00a1Estamos activ\u00edsimos pa\u2019 lo que necesit\u00e9s! \ud83d\udd25 Mira la carta melo \ud83c\udf55 {carta}, toca la fotico \ud83d\udcf8 y \u00a1pum! todo se va agregando al toque. Cuando est\u00e9 todo ready, dale al verde \u2705 y \u00a1BOOM! \ud83d\udca5 \u00a1Vamos pa\u2019 esa, pedido activado full power, parcero! \ud83d\ude80\"",
+                "\"\u00a1Quiubo, {nombre}! \ud83c\udf1c Buenas noches, papi, \u00bfc\u00f3mo va esa noche? \ud83d\ude0e \u00bfEstamos activos pa' prender ese pedido? \ud83d\udca5 Te paso la carta melo \ud83c\udf7d\ufe0f {carta}, toca la fotico \ud83d\udcf8 y se va agregando solito. Cuando tengas todo ready, dale al botoncito verde \u2705 y \u00a1BOOM! \ud83d\udca5 \u00a1Pedido activado al toque! \ud83d\ude80\"",
+                "\"\u00a1Quiubo, {nombre}! \ud83c\udf1c Buenas noches, papi, \u00bfc\u00f3mo va todo? \ud83d\ude01 \u00bfListo pa\u2019 activar ese pedido esta noche? \ud83d\udd25 Te paso la carta melo \ud83c\udf7d\ufe0f {carta}, solo toca la fotico \ud83d\udcf8 y se va agregando al toque. Cuando lo teng\u00e1s ready, le das al bot\u00f3n verde \u2705 y \u00a1BOOM! \ud83d\udca5 \u00a1Pedido activado, parcero! \ud83d\ude80\"",
+                " \"\u00a1Quiubo, {nombre}! \ud83c\udf19 Muy buenas noches, papi, \u00bfc\u00f3mo vamos? \ud83d\ude01 \u00bfEstamos activos para activar ese pedido esta noche? \ud83d\udd25 Te paso la carta melo \ud83c\udf7d\ufe0f {carta}, solo toca la fotico \ud83d\udcf8 y se va agregando solito. Cuando tengas todo ready, le das al botoncito verde \u2705 que dice 'Listo' y \u00a1BOOM! \ud83d\udca5 \u00a1Pedido activado! \ud83d\ude80\"",
+                "\"\u00a1Quiubo, papi! \ud83c\udf1c \u00bfC\u00f3mo va esa noche encendida? \ud83d\ude0e \u00a1Estamos activos al 100 pa\u2019 romperla con ese pedido! \ud83d\udd25 Te dejo la carta melo \ud83c\udf55 {carta}, solo toca la fotico \ud83d\udcf8 y \u00a1pum! se va sumando. Cuando teng\u00e1s todo ready, le das al botoncito verde \u2705 y \u00a1BOOM! \ud83d\udca5 \u00a1Vamos pa\u2019 esa, pedido activado de una, papi! \ud83d\ude80\"",
+                "\"\u00a1Quiubo, papi! \ud83c\udf19 \u00bfC\u00f3mo va esa noche? \ud83d\ude0e \u00a1Estamos activos y ready pa\u2019 activar ese pedido! \ud83d\udd25 Te paso la carta melo \ud83c\udf7d\ufe0f {carta}, toca las foticos \ud83d\udcf8 y se van sumando al toque. Cuando teng\u00e1s todo ready, dale al verde \u2705 y \u00a1BOOM! \ud83d\udca5 \u00a1Vamos pa' esa, pedido activado, papi! \ud83d\ude80\"",
+                "\"\u00a1Quiubo, parcero! \ud83c\udf19 \u00bfC\u00f3mo va esa noche, papi? \ud83d\ude0e \u00a1Estamos activos y listos pa' lo que necesit\u00e9s! \ud83d\udd25 \u00bfQu\u00e9 se te antoja? \ud83c\udf54 Te paso la carta melo \ud83d\udccb {carta}, solo toca la fotico \ud83d\udcf8 y \u00a1pam! se va agregando solito. Cuando teng\u00e1s todo ready, le das al botoncito verde \u2705 que dice 'Listo' y \u00a1BOOM! \ud83d\udca5 \u00a1Vamos pa\u2019 esa, pedido activado, papi! \ud83d\ude80\""
+            ]
+        }
+    },
+    {
+        "intent": "saludos tarde",
+        "data": {
+            "patterns": [
+                [
+                    "hola"
+                ],
+                [
+                    "Hola"
+                ],
+                [
+                    "buenas",
+                    "tardes"
+                ],
+                [
+                    "Buenas",
+                    "tardes"
+                ],
+                [
+                    "hey,",
+                    "bueas",
+                    "tardes"
+                ],
+                [
+                    "Hey,",
+                    "buenas",
+                    "tardes"
+                ],
+                [
+                    "hola,",
+                    "buenas",
+                    "tardes"
+                ],
+                [
+                    "Hola,",
+                    "buenas",
+                    "tardes"
+                ],
+                [
+                    "hole,",
+                    "buenas",
+                    "tardes"
+                ],
+                [
+                    "Hole,",
+                    "buenas",
+                    "tardes"
+                ],
+                [
+                    "holi,",
+                    "buenas",
+                    "tardes"
+                ],
+                [
+                    "Holi,",
+                    "buenas",
+                    "tardes"
+                ]
+            ],
+            "responses": [
+                "",
+                "\"\u00a1Epa, {nombre}! \ud83d\ude0e Buenas tardes, \u00bfc\u00f3mo va esa energ\u00eda? \ud83d\udd25 Estamos listos pa\u2019 activar ese pedido \ud83c\udf54. Te paso la carta melo \ud83d\udccb {carta}, toca las foticos \ud83d\udcf8 y se van agregando. Cuando est\u00e9 todo listo, solo le das al bot\u00f3n verde \u2705 y \u00a1pum! \u00a1Pedido listo, mijo! \ud83d\udca5\ud83d\ude80.\"",
+                "\"\u00a1Epa, {nombre}! \ud83d\udca5 Buenas tardes, mijo, \u00bfc\u00f3mo va esa tarde prendida? \ud83d\udd25 Estamos activados pa' meterle full flow a ese pedido \ud83c\udf55. Aqu\u00ed te dejo la carta melo \ud83d\udccb {carta}, toca la fotico \ud83d\udcf8 y \u00a1pam! \ud83d\udca5 todo se va sumando. Cuando tengas todo ready, solo le das al botoncito verde \u2705 y \u00a1BOOM! \u00a1Pedido activado, pap\u00e1! \ud83d\ude80\"",
+                "\"\u00a1Epa, {nombre}! \ud83d\udca5 Buenas tardes, mijo, \u00bfc\u00f3mo va esa tarde prendida? \ud83d\udd25 Estamos activos pa' activar ese pedido ya mismo \ud83c\udf55. Te dejo la carta melo \ud83d\udccb {carta}, toca la fotico \ud83d\udcf8 y \u00a1pam! \ud83d\udca3 se va sumando. Cuando tengas todo ready, dale al verde \u2705 y \u00a1BOOM! \u00a1Pedido on fire! \ud83d\ude80\"",
+                "\"\u00a1Epa, {nombre}! \ud83d\ude0e \u00bfC\u00f3mo va todo esta tarde? Estoy pa' lo que necesit\u00e9s \ud83d\udd25. Mira la carta \ud83d\udccb {carta}, toca la fotico \ud83d\udcf8 y \u00a1pum! se agregan solitos. Cuando teng\u00e1s todo ready, le das al verde \u2705 y \u00a1listo el pedido, papi! \ud83d\ude80.\"",
+                "\"\u00a1Hey, {nombre}! \ud83d\udd25 Buenas tardes, \u00bfc\u00f3mo va esa energ\u00eda, papi? \ud83d\ude01 Estamos m\u00e1s que ready pa' romperla con tu pedido. \ud83d\udca5 Te paso la carta melo \ud83c\udf54 {carta}, toca la fotico \ud83d\udcf8 y \u00a1BOOM! \ud83d\udca3 se va sumando solito. Cuando lo tengas todo activado, dale al bot\u00f3n verde \u2705 y \u00a1BAM! \u00a1Pedido listo pa' despachar! \ud83d\ude80\"",
+                "\"\u00a1Hey, {nombre}! \ud83d\ude01 Buenas tardes, \u00bfc\u00f3mo va todo? \ud83c\udf07 Estamos activados pa' lo que necesit\u00e9s. \ud83d\udcaa Te dejo la carta melo \ud83c\udf55 {carta}, toca las foticos \ud83d\udcf8 y se van agregando. Cuando teng\u00e1s todo ready, dale al botoncito verde \u2705 y \u00a1BOOM! pedido en camino \ud83d\ude80.\"",
+                "\"\u00a1Hey, {nombre}! \ud83d\udd25 Buenas tardes, papi, \u00bfc\u00f3mo va la vuelta? \ud83d\ude01 Estamos activados, ready pa' romperla con ese pedido. Te dejo la carta melo \ud83c\udf54 {carta}, toca la fotico \ud83d\udcf8 y \u00a1BOOM! \ud83d\udca3 se va sumando todo. Dale al bot\u00f3n verde \u2705 cuando est\u00e9s listo y \u00a1pum! \u00a1Pedido activado! \ud83d\ude80\"",
+                "\"\u00a1Hey, papi! \ud83e\udd19 \u00bfC\u00f3mo va esa tarde? Estoy ready pa' lo que necesit\u00e9s \ud83d\udd25. Te dejo la carta melo \ud83c\udf7d\ufe0f {carta}, toca la foto y \u00a1pum! \ud83d\udca5 se va sumando todo. Cuando teng\u00e1s todo activado, solo le das al verde \u2705 y \u00a1BOOM! \ud83d\ude80 \u00a1Todo listo!\"",
+                "\"\u00a1Hola, papi! \ud83d\ude01 \u00bfC\u00f3mo va la tarde? Vamos a darle flow a ese pedido \ud83d\udd25. Te dejo la carta melo \ud83c\udf55 {carta}, toca las foticos \ud83d\udcf8 y se van sumando. Cuando teng\u00e1s todo activado, solo le das al bot\u00f3n verde \u2705 y \u00a1BOOM! pedido listo \ud83d\ude80.\"",
+                "\"\u00a1Oe, {nombre}! \ud83d\udca3 Buenas tardes, parcero, \u00bfc\u00f3mo va todo? \ud83c\udf07 \u00a1Estamos on fire pa\u2019 activar ese pedido ya mismo! \ud83d\udd25 Te paso la carta melo \ud83c\udf55 {carta}, toca las foticos \ud83d\udcf8 y \u00a1pam! \ud83d\udca5 se va agregando todo. Cuando teng\u00e1s todo listo, dale al botoncito verde \u2705 y \u00a1BAM! \u00a1Pedido activado al toque! \ud83d\ude80\"",
+                "\"\u00a1Oe, {nombre}! \ud83d\udca3 Buenas tardes, parcero, \u00bfqu\u00e9 m\u00e1s? \ud83c\udf07 \u00a1Esta tarde vamos con toda! \ud83d\udca5 Te dejo la carta melo \ud83c\udf55 {carta}, toca las foticos \ud83d\udcf8 y \u00a1pum! \ud83d\udd25 se va sumando todo. Cuando teng\u00e1s listo el pedido, le das al verde \u2705 y \u00a1pam! \u00a1Pedido activado, mijo! \ud83d\ude80\"",
+                "\"\u00a1Oe, {nombre}! \ud83e\udd19 Buenas tardes, \u00bfqu\u00e9 m\u00e1s, parcero? \ud83d\ude01 \u00bfEstamos ready pa' romperla con ese pedido? \ud83d\udd25 Aqu\u00ed te dejo la carta \ud83c\udf54 {carta}, toca la fotico \ud83d\udcf8 y \u00a1pam! se va agregando. Cuando teng\u00e1s todo listo, solo dale al verde \u2705 y \u00a1pum! \u00a1pedido activado! \ud83d\udca5\ud83d\ude80.\"",
+                "\"\u00a1Quiubo, {nombre}! \ud83d\udd25 Buenas tardes, papi, \u00bfc\u00f3mo va esa tarde encendida? \ud83d\ude0e \u00bfEstamos activados pa\u2019 reventar ese pedido? \ud83d\udca5 Te dejo la carta melo \ud83c\udf7d\ufe0f {carta}, toca la fotico \ud83d\udcf8 y \u00a1pum! todo se va sumando. Cuando teng\u00e1s todo ready, le das al verde \u2705 y \u00a1BOOM! \ud83d\ude80 \u00a1Pedido on fire, pap\u00e1!\"",
+                "\"\u00a1Quiubo, {nombre}! \ud83d\ude0e Buenas tardes, papi, \u00bfc\u00f3mo va la tarde? \ud83c\udf1e \u00bfListo pa' activar ese pedido? \ud83d\udd25 Te paso la carta melo \ud83c\udf7d\ufe0f {carta}, toca la fotico \ud83d\udcf8 y se va sumando solito. Cuando teng\u00e1s todo ready, le das al botoncito verde \u2705 y \u00a1BOOM! \ud83d\udca5 \u00a1Pedido activado al toque! \ud83d\ude80.\"",
+                "\"\u00a1Quiubo, {nombre}! \ud83d\udd25 Buenas tardes, papi, \u00bfc\u00f3mo va todo por all\u00e1? \ud83d\ude0e \u00a1Estamos full activos pa' prender ese pedido ya! \ud83d\udca5 Te paso la carta melo \ud83c\udf7d\ufe0f {carta}, toca las foticos \ud83d\udcf8 y \u00a1pum! todo se va agregando solito. Cuando teng\u00e1s todo ready, le das al botoncito verde \u2705 y \u00a1BOOM! \ud83d\ude80 \u00a1Pedido encendido, parcero!\"",
+                "\"\u00a1Quiubo, {nombre}! \ud83d\ude0e Muy buenas tardes, papi, \u00bfc\u00f3mo va la tarde? \ud83d\ude01 \u00bfEstamos activos para activar ese pedido? \ud83d\udd25 Te paso la carta melo \ud83c\udf7d\ufe0f {carta}, solo toca la fotico \ud83d\udcf8 y se va agregando solito. Cuando tengas todo ready, le das al botoncito verde \u2705 que dice 'Listo' y \u00a1BOOM! \ud83d\udca5 \u00a1Pedido activado! \ud83d\ude80\"",
+                "\"\u00a1Quiubo, parcero! \ud83d\ude0e \u00bfC\u00f3mo va todo esta tarde? Listo pa\u2019 ayudarte con lo que necesit\u00e9s. \ud83d\udd25 \u00bfQu\u00e9 se te antoja? \ud83c\udf54 \u00a1Pide tranqui que yo me encargo del resto! \ud83d\udcaa Te comparto la carta inteligente \ud83d\udccb {carta}, solo toc\u00e1s la fotico \ud83d\udcf8 y se van agregando autom\u00e1ticamente. Cuando teng\u00e1s todo ready, le das al bot\u00f3n verde \u2705 que dice 'Listo'.\"",
+                "\"\u00a1Quiubo, parcero! \ud83d\ude0e \u00bfQu\u00e9 tal va la tarde? Estoy aqu\u00ed pa\u2019 ayudarte con lo que necesit\u00e9s. \ud83d\udd25 \u00bfQu\u00e9 se te antoja hoy? \ud83c\udf55 Te paso la carta melo \ud83d\udccb {carta}, toca las foticos \ud83d\udcf8 y se van agregando solitos. Cuando teng\u00e1s todo listo, le das al botoncito verde \u2705 que dice 'Listo' y \u00a1BOOM! Pedido activado \ud83d\ude80.\""
             ]
         }
     }

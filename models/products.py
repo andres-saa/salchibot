@@ -25,7 +25,7 @@ class Products:
         # Arma la consulta final
         query = self.db.build_select_query(
             'inventory.complete_product_instances',
-            ['id'],
+            ['*'],
             condition=f'({like_conditions}) AND site_id = {site_id} AND restaurant_id = {restaurant_id}'
         )
         

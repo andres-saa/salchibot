@@ -275,8 +275,8 @@ def match_pattern(user_input: str, client_id: str, datos):
                 return random.choice(intent['data']['responses'])
 
                 
-    update_last_response("Lo siento, no entiendo tu solicitud. ¿Puedes repetirla?",client_id)
-    return "Lo siento, no entiendo tu solicitud. ¿Puedes repetirla?"
+    update_last_response("Un acesor lo atendera en breve, muchas gracias",client_id)
+    return "Un acesor lo atendera en breve, muchas gracias"
 
 
 
@@ -310,15 +310,23 @@ def extraer_productos(texto,wsp_id):
     # Verificar si se encontraron los IDs correspondientes
     if not productos_con_id:
         return "No se encontraron productos coincidentes en la base de datos."
+
+
+    
     
     # Crear una lista de diccionarios combinando los nombres, cantidades e IDs
     productos_finales = []
     for i, producto in enumerate(productos_con_id):
         productos_finales.append({
-            'nombre': nombres_productos[i],
+            'nombre': producto["product_name"],
             'quantity': cantidades[i],
-            'product_instance_id': producto['id']  # Asumiendo que 'producto' es un diccionario con el campo 'id'
+            'product_instance_id': producto['id'],
+            'price': producto['price'],
+            
+          # Asumiendo que 'producto' es un diccionario con el campo 'id'
         })
+    
+    print(productos_con_id)
     
     
     order_json = build_json(productos_finales,[], User(user_name='andres',user_phone='11111111',user_address='esta direcccion'),12,5,5000,'prueba de wps')
@@ -326,14 +334,19 @@ def extraer_productos(texto,wsp_id):
     
     def convertir_pedido(productos):
         resultado = []
+        total = 0
         for producto in productos:
-            linea = f"- {producto['nombre']} x *{producto['quantity']}* =  *$0.00*"
+            subtotal = producto['quantity'] * producto['price']
+            total += subtotal
+            linea = f"- {producto['nombre']} x *{producto['quantity']}* = ${int(subtotal):,}"
             resultado.append(linea)
+        resultado.append(f"\nTotal = ${int(total):,}")
         return "\n".join(resultado)
+
+    print(productos_con_id)
     
     chabot_instance.create_temp_order(wsp_id=wsp_id,json_data=order_json)
     return f"Listo papi, Ya tengo tu pedido registrado \n {convertir_pedido(productos_finales)} \n {get_my_data(wsp_id)} \n\n si todo es correcto porfa ingresa la palabra confirmar para enviarlo a preparacion"
-
 
 
 def generar_mensaje_pedido(pedido):
@@ -342,23 +355,31 @@ def generar_mensaje_pedido(pedido):
         return "El carrito está vacío. Agrega productos antes de enviar el pedido."
 
     # Inicializar el mensaje
-    mensaje = 'Hola tienes un pedido en proceso si vas a realizar otro o necesitas eleminarlo escribe *cancelar* o "confirmar para seguir con el \n"  \n *PRODUCTOS* \n'
+    mensaje = 'Hola, tienes un pedido en proceso. Si deseas realizar otro o necesitas eliminarlo, escribe *cancelar* o "confirmar" para continuar con el pedido.\n\n*PRODUCTOS*:\n'
     
     # Recorrer los productos y agregar su información al mensaje
+    total_productos = 0
     for producto in pedido['pedido_temporal']['order_products']:
         nombre = producto['nombre']
         cantidad = producto['quantity']
         precio = producto.get('price', 0)  # Suponer que el precio puede no estar en los datos
-        mensaje += f"- {nombre} x *{cantidad}* = *${precio:,.2f}*\n"
+        subtotal = precio * cantidad
+        total_productos += subtotal
+        mensaje += f"- {nombre} x *{cantidad}* = *${subtotal:,.0f}*\n"
     
-    # Añadir el total al mensaje (en este caso asumimos que el total está en el 'delivery_price' como ejemplo)
-    total = pedido['pedido_temporal']['delivery_price']  # Usar el precio del delivery como ejemplo de total
-    mensaje += f"*Total: ${total:,.2f}*\n"
+    # Añadir el precio del delivery si existe
+    delivery_price = pedido['pedido_temporal'].get('delivery_price', 0)  # Usar el precio del delivery si está disponible
+    total = total_productos + delivery_price
+    
+    # Formatear los totales y el precio del delivery aparte en pesos colombianos
+    mensaje += f"\n*Total productos: ${total_productos:,.0f}*\n"
+    mensaje += f"*Precio del domicilio: ${delivery_price:,.0f}*\n"
+    mensaje += f"*Total del pedido: ${total:,.0f}*\n"
     
     # Añadir notas adicionales si existen
     notas = pedido['pedido_temporal'].get('order_notes')
     if notas:
-        mensaje += f"*Notas adicionales*: {notas}\n"
+        mensaje += f"\n*Notas adicionales*: {notas}\n"
     
     return mensaje
 
@@ -480,8 +501,6 @@ def chatbot(userInput: UserInput):
        return {"response":extraer_productos(userInput.answer,userInput.client_id)}
     
     
-    
-
 
     # Generar respuesta inicial
     response = match_pattern(userInput.answer, userInput.client_id, datos)
