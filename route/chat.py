@@ -27,8 +27,8 @@ def build_json(order_products: list, order_aditionals: list, user, site_id: int,
    
     order = {
         "order_products": order_products,
-        "site_id": site_id,
-        "delivery_person_id": 4,
+        "site_id": 12,
+        "delivery_person_id": delivery_price,
         "payment_method_id": payment_method_id,
         "delivery_price": delivery_price,
         "order_notes": order_notes,
@@ -140,7 +140,8 @@ def get_my_data(user_id):
     response = f"""\n
     *Nombre*: {user["user_name"]} \n
     *Direccion*: {user["user_address"]} \n
-    *Telefono*: {user["user_phone"]}
+    *Telefono*: {user["user_phone"]} \n
+    *Metodo de pago*: {user["payment_method"]}
     """ 
     
     return response
@@ -293,7 +294,6 @@ def extraer_productos(texto,wsp_id):
     # Regex para extraer nombre del producto, cantidad y precio (aunque el precio no es necesario aquí)
     pattern = re.compile(r'-\s(.+?)\sx\s(\d+)')
     
-    # Buscar todos los matches
     matches = pattern.findall(texto_limpio)
     
     if not matches:
@@ -327,9 +327,46 @@ def extraer_productos(texto,wsp_id):
         })
     
     print(productos_con_id)
+
+
+    I = chabot_instance.i_am_registered(wsp_id)
+
+    location = chabot_instance.get_my_neighborhood(I[0]['user_city'],I[0]['user_barrio'])
+
+    site_id = location[0]["site_id"]
+    delivery_price = location[0]["delivery_price"]
+    barrio = location[0]["name"]
+
+    payment_methods = [
+            {
+                "id": 5,
+                "name": "TARJETA (DATAFONO)"
+            },
+            {
+                "id": 6,
+                "name": "TRANSFERENCIA"
+            },
+            {
+                "id": 7,
+                "name": "RECOGER EN LOCAL"
+            },
+            {
+                "id": 8,
+                "name": "EFECTIVO"
+            }
+        ]
+
+    user_payment_method = I[0]["payment_method"].strip().lower()  # Limpia y convierte a minúsculas
+    selected_payment_method_id = 5
+    for payment in payment_methods:
+        if payment["name"].strip().lower() == user_payment_method:
+            selected_payment_method_id = payment["id"]
+            break 
+
+
     
     
-    order_json = build_json(productos_finales,[], User(user_name='andres',user_phone='11111111',user_address='esta direcccion'),12,5,5000,'prueba de wps')
+    order_json = build_json(productos_finales,[], User(user_name=I[0]['user_name'],user_phone=I[0]['user_phone'],user_address=I[0]['user_address'] + " Barrio  " + barrio),site_id,selected_payment_method_id,round(delivery_price) ,'prueba de wps')
     
     
     def convertir_pedido(productos):
@@ -346,7 +383,7 @@ def extraer_productos(texto,wsp_id):
     print(productos_con_id)
     
     chabot_instance.create_temp_order(wsp_id=wsp_id,json_data=order_json)
-    return f"Listo papi, Ya tengo tu pedido registrado \n\n {convertir_pedido(productos_finales)} \n {get_my_data(wsp_id)} \n si todo es correcto porfa ingresa la palabra confirmar para enviarlo a preparacion"
+    return f"Listo papi, Ya tengo tu pedido registrado \n\n {convertir_pedido(productos_finales)} \n {get_my_data(wsp_id)} \n\n si todo es correcto porfa ingresa la palabra *confirmar* para enviarlo a preparacion si necesitas cambiar la direccion registrada o el metodo de pago puedes hacerlo aqui https://bot.salchimonster.com/registro/"
 
 
 def generar_mensaje_pedido(pedido):
@@ -355,7 +392,7 @@ def generar_mensaje_pedido(pedido):
         return "El carrito está vacío. Agrega productos antes de enviar el pedido."
 
     # Inicializar el mensaje
-    mensaje = 'Hola, tienes un pedido en proceso. Si deseas realizar otro o necesitas eliminarlo, escribe *cancelar* o "confirmar" para continuar con el pedido.\n\n*PRODUCTOS*:\n'
+    mensaje = 'Hola, tienes un pedido en proceso. Si deseas realizar otro o necesitas eliminarlo, escribe *cancelar* o *confirmar* para continuar con el pedido.\n\n*PRODUCTOS*:\n'
     
     # Recorrer los productos y agregar su información al mensaje
     total_productos = 0
@@ -368,32 +405,67 @@ def generar_mensaje_pedido(pedido):
         mensaje += f"- {nombre} x *{cantidad}* = *${subtotal:,.0f}*\n"
     
     # Añadir el precio del delivery si existe
-    delivery_price = pedido['pedido_temporal'].get('delivery_price', 0)  # Usar el precio del delivery si está disponible
+    delivery_price = pedido['pedido_temporal'].get('delivery_price', 0)
+    payment_method = pedido['pedido_temporal'].get('payment_method_id', 5)  # Usar el precio del delivery
+     
+
+    payment_methods = [
+            {
+                "id": 5,
+                "name": "TARJETA (DATAFONO)"
+            },
+            {
+                "id": 6,
+                "name": "TRANSFERENCIA"
+            },
+            {
+                "id": 7,
+                "name": "RECOGER EN LOCAL"
+            },
+            {
+                "id": 8,
+                "name": "EFECTIVO"
+            }
+        ]
+
+    user_payment_method_to_show =  '' # Limpia y convierte a minúsculas
+   
+    for payment in payment_methods:
+        if payment["id"] == payment_method:
+            user_payment_method_to_show = payment["name"]
+            print(payment)
+            break 
+
+
+
+
+
     total = total_productos + delivery_price
     
     # Formatear los totales y el precio del delivery aparte en pesos colombianos
+    mensaje += f"*Metodo de pago: {user_payment_method_to_show}*\n"
     mensaje += f"\n*Total productos: ${total_productos:,.0f}*\n"
     mensaje += f"*Precio del domicilio: ${delivery_price:,.0f}*\n"
     mensaje += f"*Total del pedido: ${total:,.0f}*\n"
     
+    
     # Añadir notas adicionales si existen
     notas = pedido['pedido_temporal'].get('order_notes')
-    if notas:
-        mensaje += f"\n*Notas adicionales*: {notas}\n"
-    
+    # if notas:
+    #     mensaje += f"\n*Notas adicionales*: {notas}\n"
+
+    mensaje += f"\nsi necesitas cambiar la direccion registrada o el metodo de pago puedes hacerlo aqui https://bot.salchimonster.com/registro/"
+
     return mensaje
 
 
 
-
 def extraer_datos_usuario(cadena: str) -> dict:
-    # Expresión regular para extraer los datos
-    patron = r"Nombre:\s*(?P<name>.+)\s*Teléfono:\s*(?P<phone>\d+)\s*Dirección:\s*(?P<address>[\w\s#-]+)\s*Ciudad:\s*(?P<city>[\w\s]+)\s*Barrio:\s*(?P<neighborhood>[\w\s]+)"
+    # Expresión regular para extraer los datos, incluyendo el método de pago
+    patron = r"Nombre:\s*(?P<name>.+)\s*Teléfono:\s*(?P<phone>\d+)\s*Dirección:\s*(?P<address>[\w\s#-]+)\s*Ciudad:\s*(?P<city>[\w\s]+)\s*Barrio:\s*(?P<neighborhood>[\w\s]+)\s*Método de Pago:\s*(?P<payment_method>[\w\s]+)"
     
     # Buscar coincidencias
     coincidencias = re.search(patron, cadena)
-    
-    print(patron)
     
     if coincidencias:
         # Limpiar los valores extraídos (eliminar espacios o saltos de línea al inicio y final)
@@ -402,14 +474,12 @@ def extraer_datos_usuario(cadena: str) -> dict:
             "user_phone": coincidencias.group("phone").strip(),
             "user_address": coincidencias.group("address").strip(),
             "city": coincidencias.group("city").strip(),  # Incluido por si se necesita
-            "neighborhood": coincidencias.group("neighborhood").strip()
+            "neighborhood": coincidencias.group("neighborhood").strip(),
+            "payment_method": coincidencias.group("payment_method").strip()  # Método de pago añadido
         }
     else:
         # Retornar un diccionario vacío si no se encuentran datos
         return {}
-    
-
-
 
 
 def confirm_order(wsp_id:str,data):
@@ -455,16 +525,25 @@ def chatbot(userInput: UserInput):
     I = chatbot_instance.i_am_registered(userInput.client_id)
     
     
-
     
     if (userInput.answer.strip().replace("*","").startswith('Resgistrame papi:')):
         print('here')
         user = extraer_datos_usuario(userInput.answer.replace('*',''))
         print(user)
         
+
+         
         if user:
-            created_user =  chatbot_instance.create_temp_user(user["user_name"],user["user_phone"],user["user_address"],userInput.client_id)
-            return {"response":f"Listo *{user['user_name'].capitalize()}* Tu registro ha sido exitoso\n como te gustaria proceder?\n, Te armamos un pedido?\n, deseas consultar el estado de tu orden?\n ¡Papi! 🔥💥 ¡Activemos ese pedido ya! Mira, por aquí te dejo nuestra carta inteligente 👉 https://bot.salchimonster.com/carta/ 🚀. Si le das click a la fotico de los productos, se van agregando de una. Cuando todo esté ready, solo le das al botón verde que dice *Listo* y ¡Booom! 🎉 ¡Pedido en marcha! 💣🔥"}
+            created_user =  chatbot_instance.create_temp_user(
+                user["user_name"],
+                user["user_phone"],
+                user["user_address"],
+                user["city"],
+                user["neighborhood"],
+                userInput.client_id,
+                user["payment_method"]) 
+            
+            return {"response":f"Listo *{user['user_name'].capitalize()}* Tu registro ha sido exitoso\n como te gustaria proceder?\n, Te armamos un pedido?\n, deseas consultar el estado de tu orden?\n ¡Papi! 🔥💥 ¡Activemos ese pedido ya! Mira, por aquí te dejo nuestra carta inteligente 👉 https://bot.salchimonster.com/carta/ 🚀. Si le das click a la fotico de los productos, se van agregando de una. Cuando todo esté ready, solo le das al botón verde que dice *Listo* y ¡Booom! 🎉 ¡Pedido en marcha! 💣🔥 si ya tienes pedido desde antes solo escribe confirmar y listo"}
     
     
     if not I:
@@ -475,12 +554,7 @@ def chatbot(userInput: UserInput):
                 clean = replace_variables(data)
                 return {"response":clean}
     
-    
 
-
-   
-    
-    
     my_current_order = chatbot_instance.i_have_temp_order(userInput.client_id)
     
     if (my_current_order and userInput.answer.lower().strip().startswith('cancelar')):

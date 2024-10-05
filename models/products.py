@@ -55,30 +55,39 @@ class Products:
             # print(data(id_wsp_customer=wsp_id, pedido_temporal=json_data))
 
 
-    def create_temp_user(self, user_name: str, user_phone: str, user_address: str, id_wsp_customer: str):
+    def create_temp_user(self, user_name: str, user_phone: str, user_address: str, user_city: str, user_barrio: str, id_wsp_customer: str, payment_method: str):
         class User(BaseModel):
             user_name: str
             user_phone: str
             user_address: str
-            id_wsp_customer: str  # Almacenar como string en lugar de dict
+            id_wsp_customer: str
+            user_city: str
+            user_barrio: str
+            payment_method: str  # Almacenar como string en lugar de dict
 
         # Crear el objeto User
         user = User(
             user_name=user_name,
             user_phone=user_phone,
             user_address=user_address,
-            id_wsp_customer=id_wsp_customer
+            id_wsp_customer=id_wsp_customer,
+            user_city=user_city,
+            user_barrio=user_barrio,
+            payment_method=payment_method
         )
 
         # Construir la consulta SQL para insertar o actualizar si el ID ya existe
         query = """
-        INSERT INTO orders.temp_user (user_name, user_phone, user_address, id_wsp_customer)
-        VALUES (%(user_name)s, %(user_phone)s, %(user_address)s, %(id_wsp_customer)s)
+        INSERT INTO orders.temp_user (user_name, user_phone, user_address, user_city, user_barrio, id_wsp_customer, payment_method)
+        VALUES (%(user_name)s, %(user_phone)s, %(user_address)s, %(user_city)s, %(user_barrio)s, %(id_wsp_customer)s, %(payment_method)s)
         ON CONFLICT (id_wsp_customer) 
         DO UPDATE SET
             user_name = EXCLUDED.user_name,
             user_phone = EXCLUDED.user_phone,
-            user_address = EXCLUDED.user_address
+            user_address = EXCLUDED.user_address,
+            user_city = EXCLUDED.user_city,
+            user_barrio = EXCLUDED.user_barrio,
+            payment_method = EXCLUDED.payment_method
         RETURNING id;
         """
 
@@ -100,6 +109,24 @@ class Products:
         query = self.db.build_select_query('orders.temp_user',["*"],f"id_wsp_customer = '{customer_id}'")
         I = self.db.execute_query(query,fetch=True)
         return I
+    
+
+    def get_my_neighborhood(self, city_name, barrio_name):
+        # Construimos el query correctamente con TRIM e ILIKE para ignorar mayúsculas y espacios
+        query = self.db.build_select_query(
+            'orders.city_barrios', 
+            ["*"], 
+            f"TRIM(city_name) ILIKE TRIM('{city_name}') AND TRIM(name) ILIKE TRIM('{barrio_name}')"
+        )
+
+        # Ejecutamos la consulta
+
+     
+        mi_barrio = self.db.execute_query(query=query, fetch=True)
+
+        return mi_barrio
+
+    
     
     
     def deleteMyTempOrder(self,customer_id:str):

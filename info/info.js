@@ -4,8 +4,12 @@ document.addEventListener("DOMContentLoaded", function () {
     const neighborhoodInput = document.getElementById('neighborhood-input');
     const neighborhoodList = document.getElementById('neighborhood-list');
 
+    const paymentInput = document.getElementById('payment-input');
+    const paymentList = document.getElementById('payment-list');
+
     let cities = [];
     let neighborhoods = [];
+    let payments = [];
 
     // Inicialmente deshabilitar el input de barrios hasta que se seleccione una ciudad
     neighborhoodInput.disabled = true;
@@ -18,6 +22,18 @@ document.addEventListener("DOMContentLoaded", function () {
             cities = data.filter(city => city.visible); // Filtrar solo las ciudades visibles
         } catch (error) {
             console.error("Error al obtener las ciudades:", error);
+        }
+    }
+
+    // Función para obtener los métodos de pago
+    async function fetchPayments() {
+        try {
+            const response = await fetch('https://backend.salchimonster.com/payment_methods');
+            const data = await response.json();
+            payments = data; // Obtener los métodos de pago
+            updateDropdownList(paymentInput, paymentList, payments.map(payment => ({ name: payment.name })), true);
+        } catch (error) {
+            console.error("Error al obtener los métodos de pago:", error);
         }
     }
 
@@ -72,18 +88,29 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     });
 
-    // Mostrar la lista de ciudades cuando el input gane foco y ocultar la lista de barrios
+    paymentInput.addEventListener('input', () => {
+        updateDropdownList(paymentInput, paymentList, payments.map(payment => ({ name: payment.name })));
+    });
+
+    // Modificación: Borrar la selección actual al hacer clic en el input
     cityInput.addEventListener('focus', () => {
+        cityInput.value = ''; // Limpiar la selección actual
         updateDropdownList(cityInput, cityList, cities.map(city => ({ city_id: city.city_id, name: city.city_name })), true);
         neighborhoodList.style.display = 'none'; // Ocultar la lista de barrios al seleccionar una ciudad
     });
 
     neighborhoodInput.addEventListener('focus', () => {
+        neighborhoodInput.value = ''; // Limpiar la selección actual
         const selectedCityName = cityInput.value;
         const selectedCity = cities.find(city => city.city_name === selectedCityName);
         if (selectedCity) {
             fetchNeighborhoods(selectedCity.city_id);
         }
+    });
+
+    paymentInput.addEventListener('focus', () => {
+        paymentInput.value = ''; // Limpiar la selección actual
+        updateDropdownList(paymentInput, paymentList, payments.map(payment => ({ name: payment.name })), true);
     });
 
     cityInput.addEventListener('blur', () => {
@@ -112,12 +139,15 @@ document.addEventListener("DOMContentLoaded", function () {
         if (!event.target.matches('.dropdown-input')) {
             cityList.style.display = 'none';
             neighborhoodList.style.display = 'none';
+            paymentList.style.display = 'none'; // Ocultar la lista de pagos
         }
     });
 
-    // Inicializar las ciudades al cargar la página
+    // Inicializar las ciudades y los métodos de pago al cargar la página
     fetchCities();
+    fetchPayments();
 });
+
 
 // Segunda parte: Manejar el evento de finalizar
 document.addEventListener("DOMContentLoaded", function () {
@@ -128,9 +158,10 @@ document.addEventListener("DOMContentLoaded", function () {
         const direccion = document.getElementById('direccion').value.trim();
         const ciudad = document.getElementById('city-input').value.trim();
         const barrio = document.getElementById('neighborhood-input').value.trim();
+        const metodoPago = document.getElementById('payment-input').value.trim(); // Capturando el método de pago
 
         // Verificar que todos los campos están llenos
-        if (nombre === '' || telefono === '' || direccion === '' || ciudad === '' || barrio === '') {
+        if (nombre === '' || telefono === '' || direccion === '' || ciudad === '' || barrio === '' || metodoPago === '') {
             alert('Por favor, completa todos los campos antes de finalizar.');
             return; // Detiene la ejecución si algún campo está vacío
         }
@@ -148,7 +179,8 @@ document.addEventListener("DOMContentLoaded", function () {
             `*Teléfono:* ${toTitleCase(telefono)}\n` +
             `*Dirección:* ${toTitleCase(direccion)}\n` +
             `*Ciudad:* ${toTitleCase(ciudad)}\n` +
-            `*Barrio:* ${toTitleCase(barrio)}`;
+            `*Barrio:* ${toTitleCase(barrio)}\n` +
+            `*Método de Pago:* ${toTitleCase(metodoPago)}`; // Agregando el método de pago al mensaje
         
         const encodedMessage = encodeURIComponent(mensaje);
         const whatsappUrl = `https://wa.me/573053447255?text=${encodedMessage}`;
@@ -156,4 +188,3 @@ document.addEventListener("DOMContentLoaded", function () {
         window.open(whatsappUrl, '_blank');
     });
 });
-
