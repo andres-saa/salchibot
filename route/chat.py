@@ -402,7 +402,7 @@ def generar_mensaje_pedido(pedido):
         precio = producto.get('price', 0)  # Suponer que el precio puede no estar en los datos
         subtotal = precio * cantidad
         total_productos += subtotal
-        mensaje += f"- {nombre} x *{cantidad}* = *${subtotal:,.0f}*\n"
+        mensaje += f"{nombre} x *{cantidad}* = *${subtotal:,.0f}*\n"
     
     # Añadir el precio del delivery si existe
     delivery_price = pedido['pedido_temporal'].get('delivery_price', 0)
