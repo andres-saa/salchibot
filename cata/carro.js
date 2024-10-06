@@ -84,7 +84,12 @@ function capitalizarTexto(texto) {
     return texto.split(' ').map(palabra => palabra.charAt(0).toUpperCase() + palabra.slice(1).toLowerCase()).join(' ');
 }
 
-function enviarPedidoWhatsApp(indicativoPais, telefono) {
+enviar.addEventListener('click', () => {
+    const notas = prompt("¿Tienes alguna nota para la cocina? (opcional)");
+    enviarPedidoWhatsApp('57', '3053447255', notas);
+});
+
+function enviarPedidoWhatsApp(indicativoPais, telefono, notas = '') {
     if (carrito.productos.length === 0) {
         alert("El carrito está vacío. Agrega productos antes de enviar el pedido.");
         return;
@@ -113,37 +118,22 @@ function enviarPedidoWhatsApp(indicativoPais, telefono) {
         }
     });
 
-    // Unir las secciones al mensaje principal solo si tienen contenido
     if (productosMensaje.trim() !== '*PRODUCTOS*\n') mensaje += productosMensaje.trim() + '\n';
     if (salsasMensaje.trim() !== '') mensaje += '\n*SALSAS*\n' + salsasMensaje.trim() + '\n';
     if (adicionalesMensaje.trim() !== '') mensaje += '\n*ADICIONALES*\n' + adicionalesMensaje.trim() + '\n';
     if (cambiosMensaje.trim() !== '') mensaje += '\n*CAMBIOS*\n' + cambiosMensaje.trim() + '\n';
 
-    // Incluir notas adicionales si existen
-    if (carrito.notas) {
-        let notasCapitalizadas = capitalizarTexto(carrito.notas.trim());
-        mensaje += `*Notas Adicionales*: ${notasCapitalizadas}\n`;
-    }
-
-    const notas = prompt("¿Tienes alguna nota para la cocina? (opcional)");
     if (notas) {
         let notasCapitalizadas = capitalizarTexto(notas.trim());
         mensaje += `*NOTAS ADICIONALES*: ${notasCapitalizadas}\n`;
     }
 
-    // Codificar el mensaje para la URL
     const mensajeCodificado = encodeURIComponent(mensaje);
 
-    // Crear la URL de WhatsApp con el número y el mensaje codificado
     const url = `https://wa.me/${indicativoPais}${telefono}?text=${mensajeCodificado}`;
 
-    // Abrir la URL en una nueva ventana para enviar el mensaje
     window.open(url, '_blank');
 }
-
-enviar.addEventListener('click', () => {
-    enviarPedidoWhatsApp('57','3053447255')
-})
 
 
 
