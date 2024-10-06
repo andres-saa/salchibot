@@ -84,21 +84,7 @@ function capitalizarTexto(texto) {
     return texto.split(' ').map(palabra => palabra.charAt(0).toUpperCase() + palabra.slice(1).toLowerCase()).join(' ');
 }
 
-enviar.addEventListener('click', () => {
-    // Primero, pide las notas dentro del evento de click.
-    const notas = prompt("¿Tienes alguna nota para la cocina? (opcional)");
-    
-    // Verifica si el prompt se cerró o si se escribió algo.
-    if (notas !== null) {
-        // Llama a la función para enviar el pedido solo después de que el usuario haya respondido el prompt.
-        enviarPedidoWhatsApp('57', '3053447255', notas);
-    } else {
-        // Si el usuario cancela el prompt, puedes manejarlo aquí si lo deseas.
-        alert("No se ingresaron notas, pero puedes enviar tu pedido sin ellas.");
-    }
-});
-
-function enviarPedidoWhatsApp(indicativoPais, telefono, notas = '') {
+function enviarPedidoWhatsApp(indicativoPais, telefono) {
     if (carrito.productos.length === 0) {
         alert("El carrito está vacío. Agrega productos antes de enviar el pedido.");
         return;
@@ -127,22 +113,38 @@ function enviarPedidoWhatsApp(indicativoPais, telefono, notas = '') {
         }
     });
 
+    // Unir las secciones al mensaje principal solo si tienen contenido
     if (productosMensaje.trim() !== '*PRODUCTOS*\n') mensaje += productosMensaje.trim() + '\n';
     if (salsasMensaje.trim() !== '') mensaje += '\n*SALSAS*\n' + salsasMensaje.trim() + '\n';
     if (adicionalesMensaje.trim() !== '') mensaje += '\n*ADICIONALES*\n' + adicionalesMensaje.trim() + '\n';
     if (cambiosMensaje.trim() !== '') mensaje += '\n*CAMBIOS*\n' + cambiosMensaje.trim() + '\n';
 
+    // Incluir notas adicionales si existen
+    if (carrito.notas) {
+        let notasCapitalizadas = capitalizarTexto(carrito.notas.trim());
+        mensaje += `*Notas Adicionales*: ${notasCapitalizadas}\n`;
+    }
+
+    const notas = prompt("¿Tienes alguna nota para la cocina? (opcional)");
     if (notas) {
         let notasCapitalizadas = capitalizarTexto(notas.trim());
         mensaje += `*NOTAS ADICIONALES*: ${notasCapitalizadas}\n`;
     }
 
+    // Codificar el mensaje para la URL
     const mensajeCodificado = encodeURIComponent(mensaje);
 
-    // Abre la ventana dentro del evento de click para evitar el bloqueo
+    // Crear la URL de WhatsApp con el número y el mensaje codificado
     const url = `https://wa.me/${indicativoPais}${telefono}?text=${mensajeCodificado}`;
+
+    // Abrir la URL en una nueva ventana para enviar el mensaje
     window.open(url, '_blank');
 }
+
+enviar.addEventListener('click', () => {
+    enviarPedidoWhatsApp('57','3053447255')
+})
+
 
 
 export { saveCarrito, agregarProducto, quitarProducto, actualizarTotalCarrito, toggleProducto, carrito  };
