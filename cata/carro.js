@@ -132,7 +132,7 @@ function enviarPedidoWhatsApp(indicativoPais, telefono, notas = '') {
 
     const url = `https://wa.me/${indicativoPais}${telefono}?text=${mensajeCodificado}`;
 
-    window.open(url, '_blank');
+    window.open(url);
 }
 
 
