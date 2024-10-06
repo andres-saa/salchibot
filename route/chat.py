@@ -390,7 +390,7 @@ def extraer_productos(texto,wsp_id):
     print(productos_con_id)
     
     chabot_instance.create_temp_order(wsp_id=wsp_id,json_data=order_json)
-    return f"Listo papi, Ya tengo tu pedido registrado\n\n{convertir_pedido(productos_finales,delivery_price)}\n{get_my_data(wsp_id)}\n\nsi todo es correcto porfa ingresa la palabra *confirmar* para enviarlo a preparacion si necesitas cambiar la direccion registrada o el metodo de pago puedes hacerlo aqui https://bot.salchimonster.com/registro/"
+    return f"Listo papi, Ya tengo tu pedido registrado\n\n{convertir_pedido(productos_finales,delivery_price)}{get_my_data(wsp_id)}\nsi todo es correcto porfa ingresa la palabra *confirmar* para enviarlo a preparacion si necesitas cambiar la direccion registrada o el metodo de pago puedes hacerlo aqui https://bot.salchimonster.com/registro/"
 
 
 def generar_mensaje_pedido(pedido):
