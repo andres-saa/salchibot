@@ -390,7 +390,7 @@ def extraer_productos(texto, wsp_id):
         for i, producto in enumerate(salsas_con_id):
             adiciones_finales.append({
                 'nombre': producto["additional_item_name"],
-                'quantity': cantidades_adiciones[i],
+                'quantity': cantidades_salsas[i],
                 'aditional_item_instance_id': producto['id'],
                 'price': producto['price'],
                 'tag':'SALSA'
@@ -400,7 +400,7 @@ def extraer_productos(texto, wsp_id):
         for i, producto in enumerate(cambios_con_id):
             adiciones_finales.append({
                 'nombre': producto["additional_item_name"],
-                'quantity': cantidades_adiciones[i],
+                'quantity': cantidades_cambios[i],
                 'aditional_item_instance_id': producto['id'],
                 'price': producto['price'],
                 'tag':'CAMBIO'
