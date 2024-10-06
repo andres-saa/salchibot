@@ -39,7 +39,7 @@ class Products:
         
         # Arma la consulta final con DISTINCT
         query = self.db.build_select_query(
-            'orders.vw_additional_item_details',
+            'orders.vw_additional_item_details_bot',
             ['DISTINCT ON (additional_item_name) id', 'price', 'additional_item_name'],
             condition=f'({like_conditions}) AND site_id = {site_id}'
         )
