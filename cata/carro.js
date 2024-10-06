@@ -85,8 +85,17 @@ function capitalizarTexto(texto) {
 }
 
 enviar.addEventListener('click', () => {
+    // Primero, pide las notas dentro del evento de click.
     const notas = prompt("¿Tienes alguna nota para la cocina? (opcional)");
-    enviarPedidoWhatsApp('57', '3053447255', notas);
+    
+    // Verifica si el prompt se cerró o si se escribió algo.
+    if (notas !== null) {
+        // Llama a la función para enviar el pedido solo después de que el usuario haya respondido el prompt.
+        enviarPedidoWhatsApp('57', '3053447255', notas);
+    } else {
+        // Si el usuario cancela el prompt, puedes manejarlo aquí si lo deseas.
+        alert("No se ingresaron notas, pero puedes enviar tu pedido sin ellas.");
+    }
 });
 
 function enviarPedidoWhatsApp(indicativoPais, telefono, notas = '') {
@@ -130,11 +139,10 @@ function enviarPedidoWhatsApp(indicativoPais, telefono, notas = '') {
 
     const mensajeCodificado = encodeURIComponent(mensaje);
 
+    // Abre la ventana dentro del evento de click para evitar el bloqueo
     const url = `https://wa.me/${indicativoPais}${telefono}?text=${mensajeCodificado}`;
-
-    window.open(url);
+    window.open(url, '_blank');
 }
-
 
 
 export { saveCarrito, agregarProducto, quitarProducto, actualizarTotalCarrito, toggleProducto, carrito  };
