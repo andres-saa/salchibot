@@ -376,34 +376,36 @@ def extraer_productos(texto, wsp_id):
 
     adiciones_finales = []
 
-    for i, producto in enumerate(adiciones_con_id):
-        adiciones_finales.append({
-            'nombre': producto["additional_item_name"],
-            'quantity': cantidades_adiciones[i],
-            'aditional_item_instance_id': producto['id'],
-            'price': producto['price'],
-            'tag':'ADICION'
-        })
+    if adiciones_con_id:  # Verifica si la lista no está vacía
+        for i, producto in enumerate(adiciones_con_id):
+            adiciones_finales.append({
+                'nombre': producto["additional_item_name"],
+                'quantity': cantidades_adiciones[i],
+                'aditional_item_instance_id': producto['id'],
+                'price': producto['price'],
+                'tag':'ADICION'
+            })
 
-    for i, producto in enumerate(salsas_con_id):
-        adiciones_finales.append({
-            'nombre': producto["additional_item_name"],
-            'quantity': cantidades_adiciones[i],
-            'aditional_item_instance_id': producto['id'],
-            'price': producto['price'],
-            'tag':'SALSA'
-        })
+    if salsas_con_id:  # Verifica si la lista no está vacía
+        for i, producto in enumerate(salsas_con_id):
+            adiciones_finales.append({
+                'nombre': producto["additional_item_name"],
+                'quantity': cantidades_adiciones[i],
+                'aditional_item_instance_id': producto['id'],
+                'price': producto['price'],
+                'tag':'SALSA'
+            })
+            
+    if cambios_con_id:  # Verifica si la lista no está vacía
+        for i, producto in enumerate(cambios_con_id):
+            adiciones_finales.append({
+                'nombre': producto["additional_item_name"],
+                'quantity': cantidades_adiciones[i],
+                'aditional_item_instance_id': producto['id'],
+                'price': producto['price'],
+                'tag':'CAMBIO'
+            })
         
-    for i, producto in enumerate(cambios_con_id):
-        adiciones_finales.append({
-            'nombre': producto["additional_item_name"],
-            'quantity': cantidades_adiciones[i],
-            'aditional_item_instance_id': producto['id'],
-            'price': producto['price'],
-            'tag':'CAMBIO'
-        })
-
-    
     # Crear una lista de diccionarios combinando los nombres, cantidades e IDs
     productos_finales = []
     for i, producto in enumerate(productos_con_id):
