@@ -369,21 +369,28 @@ def extraer_productos(texto,wsp_id):
     order_json = build_json(productos_finales,[], User(user_name=I[0]['user_name'],user_phone=I[0]['user_phone'],user_address=I[0]['user_address'] + " Barrio  " + barrio),site_id,selected_payment_method_id,round(delivery_price) ,'prueba de wps')
     
     
-    def convertir_pedido(productos):
+    def convertir_pedido(productos, delivery_price):
         resultado = []
         total = 0
         for producto in productos:
             subtotal = producto['quantity'] * producto['price']
             total += subtotal
-            linea = f"{producto['nombre']} x *{producto['quantity']}* = ${int(subtotal):,}"
+            linea = f"{producto['nombre']} x *{producto['quantity']}* = ${int(subtotal):,}\n"
             resultado.append(linea.title())  # Capitaliza la primera letra de cada palabra
-        resultado.append(f"\nTotal = ${int(total):,}")
+        
+        # Añadir el precio del domicilio
+        resultado.append(f"\nDomicilio = ${int(delivery_price):,}")
+        
+        # Añadir el total sumando el domicilio
+        total += delivery_price
+        resultado.append(f"Total = ${int(total):,}")
+        
         return "\n".join(resultado)
 
     print(productos_con_id)
     
     chabot_instance.create_temp_order(wsp_id=wsp_id,json_data=order_json)
-    return f"Listo papi, Ya tengo tu pedido registrado \n\n {convertir_pedido(productos_finales)} \n {get_my_data(wsp_id)} \n\n si todo es correcto porfa ingresa la palabra *confirmar* para enviarlo a preparacion si necesitas cambiar la direccion registrada o el metodo de pago puedes hacerlo aqui https://bot.salchimonster.com/registro/"
+    return f"Listo papi, Ya tengo tu pedido registrado\n\n{convertir_pedido(productos_finales)} \n {get_my_data(wsp_id)} \n\n si todo es correcto porfa ingresa la palabra *confirmar* para enviarlo a preparacion si necesitas cambiar la direccion registrada o el metodo de pago puedes hacerlo aqui https://bot.salchimonster.com/registro/"
 
 
 def generar_mensaje_pedido(pedido):
