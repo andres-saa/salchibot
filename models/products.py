@@ -164,7 +164,8 @@ class Products:
                 "user_phone": user['user_phone'],
                 "user_address": user['user_address']
             },
-            "order_aditionals": order_aditionals  # Agregar los adicionales
+            "order_aditionals": order_aditionals,
+            "inserted_by_id":1082  # Agregar los adicionales
         }
 
         # Realizar la solicitud POST
