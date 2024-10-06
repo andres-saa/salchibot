@@ -27,7 +27,7 @@ def build_json(order_products: list, order_aditionals: list, user, site_id: int,
    
     order = {
         "order_products": order_products,
-        "site_id": 12,
+        "site_id": site_id,
         "delivery_person_id": delivery_price,
         "payment_method_id": payment_method_id,
         "delivery_price": delivery_price,
@@ -380,7 +380,7 @@ def extraer_productos(texto, wsp_id):
         for i, producto in enumerate(adiciones_con_id):
             adiciones_finales.append({
                 'nombre': producto["additional_item_name"],
-                'quantity': cantidades_adiciones[i],
+                'quantity': 1,
                 'aditional_item_instance_id': producto['id'],
                 'price': producto['price'],
                 'tag':'ADICION'
@@ -411,7 +411,7 @@ def extraer_productos(texto, wsp_id):
     for i, producto in enumerate(productos_con_id):
         productos_finales.append({
             'nombre': producto["product_name"],
-            'quantity': 1,
+            'quantity': cantidades_productos[i],
             'product_instance_id': producto['id'],
             'price': producto['price'],
             
