@@ -354,14 +354,20 @@ def extraer_productos(texto, wsp_id):
     # Crear instancia del manejador de adiciones
     adiciones_instance = Products()
 
-    # Obtener IDs y detalles de las adiciones
-    adiciones_con_id = adiciones_instance.getAditionaldByNames(nombres_adiciones, site_id=1)
 
-    # Obtener IDs y detalles de las salsas
-    salsas_con_id = adiciones_instance.getAditionaldByNames(nombres_salsas, site_id=1)
+    adiciones_con_id = []
+    salsas_con_id = []
+    cambios_con_id = []
 
+    if (nombres_adiciones):
+        adiciones_con_id = adiciones_instance.getAditionaldByNames(nombres_adiciones, site_id=1)
+
+    if (nombres_salsas):
+        salsas_con_id = adiciones_instance.getAditionaldByNames(nombres_salsas, site_id=1)
+
+    if (nombres_cambios):
     # Obtener IDs y detalles de los cambios
-    cambios_con_id = adiciones_instance.getAditionaldByNames(nombres_cambios, site_id=1)
+        cambios_con_id = adiciones_instance.getAditionaldByNames(nombres_cambios, site_id=1)
     
 
     
@@ -458,7 +464,8 @@ def extraer_productos(texto, wsp_id):
 
     
     
-    order_json = build_json(productos_finales,adiciones_finales, User(user_name=I[0]['user_name'],user_phone=I[0]['user_phone'],user_address=I[0]['user_address'] + " Barrio  " + barrio),site_id,selected_payment_method_id,round(delivery_price) ,pedido["notas_adicionales"])
+    
+    order_json = build_json(productos_finales,adiciones_finales, User(user_name=I[0]['user_name'],user_phone=I[0]['user_phone'],user_address=I[0]['user_address'] + " Barrio  " + barrio),site_id,selected_payment_method_id,round(delivery_price) ,pedido.get("notas_adicionales", "Sin notas"))
     
     
     def convertir_pedido(productos):

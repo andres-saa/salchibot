@@ -114,10 +114,10 @@ function enviarPedidoWhatsApp(indicativoPais, telefono) {
     });
 
     // Unir las secciones al mensaje principal solo si tienen contenido
-    if (productosMensaje.trim() !== '*PRODUCTOS*\n') mensaje += productosMensaje.trim() + '\n';
-    if (salsasMensaje.trim() !== '') mensaje += '\n*SALSAS*\n' + salsasMensaje.trim() + '\n';
-    if (adicionalesMensaje.trim() !== '') mensaje += '\n*ADICIONALES*\n' + adicionalesMensaje.trim() + '\n';
-    if (cambiosMensaje.trim() !== '') mensaje += '\n*CAMBIOS*\n' + cambiosMensaje.trim() + '\n';
+    mensaje += productosMensaje.trim() + '\n';
+    mensaje += '\n*SALSAS*\n' + salsasMensaje.trim() + '\n';
+    mensaje += '\n*ADICIONALES*\n' + adicionalesMensaje.trim() + '\n';
+    mensaje += '\n*CAMBIOS*\n' + cambiosMensaje.trim() + '\n';
 
     // Incluir notas adicionales si existen
     if (carrito.notas) {
