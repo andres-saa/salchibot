@@ -7,8 +7,8 @@ button_right.classList.add('change-category')
 
 
 
-import { fetchCategories } from "./service/categoryService.js"
-import { create_carta } from "./service/cardService.js"
+import { fetchCategories,fetchAditionals } from "./service/categoryService.js"
+import { create_carta,create_carta_aditional } from "./service/cardService.js"
 import { carrito } from "./carro.js";
 
 
@@ -63,20 +63,37 @@ button_right.addEventListener('click', () => {
 
 
 let categories = []
-const listas = []
 
+
+const listas = []
+let aditionals = []
 
 const init = async() => {
     categories = await fetchCategories(1)
+    aditionals = await fetchAditionals()
+
+   
+    
+    categories = categories.concat(aditionals)
+
+   
     categories.forEach((c) => {
         const lista = document.createElement('div')
         lista.classList.add('products')
             c.products.forEach((p) => {
-                const carta = create_carta(p)
+                let carta = {}
+                c.category_id ? carta = create_carta(p) : carta = create_carta_aditional(p)
                 lista.appendChild(carta)
             })
         listas.push(lista)
     })
+
+
+    console.log(aditionals)
+    
+      
+   
+
     
     listas.forEach(l => {
         carousel.appendChild(l)

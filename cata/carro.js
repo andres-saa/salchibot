@@ -1,7 +1,9 @@
 // Inicializar el carrito en memoria (sin localStorage)
-let carrito = {
-    productos: [],
-    total: 0
+const carrito = {
+    productos: [],  // Productos normales
+    adiciones: [],  // Productos con tag 'ADICIÓN'
+    cambios: [],    // Productos con tag 'CAMBIO'
+    salsas: []      // Productos con tag 'SALSA'
 };
 
 
@@ -48,15 +50,7 @@ function actualizarTotalCarrito() {
     }
 }
 
-// Función para manejar el toggle de agregar/quitar producto al hacer clic en la carta
-// function toggleProducto(producto) {
-//     const existe = carrito.productos.some(p => p.id === producto.id);
-//     if (existe) {
-//         quitarProducto(producto.id);
-//     } else {
-//         agregarProducto(producto);
-//     }
-// }
+
 
 
 function toggleProducto(producto) {
@@ -86,6 +80,10 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 
+function capitalizarTexto(texto) {
+    return texto.split(' ').map(palabra => palabra.charAt(0).toUpperCase() + palabra.slice(1).toLowerCase()).join(' ');
+}
+
 function enviarPedidoWhatsApp(indicativoPais, telefono) {
     if (carrito.productos.length === 0) {
         alert("El carrito está vacío. Agrega productos antes de enviar el pedido.");
@@ -93,39 +91,60 @@ function enviarPedidoWhatsApp(indicativoPais, telefono) {
     }
 
     // Crear el mensaje del pedido
-    let mensaje = 'Mi pedido:\n *PRODUCTOS* \n';
-    
-    // Iterar sobre cada producto y añadir su cantidad, nombre y precio al mensaje
+    let mensaje = 'Mi pedido:\n';
+
+    // Variables para agrupar productos, salsas, adicionales y cambios
+    let productosMensaje = '*PRODUCTOS*\n';
+    let salsasMensaje = '';
+    let adicionalesMensaje = '';
+    let cambiosMensaje = '';
+
     carrito.productos.forEach(producto => {
-        mensaje += `- ${producto.product_name} x *${producto.cantidad}*\n`;
+        let productoNombreCapitalizado = capitalizarTexto(producto.product_name.trim());
+
+        if (producto.tag === 'SALSA') {
+            salsasMensaje += `- ${productoNombreCapitalizado} x *${producto.cantidad}*\n`;
+        } else if (producto.tag === 'ADICION') {
+            adicionalesMensaje += `- ${productoNombreCapitalizado} x *${producto.cantidad}*\n`;
+        } else if (producto.tag === 'CAMBIO') {
+            cambiosMensaje += `- ${productoNombreCapitalizado} x *${producto.cantidad}*\n`;
+        } else {
+            productosMensaje += `- ${productoNombreCapitalizado} x *${producto.cantidad}*\n`;
+        }
     });
-    
-    
-    
+
+    // Unir las secciones al mensaje principal solo si tienen contenido
+    if (productosMensaje.trim() !== '*PRODUCTOS*\n') mensaje += productosMensaje.trim() + '\n';
+    if (salsasMensaje.trim() !== '') mensaje += '\n*SALSAS*\n' + salsasMensaje.trim() + '\n';
+    if (adicionalesMensaje.trim() !== '') mensaje += '\n*ADICIONALES*\n' + adicionalesMensaje.trim() + '\n';
+    if (cambiosMensaje.trim() !== '') mensaje += '\n*CAMBIOS*\n' + cambiosMensaje.trim() + '\n';
+
     // Incluir notas adicionales si existen
     if (carrito.notas) {
-        mensaje += `*Notas adicionales*: ${carrito.notas}\n`;
+        let notasCapitalizadas = capitalizarTexto(carrito.notas.trim());
+        mensaje += `*Notas Adicionales*: ${notasCapitalizadas}\n`;
     }
-    
+
+    const notas = prompt("¿Tienes alguna nota para la cocina? (opcional)");
+    if (notas) {
+        let notasCapitalizadas = capitalizarTexto(notas.trim());
+        mensaje += `*NOTAS ADICIONALES*: ${notasCapitalizadas}\n`;
+    }
+
     // Codificar el mensaje para la URL
     const mensajeCodificado = encodeURIComponent(mensaje);
-    
+
     // Crear la URL de WhatsApp con el número y el mensaje codificado
     const url = `https://wa.me/${indicativoPais}${telefono}?text=${mensajeCodificado}`;
-    
+
     // Abrir la URL en una nueva ventana para enviar el mensaje
     window.open(url, '_blank');
 }
-
 
 enviar.addEventListener('click', () => {
     enviarPedidoWhatsApp('57','3053447255')
 })
 
 
-// aviso.addEventListener('click', () => {
-//     barra.style.height = '60vh'
-//     barra.style.zIndex = 1000
-// })
 
 export { saveCarrito, agregarProducto, quitarProducto, actualizarTotalCarrito, toggleProducto, carrito  };

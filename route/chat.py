@@ -283,43 +283,133 @@ def match_pattern(user_input: str, client_id: str, datos):
 
 
 
-def extraer_productos(texto,wsp_id):
+def extraer_productos(texto, wsp_id):
     # Verifica que el texto empiece con "Mi pedido:"
     if not texto.strip().startswith("Mi pedido:"):
         return "El texto no comienza con 'Mi pedido:'"
     
     # Limpiar el texto eliminando los asteriscos y reemplazando comas por puntos en los precios
     texto_limpio = texto.replace('*', '').replace(',', '.')
-    
-    # Regex para extraer nombre del producto, cantidad y precio (aunque el precio no es necesario aquí)
-    pattern = re.compile(r'-\s(.+?)\sx\s(\d+)')
-    
-    matches = pattern.findall(texto_limpio)
-    
-    if not matches:
+
+    # Diccionario para almacenar los productos y sus categorías
+    pedido = {
+        "productos": [],
+        "salsas": [],
+        "adicionales": [],
+        "cambios": []
+    }
+
+    # Identificar las secciones del texto
+    secciones = {
+        "productos": re.search(r'PRODUCTOS(.*?)(SALSAS|ADICIONALES|CAMBIOS|$)', texto_limpio, re.DOTALL),
+        "salsas": re.search(r'SALSAS(.*?)(ADICIONALES|CAMBIOS|$)', texto_limpio, re.DOTALL),
+        "adicionales": re.search(r'ADICIONALES(.*?)(CAMBIOS|$)', texto_limpio, re.DOTALL),
+        "cambios": re.search(r'CAMBIOS(.*)', texto_limpio, re.DOTALL),
+        "notas_adicionales": re.search(r'NOTAS ADICIONALES:(.*)', texto_limpio, re.DOTALL)
+    }
+
+    # Expresión regular para extraer el nombre del producto, la cantidad y otras descripciones si es necesario
+    pattern = re.compile(r'-\s(.+?)\sx\s(\d+)\n')
+
+    for categoria, match in secciones.items():
+        if match and categoria != "notas_adicionales":  # Excepto notas adicionales
+            texto_seccion = match.group(1)
+            matches = pattern.findall(texto_seccion)
+            for producto, cantidad in matches:
+                pedido[categoria].append({"producto": producto.strip(), "cantidad": int(cantidad)})
+        elif categoria == "notas_adicionales" and match:
+            pedido["notas_adicionales"] = match.group(1).strip()
+
+    if not pedido["productos"]:
         return "No se encontraron productos en el texto."
     
-    # Extraer nombres y cantidades
-    nombres_productos = [match[0].strip() for match in matches]
-    cantidades = [int(match[1]) for match in matches]
-
-    # Instancia de la clase Products para obtener los IDs de los productos
-    chabot_instance = Products()
-    productos_con_id = chabot_instance.getProductsIdByNames(nombres_productos, site_id=1, restaurant_id=1)
     
-    # Verificar si se encontraron los IDs correspondientes
+    
+    
+    if not pedido["productos"]:
+        return "No se encontraron productos en el texto."
+    
+
+
+
+    nombres_productos = [match["producto"].strip() for match in pedido["productos"]]
+    cantidades_productos = [int(match["cantidad"]) for match in pedido["productos"]]
+
+    # Crear listas separadas para adiciones, salsas y cambios junto con sus cantidades
+    nombres_adiciones = [match["producto"].strip() for match in pedido["adicionales"] ]
+    cantidades_adiciones = [int(match["cantidad"]) for match in pedido["adicionales"] ]
+
+    nombres_salsas = [match["producto"].strip() for match in pedido["salsas"] ]
+    cantidades_salsas = [int(match["cantidad"]) for match in pedido["salsas"] ]
+
+    nombres_cambios = [match["producto"].strip() for match in pedido["cambios"]]
+    cantidades_cambios = [int(match["cantidad"]) for match in pedido["cambios"]]
+
+    # Crear instancia del manejador de productos
+    chabot_instance = Products()
+
+    # Obtener IDs y detalles de los productos principales
+    productos_con_id = chabot_instance.getProductsIdByNames(nombres_productos, site_id=1, restaurant_id=1)
+
+    # Crear instancia del manejador de adiciones
+    adiciones_instance = Products()
+
+    # Obtener IDs y detalles de las adiciones
+    adiciones_con_id = adiciones_instance.getAditionaldByNames(nombres_adiciones, site_id=1)
+
+    # Obtener IDs y detalles de las salsas
+    salsas_con_id = adiciones_instance.getAditionaldByNames(nombres_salsas, site_id=1)
+
+    # Obtener IDs y detalles de los cambios
+    cambios_con_id = adiciones_instance.getAditionaldByNames(nombres_cambios, site_id=1)
+    
+
+    
+
+
+
     if not productos_con_id:
         return "No se encontraron productos coincidentes en la base de datos."
 
 
-    
+
+
+    adiciones_finales = []
+
+    for i, producto in enumerate(adiciones_con_id):
+        adiciones_finales.append({
+            'nombre': producto["additional_item_name"],
+            'quantity': cantidades_adiciones[i],
+            'aditional_item_instance_id': producto['id'],
+            'price': producto['price'],
+            'tag':'ADICION'
+        })
+
+    for i, producto in enumerate(salsas_con_id):
+        adiciones_finales.append({
+            'nombre': producto["additional_item_name"],
+            'quantity': cantidades_adiciones[i],
+            'aditional_item_instance_id': producto['id'],
+            'price': producto['price'],
+            'tag':'SALSA'
+        })
+        
+    for i, producto in enumerate(cambios_con_id):
+        adiciones_finales.append({
+            'nombre': producto["additional_item_name"],
+            'quantity': cantidades_adiciones[i],
+            'aditional_item_instance_id': producto['id'],
+            'price': producto['price'],
+            'tag':'CAMBIO'
+        })
+
     
     # Crear una lista de diccionarios combinando los nombres, cantidades e IDs
     productos_finales = []
     for i, producto in enumerate(productos_con_id):
         productos_finales.append({
             'nombre': producto["product_name"],
-            'quantity': cantidades[i],
+            'quantity': cantidades_productos[i],
             'product_instance_id': producto['id'],
             'price': producto['price'],
             
@@ -366,10 +456,10 @@ def extraer_productos(texto,wsp_id):
 
     
     
-    order_json = build_json(productos_finales,[], User(user_name=I[0]['user_name'],user_phone=I[0]['user_phone'],user_address=I[0]['user_address'] + " Barrio  " + barrio),site_id,selected_payment_method_id,round(delivery_price) ,'prueba de wps')
+    order_json = build_json(productos_finales,adiciones_finales, User(user_name=I[0]['user_name'],user_phone=I[0]['user_phone'],user_address=I[0]['user_address'] + " Barrio  " + barrio),site_id,selected_payment_method_id,round(delivery_price) ,pedido["notas_adicionales"])
     
     
-    def convertir_pedido(productos, delivery_price):
+    def convertir_pedido(productos):
         resultado = []
         total = 0
         for producto in productos:
@@ -378,19 +468,89 @@ def extraer_productos(texto,wsp_id):
             linea = f"{producto['nombre']} x *{producto['quantity']}* = ${int(subtotal):,}\n"
             resultado.append(linea.title())  # Capitaliza la primera letra de cada palabra
         
-        # Añadir el precio del domicilio
-        resultado.append(f"Domicilio = ${int(delivery_price):,}")
-        
-        # Añadir el total sumando el domicilio
-        total += delivery_price
-        resultado.append(f"Total = ${int(total):,}")
         
         return "\n".join(resultado)
-
-    print(productos_con_id)
     
+
+    def convertir_adicionales(adiciones):
+        
+        # Inicializar mensajes
+        salsas_message = ""
+        adiciones_message = ""
+        cambios_message = ""
+
+        salsas = []
+        adicionales = []
+        cambios = []
+
+
+        for adicion in adiciones:
+            if adicion["tag"] == "ADICION":
+                adicionales.append(adicion)
+            elif adicion["tag"] == "CAMBIO":
+                cambios.append(adicion)
+            elif adicion["tag"] == "SALSA":
+                salsas.append(adicion)
+
+        # Procesar salsas si no está vacío
+        if salsas:
+            salsas_message = "\n*Salsas*\n"
+            for salsa in salsas:
+                message = salsa["nombre"]
+                salsas_message += (message + '\n')
+
+        # Procesar adicionales si no está vacío
+        if adicionales:
+            adiciones_message = "\n*Adiciones*\n"
+            for adicion in adicionales:
+                message = adicion["nombre"] + " x " + str(adicion["price"]) 
+                adiciones_message += (message + '\n')
+
+        # Procesar cambios si no está vacío
+        if cambios:
+            cambios_message = "\n*Cambios*\n"
+            for cambio in cambios:
+                message = cambio["nombre"] + " x " + str(cambio["price"])
+                cambios_message += (message + '\n')
+
+        # Combinar todos los mensajes no vacíos
+        final_message = salsas_message + adiciones_message + cambios_message
+
+        
+        print(final_message)
+
+        return final_message
+    
+
+    def calcular_total(productos, adicionales, delivery_price):
+        subtotal_productos = 0
+        subtotal_adicionales = 0
+
+        # Calcular el subtotal de los productos
+        for producto in productos:
+            subtotal_productos += producto['quantity'] * producto['price']
+        
+        # Calcular el subtotal de los adicionales
+        for adicional in adicionales:
+            subtotal_adicionales += adicional['quantity'] * adicional['price']
+
+        # Sumar los subtotales y el precio del domicilio
+        subtotal = subtotal_productos + subtotal_adicionales
+        total = subtotal + delivery_price
+
+        # Formatear el mensaje final con los precios
+        mensaje = f"""
+        Subtotal Productos: ${int(subtotal_productos):,}
+        Subtotal Adiciones: ${int(subtotal_adicionales):,}
+        Precio del Domicilio: ${int(delivery_price):,}
+        Total Pedido: ${int(total):,}
+            """
+            
+        return mensaje
+ 
     chabot_instance.create_temp_order(wsp_id=wsp_id,json_data=order_json)
-    return f"Listo papi, Ya tengo tu pedido registrado\n\n{convertir_pedido(productos_finales,delivery_price)}{get_my_data(wsp_id)}\nsi todo es correcto porfa ingresa la palabra *confirmar* para enviarlo a preparacion si necesitas cambiar la direccion registrada o el metodo de pago puedes hacerlo aqui https://bot.salchimonster.com/registro/"
+    return f"""Listo papi, Ya tengo tu pedido registrado\n\n{convertir_pedido(productos_finales)} 
+    {convertir_adicionales(adiciones_finales)} {calcular_total(productos_finales,adiciones_finales,delivery_price)}  {get_my_data(wsp_id)}\nsi todo es correcto porfa ingresa la palabra *confirmar* para enviarlo a preparacion si necesitas cambiar la direccion registrada o el metodo de pago puedes hacerlo aqui https://bot.salchimonster.com/registro/"""
 
 
 def generar_mensaje_pedido(pedido):

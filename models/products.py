@@ -19,19 +19,32 @@ class Products:
 
    
     def getProductsIdByNames(self, names: list[str], site_id: int, restaurant_id: int):
-        # Construye las condiciones LIKE para cada nombre en la lista
-        like_conditions = " OR ".join([f"product_name LIKE '%{name}%'" for name in names])
+    # Construye las condiciones ILIKE para cada nombre en la lista
+        ilike_conditions = " OR ".join([f"product_name ILIKE '%{name}%'" for name in names])
         
         # Arma la consulta final
         query = self.db.build_select_query(
             'inventory.complete_product_instances',
             ['*'],
-            condition=f'({like_conditions}) AND site_id = {site_id} AND restaurant_id = {restaurant_id}'
+            condition=f'({ilike_conditions}) AND site_id = {site_id} AND restaurant_id = {restaurant_id}'
         )
         
+        return self.db.fetch_all(query)
+
+    
+
+    def getAditionaldByNames(self, names: list[str], site_id: int):
+        # Construye las condiciones LIKE para cada nombre en la lista
+        like_conditions = " OR ".join([f"additional_item_name ILIKE '%{name}%'" for name in names])
+        
+        # Arma la consulta final con DISTINCT
+        query = self.db.build_select_query(
+            'orders.vw_additional_item_details',
+            ['DISTINCT ON (additional_item_name) id', 'price', 'additional_item_name'],
+            condition=f'({like_conditions}) AND site_id = {site_id}'
+        )
         
         return self.db.fetch_all(query)
-    
 
     def create_temp_order(self, wsp_id: str, json_data: dict):
         
