@@ -392,7 +392,7 @@ def generar_mensaje_pedido(pedido):
         return "El carrito está vacío. Agrega productos antes de enviar el pedido."
 
     # Inicializar el mensaje
-    mensaje = 'Hola, tienes un pedido en proceso. Si deseas realizar otro o necesitas eliminarlo, escribe *cancelar* o *confirmar* para continuar con el pedido.\n\n*PRODUCTOS*:\n'
+    mensaje = 'Hola, tienes un pedido en proceso. Si deseas realizar otro o necesitas eliminarlo, escribe *cancelar* o *confirmar* para continuar con el pedido.\n\n*PRODUCTOS*:\n\n'
     
     # Recorrer los productos y agregar su información al mensaje
     total_productos = 0
@@ -443,7 +443,7 @@ def generar_mensaje_pedido(pedido):
     total = total_productos + delivery_price
     
     # Formatear los totales y el precio del delivery aparte en pesos colombianos
-    mensaje += f"*Metodo de pago: {user_payment_method_to_show}*\n"
+    mensaje += f"*Metodo de pago: {user_payment_method_to_show}*"
     mensaje += f"\n*Total productos: ${total_productos:,.0f}*\n"
     mensaje += f"*Precio del domicilio: ${delivery_price:,.0f}*\n"
     mensaje += f"*Total del pedido: ${total:,.0f}*\n"
