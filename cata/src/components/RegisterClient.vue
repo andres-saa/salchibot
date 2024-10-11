@@ -257,7 +257,7 @@ const send = async () => {
   const encodedMessage = encodeURIComponent(finalMessage + user_data)
   const whatsappUrl = `https://wa.me/573053447255?text=${encodedMessage}`
   window.open(whatsappUrl, '_blank')
-  await fetchService.post(`http://chatbot.salchimonster.com/crete-temp-order/${wsp_id}`, temp_order)
+  await fetchService.post(`https://chatbot.salchimonster.com/crete-temp-order/${wsp_id}`, temp_order)
 
 }
 
