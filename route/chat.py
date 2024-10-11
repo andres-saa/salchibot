@@ -643,11 +643,21 @@ def generar_mensaje_pedido(data):
         mis_datos_message += f"🌆 Ciudad: Bogotá\n"
         mis_datos_message += f"🏘️ Barrio: BOSQUES DE HAYUELOS\n"
         mis_datos_message += f"💳 Método de Pago: TARJETA (DATAFONO)\n"
+        
+    
+    if "order_notes" in data["pedido_temporal"]:
+        user_data = data["pedido_temporal"]["order_notes"]
+        mis_datos_message += "\n📝 *NOTAS PARA LA COCINA*\n"
+        mis_datos_message += f"{user_data}" 
+    
 
     # Añadir el total de precio de entrega si existe
     if "delivery_price" in data["pedido_temporal"]:
         total_final += data["pedido_temporal"]["delivery_price"]
         mis_datos_message += f"🚚 Precio del Domicilio: ${data['pedido_temporal']['delivery_price']:,}\n"
+        
+        
+    
 
     # Añadir el total final
     total_message = f"\n💰 *TOTAL FINAL: ${total_final:,}*\n si todo es correcto escribe *confirmar* para salir volando con tu pedido o *cancelar* para ignorar este y hacer otro."
