@@ -37,7 +37,9 @@ def build_json(order_products: list, order_aditionals: list, user, site_id: int,
             "user_phone": user.user_phone,
             "user_address": user.user_address
         },
-        "order_aditionals": order_aditionals  # Agregar los adicionales
+        "order_aditionals": order_aditionals,
+        "inserted_by":1082
+        # Agregar los adicionales
     }
 
     return order
@@ -113,7 +115,7 @@ def computed_variables(user_id:str):
             "⏰ Horario: Viernes a domingo 12:00 PM a 11:30 PM\n"
         ),
 
-        "carta":("https://bot.salchimonster.com/carta/"),
+        "carta":(f"https://bot.salchimonster.com/carta/{user_id} "),
         "registro":("https://bot.salchimonster.com/registro/"),
         "cambio_direccion":("https://bot.salchimonster.com/direccion/"),
         "nombre":f'*{get_my_self(user_id).capitalize()}*'
@@ -225,25 +227,49 @@ def save_data_responses(data):
 data = load_data()
 data_responses = load_data_responses()
 
-def register_client(user_info, client_id):
-    # Comprueba si la información del usuario comienza con la cadena de inicio esperada
-    if user_info.startswith('registro cliente'):
-        # Separa la información en partes usando el salto de línea
-        info_parts = user_info.split('\n')
 
-        # Ignora la primera línea, que es el título, y comienza a procesar desde la segunda línea
-        client_data = {}
-        for part in info_parts[1:]:  # Comienza desde el segundo elemento de la lista
-            key, value = part.split(': ')
-            client_data[key.strip().lower()] = value.strip()
+
+
+def register_client(user_info, client_id):
+    # # Comprueba si la información del usuario comienza con la cadena de inicio esperada
+    # if user_info.startswith('registro cliente'):
+    #     # Separa la información en partes usando el salto de línea
+    #     info_parts = user_info.split('\n')
+
+    #     # Ignora la primera línea, que es el título, y comienza a procesar desde la segunda línea
+    #     client_data = {}
+    #     for part in info_parts[1:]:  # Comienza desde el segundo elemento de la lista
+    #         key, value = part.split(': ')
+    #         client_data[key.strip().lower()] = value.strip()
         
-        # Suponiendo que 'data' es un diccionario que ya ha sido inicializado en algún lugar de tu código
-        data["clientes_registrados"][client_id] = client_data  # Usar el ID proporcionado
-        save_data(data)  # Asegúrate de que la función save_data esté definida y funcione correctamente
-        return "¡Registro completado exitosamente! Aquí está tu ID de cliente: " + client_id
+    #     # Suponiendo que 'data' es un diccionario que ya ha sido inicializado en algún lugar de tu código
+    #     data["clientes_registrados"][client_id] = client_data  # Usar el ID proporcionado
+    #     save_data(data)  # Asegúrate de que la función save_data esté definida y funcione correctamente
+    #     return "¡Registro completado exitosamente! Aquí está tu ID de cliente: " + client_id
     
     # Retorna un mensaje si el formato no es correcto
+
+    # Remueve los asteriscos y emojis
+    temp_data = re.sub(r'[\*😊📱📍💰]', '', user_info)
+
+    # Divide las líneas
+    parts = temp_data.split('\n')
+
+    # Mapea cada línea para crear el objeto clave-valor
+    data_object = {}
+    for part in parts:
+        key_value = part.split(":")
+        if len(key_value) == 2:
+            key, value = key_value
+            key = key.strip()  # Limpia espacios alrededor de la clave
+            value = value.strip()  # Limpia espacios alrededor del valor
+            data_object[key] = value  # Asigna clave-valor
+
+    print(data_object)
+
     return 'Estoy a la espera de los datos, el formato no es correcto, por favor use el link proporcionado http://127.0.0.1:5500/info/info.html'
+
+
 
 
 def check_client_registration(client_id):
@@ -276,8 +302,8 @@ def match_pattern(user_input: str, client_id: str, datos):
                 return random.choice(intent['data']['responses'])
 
                 
-    update_last_response("Un acesor lo atendera en breve, muchas gracias",client_id)
-    return "Un acesor lo atendera en breve, muchas gracias"
+    update_last_response("Un asesor lo atendera en breve, muchas gracias",client_id)
+    return "Un asesor lo atendera en breve, muchas gracias"
 
 
 
@@ -461,9 +487,6 @@ def extraer_productos(texto, wsp_id):
             selected_payment_method_id = payment["id"]
             break 
 
-
-    
-    
     
     order_json = build_json(productos_finales,adiciones_finales, User(user_name=I[0]['user_name'],user_phone=I[0]['user_phone'],user_address=I[0]['user_address'] + " Barrio  " + barrio),site_id,selected_payment_method_id,round(delivery_price) ,pedido.get("notas_adicionales", "Sin notas"))
     
@@ -562,101 +585,99 @@ def extraer_productos(texto, wsp_id):
     {convertir_adicionales(adiciones_finales)} {calcular_total(productos_finales,adiciones_finales,delivery_price)}  {get_my_data(wsp_id)}\nsi todo es correcto porfa ingresa la palabra *confirmar* para enviarlo a preparacion si necesitas cambiar la direccion registrada o el metodo de pago puedes hacerlo aqui https://bot.salchimonster.com/registro/"""
 
 
-def generar_mensaje_pedido(pedido):
-    # Verificar que el pedido contenga productos
-    if not pedido['pedido_temporal']['order_products']:
-        return "El carrito está vacío. Agrega productos antes de enviar el pedido."
-
-    # Inicializar el mensaje
-    mensaje = 'Hola, tienes un pedido en proceso. Si deseas realizar otro o necesitas eliminarlo, escribe *cancelar* o *confirmar* para continuar con el pedido.\n\n*PRODUCTOS*:\n\n'
+def generar_mensaje_pedido(data):
     
-    # Recorrer los productos y agregar su información al mensaje
-    total_productos = 0
-    for producto in pedido['pedido_temporal']['order_products']:
-        nombre = producto['nombre'].title()  # Capitaliza la primera letra de cada palabra
-        cantidad = producto['quantity']
-        precio = producto.get('price', 0)  # Suponer que el precio puede no estar en los datos
-        subtotal = precio * cantidad
-        total_productos += subtotal
-        mensaje += f"{nombre} x *{cantidad}* = *${subtotal:,.0f}*\n\n"
-    
-    # Añadir el precio del delivery si existe
-    delivery_price = pedido['pedido_temporal'].get('delivery_price', 0)
-    payment_method = pedido['pedido_temporal'].get('payment_method_id', 5)  # Usar el precio del delivery
-     
+# Inicializar secciones del mensaje
+    productos_message = ""
+    cambios_message = ""
+    salsas_message = ""
+    adiciones_message = ""
+    mis_datos_message = ""
+    total_final = 0  # Para calcular el total final
 
-    payment_methods = [
-            {
-                "id": 5,
-                "name": "TARJETA (DATAFONO)"
-            },
-            {
-                "id": 6,
-                "name": "TRANSFERENCIA"
-            },
-            {
-                "id": 7,
-                "name": "RECOGER EN LOCAL"
-            },
-            {
-                "id": 8,
-                "name": "EFECTIVO"
-            }
-        ]
+    # Procesar productos
+    if "order_products" in data["pedido_temporal"]:
+        productos_message += "Listo papi!!, seria asi, me digiste\n\n🍔 *PRODUCTOS*\n"
+        for product in data["pedido_temporal"]["order_products"]:
+            total_producto = product['quantity'] * product['price']
+            productos_message += f"🍽️ *{product['quantity']}* - {product['name']} = ${total_producto:,}\n"
+            total_final += total_producto
 
-    user_payment_method_to_show =  '' # Limpia y convierte a minúsculas
-   
-    for payment in payment_methods:
-        if payment["id"] == payment_method:
-            user_payment_method_to_show = payment["name"]
-            print(payment)
-            break 
+    # Procesar cambios
+    if "order_aditionals" in data["pedido_temporal"]:
+        cambios = [adicional for adicional in data["pedido_temporal"]["order_aditionals"] if adicional["tag"] == "CAMBIO"]
+        if cambios:
+            cambios_message += "\n🔄 *CAMBIOS*\n"
+            for cambio in cambios:
+                total_cambio = cambio['quantity'] * cambio['price']
+                cambios_message += f"🔄 *{cambio['quantity']}* - {cambio['name']} = ${total_cambio:,}\n"
+                total_final += total_cambio
 
+    # Procesar salsas
+    if "order_aditionals" in data["pedido_temporal"]:
+        salsas = [adicional for adicional in data["pedido_temporal"]["order_aditionals"] if adicional["tag"] == "SALSA"]
+        if salsas:
+            salsas_message += "\n🌶️ *SALSAS*\n"
+            for salsa in salsas:
+                total_salsa = salsa['quantity'] * salsa['price']
+                salsas_message += f"🌶️ *{salsa['quantity']}* - {salsa['name']} = ${total_salsa:,}\n"
+                total_final += total_salsa
 
+    # Procesar adiciones
+    if "order_aditionals" in data["pedido_temporal"]:
+        adiciones = [adicional for adicional in data["pedido_temporal"]["order_aditionals"] if adicional["tag"] == "ADICION"]
+        if adiciones:
+            adiciones_message += "\n➕ *ADICIONES*\n"
+            for adicion in adiciones:
+                total_adicion = adicion['quantity'] * adicion['price']
+                adiciones_message += f"🧀 *{adicion['quantity']}* - {adicion['name']} = ${total_adicion:,}\n"
+                total_final += total_adicion
 
+    # Procesar mis datos
+    if "user_data" in data["pedido_temporal"]:
+        user_data = data["pedido_temporal"]["user_data"]
+        mis_datos_message += "\n📝 *TUS DATOS PAPI*\n"
+        mis_datos_message += f"👤 Nombre: {user_data.get('user_name', 'Nombre no disponible')}\n"
+        mis_datos_message += f"📞 Teléfono: {user_data.get('user_phone', 'Teléfono no disponible')}\n"
+        mis_datos_message += f"🏠 Dirección: {user_data.get('user_address', 'Dirección no disponible')}\n"
+        mis_datos_message += f"🌆 Ciudad: Bogotá\n"
+        mis_datos_message += f"🏘️ Barrio: BOSQUES DE HAYUELOS\n"
+        mis_datos_message += f"💳 Método de Pago: TARJETA (DATAFONO)\n"
 
+    # Añadir el total de precio de entrega si existe
+    if "delivery_price" in data["pedido_temporal"]:
+        total_final += data["pedido_temporal"]["delivery_price"]
+        mis_datos_message += f"🚚 Precio del Domicilio: ${data['pedido_temporal']['delivery_price']:,}\n"
 
-    total = total_productos + delivery_price
-    
-    # Formatear los totales y el precio del delivery aparte en pesos colombianos
-    mensaje += f"*Metodo de pago: {user_payment_method_to_show}*"
-    mensaje += f"\n*Total productos: ${total_productos:,.0f}*\n"
-    mensaje += f"*Precio del domicilio: ${delivery_price:,.0f}*\n"
-    mensaje += f"*Total del pedido: ${total:,.0f}*\n"
-    
-    
-    # Añadir notas adicionales si existen
-    notas = pedido['pedido_temporal'].get('order_notes')
-    # if notas:
-    #     mensaje += f"\n*Notas adicionales*: {notas}\n"
+    # Añadir el total final
+    total_message = f"\n💰 *TOTAL FINAL: ${total_final:,}*\n si todo es correcto escribe *confirmar* para salir volando con tu pedido o *cancelar* para ignorar este y hacer otro."
 
-    mensaje += f"\nsi necesitas cambiar la direccion registrada o el metodo de pago puedes hacerlo aqui https://bot.salchimonster.com/registro/"
-
-    return mensaje
+    # Construir el mensaje final
+    final_message = productos_message + cambios_message + salsas_message + adiciones_message + mis_datos_message + total_message
+    return final_message
 
 
 
 def extraer_datos_usuario(cadena: str) -> dict:
-    # Expresión regular para extraer los datos, incluyendo el método de pago
-    patron = r"Nombre:\s*(?P<name>.+)\s*Teléfono:\s*(?P<phone>\d+)\s*Dirección:\s*(?P<address>[\w\s#-]+)\s*Ciudad:\s*(?P<city>[\w\s]+)\s*Barrio:\s*(?P<neighborhood>[\w\s]+)\s*Método de Pago:\s*(?P<payment_method>[\w\s]+)"
-    
-    # Buscar coincidencias
-    coincidencias = re.search(patron, cadena)
-    
-    if coincidencias:
-        # Limpiar los valores extraídos (eliminar espacios o saltos de línea al inicio y final)
-        return {
-            "user_name": coincidencias.group("name").strip(),
-            "user_phone": coincidencias.group("phone").strip(),
-            "user_address": coincidencias.group("address").strip(),
-            "city": coincidencias.group("city").strip(),  # Incluido por si se necesita
-            "neighborhood": coincidencias.group("neighborhood").strip(),
-            "payment_method": coincidencias.group("payment_method").strip()  # Método de pago añadido
-        }
-    else:
-        # Retornar un diccionario vacío si no se encuentran datos
-        return {}
+    # Remueve los asteriscos y emojis
+    temp_data = re.sub(r'[\*\U0001F600-\U0001F64F]', '', cadena)  # Añadido rango de emojis
 
+    # Divide las líneas
+    parts = temp_data.split('\n')[1:]
+
+    # Mapea cada línea para crear el objeto clave-valor
+    data_object = {}
+    for part in parts:
+        key_value = part.split(":")
+        if len(key_value) == 2:
+            key, value = key_value
+            key = key.strip()  # Limpia espacios alrededor de la clave
+            value = value.strip()  # Limpia espacios alrededor del valor
+            data_object[key] = value  # Asigna clave-valor
+        else:
+            print(f"Formato inválido detectado en la línea: {part}")
+
+    return data_object
 
 def confirm_order(wsp_id:str,data):
     chatbot_instance = Products()
@@ -687,55 +708,20 @@ def chatbot(userInput: UserInput):
     def replace_variables(text):
         pattern = re.compile(r'\{(\w+)\}')  # Patrón para identificar variables dentro de llaves
         return pattern.sub(lambda match: computed_variables(userInput.client_id).get(match.group(1), f"{match.group(0)}"), text)
-    # Cargar datos de un archivo JSON loca
-
 
     with open('data_patterns.json', 'r') as file:
         datos = json.load(file)
-        
-        
+         
     if not data_responses.get(userInput.client_id):
             update_last_response('hola', userInput.client_id)
     chatbot_instance = Products()
     
-    I = chatbot_instance.i_am_registered(userInput.client_id)
-    
-    
-    
-    if (userInput.answer.strip().replace("*","").startswith('Resgistrame papi:')):
-        print('here')
-        user = extraer_datos_usuario(userInput.answer.replace('*',''))
-        print(user)
-        
-
-         
-        if user:
-            created_user =  chatbot_instance.create_temp_user(
-                user["user_name"],
-                user["user_phone"],
-                user["user_address"],
-                user["city"],
-                user["neighborhood"],
-                userInput.client_id,
-                user["payment_method"]) 
-            
-            return {"response":f"Listo *{user['user_name'].capitalize()}* Tu registro ha sido exitoso\n como te gustaria proceder?\n, Te armamos un pedido?\n, deseas consultar el estado de tu orden?\n ¡Papi! 🔥💥 ¡Activemos ese pedido ya! Mira, por aquí te dejo nuestra carta inteligente 👉 https://bot.salchimonster.com/carta/ 🚀. Si le das click a la fotico de los productos, se van agregando de una. Cuando todo esté ready, solo le das al botón verde que dice *Listo* y ¡Booom! 🎉 ¡Pedido en marcha! 💣🔥 si ya tienes pedido desde antes solo escribe confirmar y listo"}
-    
-    
-    if not I:
-        
-        for intent in datos:
-            if intent["intent"] == "no registrado":   
-                data =  random.choice(intent["data"]["responses"])
-                clean = replace_variables(data)
-                return {"response":clean}
-    
-
     my_current_order = chatbot_instance.i_have_temp_order(userInput.client_id)
     
     if (my_current_order and userInput.answer.lower().strip().startswith('cancelar')):
         chatbot_instance.deleteMyTempOrder(userInput.client_id)
-        return {"response":"listo vamos desde cero"}
+        return {"response":f"listo vamos desde papi Explora nuestra carta automática aquí: https://bot.salchimonster.com/carta/{userInput.client_id}"}
+    
     
     if (my_current_order and userInput.answer.strip().lower().startswith('confirmar')):
         response = confirm_order(userInput.client_id,my_current_order)
@@ -747,18 +733,8 @@ def chatbot(userInput: UserInput):
     if my_current_order:
         return {"response":generar_mensaje_pedido(my_current_order[0])}
 
-    if  userInput.answer.strip().startswith("Mi pedido:"):
-       return {"response":extraer_productos(userInput.answer,userInput.client_id)}
-    
-    
-
-    # Generar respuesta inicial
     response = match_pattern(userInput.answer, userInput.client_id, datos)
 
-    # Buscar y reemplazar variables en la respuesta
-    
-
-    # Aplicar reemplazo de variables a la respuesta
     response = replace_variables(response)
 
     return {"response": response}

@@ -45,6 +45,8 @@ class Products:
         )
         
         return self.db.fetch_all(query)
+    
+    
 
     def create_temp_order(self, wsp_id: str, json_data: dict):
         
@@ -112,9 +114,16 @@ class Products:
 
     
 
-    def i_have_temp_order(self,customer_id:str):
-        query = self.db.build_select_query('orders.temp_order',["*"],f"id_wsp_customer = '{customer_id}'")
-        my_order = self.db.execute_query(query,fetch=True)
+    def i_have_temp_order(self, customer_id: str):
+        # Modificamos la consulta para obtener el último registro basado en el campo "created_at" o un identificador único
+        query = self.db.build_select_query(
+            'orders.temp_order',
+            ["*"],
+            f"id_wsp_customer = '{customer_id}'",
+            order_by="id DESC",  # Puedes cambiar 'created_at' por otro campo que haga sentido en tu base de datos
+            limit=1
+        )
+        my_order = self.db.execute_query(query, fetch=True)
         return my_order
     
     
@@ -165,13 +174,16 @@ class Products:
                 "user_address": user['user_address']
             },
             "order_aditionals": order_aditionals,
-            "inserted_by_id":1082  # Agregar los adicionales
+            "inserted_by":1082  # Agregar los adicionales
         }
 
-        # Realizar la solicitud POST
+
+        print(order)
+
+      
         response = requests.post(url, json=order)
 
-        # Manejar la respuesta
+
         if response.status_code == 200:
             print("Order placed successfully!")
             return response.json()

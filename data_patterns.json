@@ -54,6 +54,15 @@
                     "horarios"
                 ],
                 [
+                    "horario",
+                    "de"
+                ],
+                [
+                    "horario",
+                    "de",
+                    ""
+                ],
+                [
                     "a",
                     "que",
                     "hora",
@@ -68,7 +77,9 @@
             ],
             "responses": [
                 "estos son los horarios de nuestras sedes monstruo {horarios}",
-                "Estos son los horarios papi {horarios}"
+                "Estos son los horarios papi {horarios}",
+                "Hola monstruo estos son nuestros horarios  {horarios}",
+                "Hola monstruo estos son nuestros horarios {horarios}"
             ]
         }
     },
