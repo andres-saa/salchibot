@@ -1,5 +1,6 @@
 <template>
   <div class="container">
+
     <div class="container-form">
       <p style="color: white">{{ data }}</p>
 
@@ -41,6 +42,12 @@
       </div>
 
 
+
+      <Textarea v-model="cart.user.order_notes" rows="3" style=""
+        placeholder="📝Alguna notita para la cocina?"></Textarea>
+
+
+      <Button @click="send" style="" size="large" class="submit-button" label="🔥 CONFIRMAR DATOS🔥"></Button>
       <Button @click="() => router.push({
         name: 'carta',
         params: {
@@ -48,7 +55,7 @@
         }
       })" style="" size="large" class="submit-button" label="VOLVER AL MENU"></Button>
 
-      <Button @click="send" style="" size="large" class="submit-button" label="🔥 CONFIRMAR DATOS🔥"></Button>
+
 
     </div>
   </div>
@@ -65,6 +72,7 @@ import InputNumber from 'primevue/inputnumber'
 import router from '@/router'
 import { useCartStore } from '@/stores/cart'
 import { useRoute } from 'vue-router'
+import Textarea from 'primevue/textarea'
 const cities = ref([])
 const neigborghoods = ref([])
 const paymentMethods = ref([])
@@ -135,6 +143,8 @@ const send = async () => {
 
   const productsToSend = []
   const aditionalTosend = []
+  let notesMessage = cart.user.order_notes.trim() ? `${cart.user.order_notes}` : 'sin notas';
+
 
 
   // Productos normales
@@ -230,7 +240,7 @@ const send = async () => {
     "delivery_person_id": 4,
     "payment_method_id": cart.user.paymentMethod.id,
     "delivery_price": cart.user.neigborghood.delivery_price,
-    "order_notes": "sin notas",
+    "order_notes": notesMessage,
     "user_data": {
       "user_name": cart.user.name,
       "user_phone": cart.user.phone.toString(),
@@ -249,7 +259,9 @@ const send = async () => {
     `*Dirección*: ${cart.user.address}\n` +
     `*Ciudad*: ${cart.user.city.city_name}\n` +
     `*Barrio*: ${cart.user.neigborghood.name}\n` +
-    `*Método de Pago*: ${cart.user.paymentMethod.name}` // Agregando el método de pago al mensaje
+    `*Método de Pago*: ${cart.user.paymentMethod.name}\n\n` +
+    `*Notas para la cocina*: ${notesMessage}`
+  // Agregando el método de pago al mensaje
 
   const wsp_id = route.params.user_id
 
@@ -258,6 +270,7 @@ const send = async () => {
   const whatsappUrl = `https://wa.me/573053447255?text=${encodedMessage}`
   window.open(whatsappUrl, '_blank')
   await fetchService.post(`https://chatbot.salchimonster.com/crete-temp-order/${wsp_id}`, temp_order)
+
 
 }
 
@@ -390,5 +403,13 @@ input {
   border: none;
 
   outline: none;
+}
+
+.notas {
+  height: 100vh;
+  width: 100vw;
+  background-color: red;
+  position: fixed;
+  z-index: 900;
 }
 </style>

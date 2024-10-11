@@ -20,7 +20,8 @@ export const useCartStore = defineStore('cart-bot', {
           city_id: 8,
           city_name: 'Bogotá',
           visible: true,
-          user_wsp_id: ''
+          user_wsp_id: '',
+          order_notes: ''
         },
         neigborghood: { neighborhood_id: 20, name: '', delivery_price: 0, site_id: 8, city_id: 8 },
         paymentMethod: { id: 6, name: 'TRANSFERENCIA' },

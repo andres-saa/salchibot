@@ -172,7 +172,7 @@ onMounted(() => {
 }
 
 .btn_quantity {
-    width: 100%;
+    width: 4rem;
     background-color: rgba(0, 0, 0, 0.767);
     border: none;
     display: flex;
@@ -226,6 +226,7 @@ onMounted(() => {
     font-weight: bold;
     text-align: center;
     font-size: 300%;
+    height: 4rem;
 
 }
 
@@ -237,7 +238,7 @@ onMounted(() => {
 }
 
 .trash {
-    width: 30%;
+    height: 60%;
     object-fit: contain;
 
 }

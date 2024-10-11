@@ -128,6 +128,9 @@ const borrar = () => {
 }
 
 
+
+
+
 const push = () => {
     if (!cart.cart.products.length > 0) {
         alert("no hay productos seleccionados")
@@ -149,9 +152,8 @@ const push = () => {
         <div class="decoration-left"></div>
 
         <div class="header">
-            <button @click="moveCarousel(1)" style="position: absolute;width: 3rem;height: 100%;  left: 0"
-                class="btn-left">
-                <img src="/public/icons/angles-left.png" alt="" />
+            <button @click="moveCarousel(1)" style="width: 4rem; position: absolute;  left: 0" class="btn-left">
+                <img class="img_flecha" src="/public/icons/angles-left.png" alt="" />
             </button>
 
             <div class="categorie-carousel">
@@ -161,9 +163,9 @@ const push = () => {
                 </p>
             </div>
 
-            <button style="position: absolute;width: 3rem;height: 100%; right: 0" @click="moveCarousel(-1)"
+            <button style="position: absolute;height: 4rem; width: 4rem; right: 0" @click="moveCarousel(-1)"
                 class="btn-right">
-                <img src="/public/icons/angles-right.png" alt="" />
+                <img class="img_flecha" src="/public/icons/angles-right.png" alt="" />
             </button>
         </div>
 
@@ -171,7 +173,8 @@ const push = () => {
             <div v-for="categori in categories" :key="categori.id" class="grid-container"
                 :style="`transform: translateX(${current_pos}%);`">
                 <productCard :product="product"
-                    v-for="product in categori.products.filter(p => p.tag === 'SALSA' || p.price > 0)" :key="product.id">
+                    v-for="product in categori.products.filter(p => p.tag === 'SALSA' || p.price > 0)"
+                    :key="product.id">
                 </productCard>
             </div>
         </div>
@@ -225,6 +228,10 @@ const push = () => {
     width: 100%;
     display: flex;
 }
+
+
+
+
 
 .carousel {
     display: flex;
@@ -324,11 +331,12 @@ img {
 .btn-left,
 .btn-right {
     border: none;
-    font-size: ;
     z-index: 100;
     display: flex;
     align-items: center;
     justify-content: center;
+
+
 }
 
 .btn-left img,
@@ -376,7 +384,7 @@ button {
     min-height: 3rem;
     color: white;
     font-weight: bold;
-    font-size: 4rem;
+    /* font-size: 4rem; */
     box-shadow: 0 0 0.5rem black;
     z-index: 100;
 }
