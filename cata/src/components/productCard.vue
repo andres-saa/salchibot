@@ -161,6 +161,7 @@ onMounted(() => {
     bottom: 0;
     transition: all ease .3s;
     transform: translateY(10rem);
+    height: 4rem;
 }
 
 .quantity-selected {
@@ -178,6 +179,7 @@ onMounted(() => {
     color: white;
     font-weight: bold;
     font-size: 300%;
+    height: 4rem;
 }
 
 .selected {
@@ -232,7 +234,7 @@ onMounted(() => {
 }
 
 .trash {
-    width: 50%;
+    width: 30%;
     object-fit: contain;
 
 }

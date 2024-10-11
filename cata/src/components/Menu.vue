@@ -126,6 +126,22 @@ const borrar = () => {
 
     cart.total = 0
 }
+
+
+const push = () => {
+    if (!cart.cart.products.length > 0) {
+        alert("no hay productos seleccionados")
+        return
+    }
+    router.push({
+        name: 'register',
+        params:
+        {
+            user_id: cart.user.user_wsp_id
+        }
+    })
+}
+
 </script>
 
 <template>
@@ -133,7 +149,8 @@ const borrar = () => {
         <div class="decoration-left"></div>
 
         <div class="header">
-            <button @click="moveCarousel(1)" style="position: absolute; left: 0" class="btn-left">
+            <button @click="moveCarousel(1)" style="position: absolute;width: 3rem;height: 100%;  left: 0"
+                class="btn-left">
                 <img src="/public/icons/angles-left.png" alt="" />
             </button>
 
@@ -144,7 +161,8 @@ const borrar = () => {
                 </p>
             </div>
 
-            <button style="position: absolute; right: 0" @click="moveCarousel(-1)" class="btn-right">
+            <button style="position: absolute;width: 3rem;height: 100%; right: 0" @click="moveCarousel(-1)"
+                class="btn-right">
                 <img src="/public/icons/angles-right.png" alt="" />
             </button>
         </div>
@@ -162,19 +180,13 @@ const borrar = () => {
             </button>
 
             <div>
-                <p v-if="cart.total < 1" class="advice">
+                <p style="font-size: .7rem;" v-if="cart.total < 1" class="advice">
                     Los productos se registran dando click en la foto
                 </p>
             </div>
             <div class="price-container">
                 <span class="price">{{ formatPesos(cart.total) }}</span>
-                <button class="button" @click="router.push({
-                    name: 'register',
-                    params:
-                    {
-                        user_id: cart.user.user_wsp_id
-                    }
-                })" id="listo">
+                <button class="button" @click="push()" id="listo">
 
                     LISTO
                 </button>
@@ -187,11 +199,12 @@ const borrar = () => {
 .grid-container {
     display: grid;
     grid-template-columns: repeat(1, 1fr);
-    gap: 1rem;
+    gap: 2rem;
     margin: 0;
     width: 100%;
     min-width: 100%;
-    padding: 1rem;
+    padding: 2rem;
+    padding-bottom: 7rem;
     transition: 0.3s all ease;
     justify-content: start;
     /* padding: 1rem; */
@@ -220,7 +233,7 @@ const borrar = () => {
 
 .bottom-bar {
     width: 100%;
-    height: 5rem;
+    height: 4rem;
     background-color: rgb(255, 255, 255);
     position: fixed;
     bottom: 0;
@@ -236,16 +249,18 @@ const borrar = () => {
 
 .buttom {
     padding: 0 4rem;
+    display: flex;
+
 }
 
 img {
-    width: 3rem;
+    width: 2rem;
     /* filter: invert(); */
 }
 
 #listo img {
     filter: invert();
-    min-height: 5rem;
+    min-height: 2rem;
     /* padding: 0 5rem; */
 }
 
@@ -276,7 +291,7 @@ img {
     left: 0;
     background-color: #ffffff;
     overflow: hidden;
-    height: min-content;
+    height: 3rem;
     padding: 0rem 3rem;
     align-items: center;
 }
@@ -288,7 +303,7 @@ img {
     min-width: 100%;
     text-align: center;
     /* margin: 0rem 1rem; */
-    font-size: 1.5rem;
+    font-size: 1rem;
     text-justify: center;
     display: flex;
     align-items: center;
@@ -309,6 +324,9 @@ img {
     border: none;
     font-size: ;
     z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .btn-left img,
@@ -317,16 +335,16 @@ img {
 }
 
 #listo {
-    height: 100%;
+
     font-weight: 900;
     background-color: rgb(0, 186, 12);
     display: flex;
     align-items: center;
     box-shadow: none;
-    border-radius: 0.5rem;
+    border-radius: 0.4rem;
     font-size: 1rem;
     padding: 1rem;
-    min-height: 4rem;
+
 }
 
 #trash {
@@ -342,8 +360,9 @@ img {
 }
 
 .price {
-    font-size: 2rem;
+    font-size: 1.5rem;
     font-weight: bold;
+    min-width: max-content;
 }
 
 

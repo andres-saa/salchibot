@@ -267,6 +267,10 @@ const get_user = async () => {
   try {
     const user = await fetchService.get(`https://chatbot.salchimonster.com/user/${wsp_id}`)
 
+    if (!user[0]) {
+      return
+    }
+
 
     // Verificar si user es un array no vacío
     if (Array.isArray(user) && user.length > 0 && user[0]) {
