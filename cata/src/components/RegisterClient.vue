@@ -237,7 +237,7 @@ const send = async () => {
     "order_products": productsToSend,
     "order_aditionals": aditionalTosend,
     "site_id": cart.user.neigborghood.site_id,
-    "delivery_person_id": 4,
+    "delivery_person_id": cart.user.neigborghood.delivery_price,
     "payment_method_id": cart.user.paymentMethod.id,
     "delivery_price": cart.user.neigborghood.delivery_price,
     "order_notes": notesMessage,
