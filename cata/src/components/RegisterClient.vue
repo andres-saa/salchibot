@@ -143,7 +143,7 @@ const send = async () => {
 
   const productsToSend = []
   const aditionalTosend = []
-  let notesMessage = cart.user.order_notes.trim() ? `${cart.user.order_notes}` : 'sin notas';
+  let notesMessage = cart.user?.order_notes?.trim() ? `${cart?.user?.order_notes}` : 'sin notas';
 
 
 
