@@ -20,31 +20,30 @@
           v-model="cart.user.neigborghood" optionLabel="name" class="select"></Select>
       </div>
       <div class="container-field">
-        <Select optionLabel="name" v-model="cart.user.paymentMethod" :options="paymentMethods"
+        <Select optionLabel="name" v-model="selectedPaymentMethod" :options="paymentMethods"
           placeholder="💰Metodo de pago preferido" class="select"></Select>
       </div>
 
       <div class="container-field">
-        <InputText v-model="cart.user.name" placeholder="😊 Nombre" class="input"></InputText>
+        <InputText v-model="name" placeholder="😊 Nombre" class="input"></InputText>
       </div>
       <div class="container-field">
-        <InputText v-model="cart.user.address" placeholder="📍 Direccion" class="input"></InputText>
+        <InputText v-model="address" placeholder="📍 Direccion" class="input"></InputText>
       </div>
       <div class="container-field">
-        <InputNumber :useGrouping="false" v-model="cart.user.phone" style="
+        <InputNumber :useGrouping="false" v-model="phone" style="
             width: 30rem;
             max-width: 100%;
             height: 3.5rem;
             font-size: 3rem !important;
             font-weight: bold;
-          " pattern="\d*" placeholder="📱Teefono" class="input">
+          " pattern="\d*" placeholder="📱Telefono" class="input">
         </InputNumber>
       </div>
 
 
 
-      <Textarea v-model="cart.user.order_notes" rows="3" style=""
-        placeholder="📝Alguna notita para la cocina?"></Textarea>
+      <Textarea v-model="order_notes" rows="3" style="" placeholder="📝Alguna notita para la cocina?"></Textarea>
 
 
       <Button @click="send" style="" size="large" class="submit-button" label="🔥 CONFIRMAR DATOS🔥"></Button>
@@ -82,7 +81,7 @@ const address = ref('')
 const phone = ref()
 
 const cart = useCartStore()
-
+const order_notes = ref('')
 
 const route = useRoute()
 
@@ -109,15 +108,15 @@ watch(() => cart.user.city, async (newval) => {
 
 const send = async () => {
   // Verificar que cada campo está lleno, uno por uno
-  if (!cart.user.name) {
+  if (!name.value) {
     alert('Por favor, completa el campo de nombre antes de finalizar.')
     return
   }
-  if (!cart.user.phone) {
+  if (!phone.value) {
     alert('Por favor, completa el campo de teléfono antes de finalizar.')
     return
   }
-  if (!cart.user.address) {
+  if (!address.value) {
     alert('Por favor, completa el campo de dirección antes de finalizar.')
     return
   }
@@ -129,7 +128,7 @@ const send = async () => {
     alert('Por favor, selecciona un barrio antes de finalizar.')
     return
   }
-  if (!cart.user.paymentMethod['name']) {
+  if (!selectedPaymentMethod.value['name']) {
     alert('Por favor, selecciona un método de pago antes de finalizar.')
     return
   }
@@ -143,7 +142,7 @@ const send = async () => {
 
   const productsToSend = []
   const aditionalTosend = []
-  let notesMessage = cart.user?.order_notes?.trim() ? `${cart?.user?.order_notes}` : 'sin notas';
+  let notesMessage = order_notes.value.trim() ? `${order_notes.value}` : 'sin notas';
 
 
 
@@ -238,13 +237,13 @@ const send = async () => {
     "order_aditionals": aditionalTosend,
     "site_id": cart.user.neigborghood.site_id,
     "delivery_person_id": cart.user.neigborghood.delivery_price,
-    "payment_method_id": cart.user.paymentMethod.id,
+    "payment_method_id": selectedPaymentMethod.value.id,
     "delivery_price": cart.user.neigborghood.delivery_price,
     "order_notes": notesMessage,
     "user_data": {
-      "user_name": cart.user.name,
-      "user_phone": cart.user.phone.toString(),
-      "user_address": `${cart.user.address} - ${cart.user.neigborghood.name}`,
+      "user_name": name.value,
+      "user_phone": phone.value.toString(),
+      "user_address": `${address.value} - ${cart.user.neigborghood.name}`,
     },
     "inserted_by": 1082
   }
@@ -254,12 +253,12 @@ const send = async () => {
 
   const user_data =
     `*MIS DATOS*\n` +
-    `*Nombre*: ${cart.user.name}\n` +
-    `*Teléfono*: ${cart.user.phone}\n` +
-    `*Dirección*: ${cart.user.address}\n` +
+    `*Nombre*: ${name.value}\n` +
+    `*Teléfono*: ${phone.value}\n` +
+    `*Dirección*: ${address.value}\n` +
     `*Ciudad*: ${cart.user.city.city_name}\n` +
     `*Barrio*: ${cart.user.neigborghood.name}\n` +
-    `*Método de Pago*: ${cart.user.paymentMethod.name}\n\n` +
+    `*Método de Pago*: ${selectedPaymentMethod.value.name}\n\n` +
     `*Notas para la cocina*: ${notesMessage}`
   // Agregando el método de pago al mensaje
 
@@ -336,9 +335,6 @@ const get_user = async () => {
 
 
 
-onMounted(async () => {
-  await get_user()
-})
 const data = ref()
 </script>
 

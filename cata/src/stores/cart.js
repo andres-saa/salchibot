@@ -4,7 +4,7 @@ export const useCartStore = defineStore('cart-bot', {
   persist: {
     key: 'cart-bot', // La clave bajo la cual se almacenará el estado
     storage: localStorage,
-    paths: ['cart', 'total', 'user'] // Guardamos tanto el carrito como el total
+    paths: ['cart', 'total'] // Guardamos tanto el carrito como el total
   },
 
   state: () => {
@@ -16,15 +16,9 @@ export const useCartStore = defineStore('cart-bot', {
       },
       total: 0,
       user: {
-        city: {
-          city_id: 8,
-          city_name: 'Bogotá',
-          visible: true,
-          user_wsp_id: '',
-          order_notes: ''
-        },
-        neigborghood: { neighborhood_id: 20, name: '', delivery_price: 0, site_id: 8, city_id: 8 },
-        paymentMethod: { id: 6, name: 'TRANSFERENCIA' },
+        city: {},
+        neigborghood: {},
+        paymentMethod: {},
         name: '',
         phone: 0,
         address: ''
