@@ -244,7 +244,7 @@ const send = async () => {
     "user_data": {
       "user_name": cart.user.name,
       "user_phone": cart.user.phone.toString(),
-      "user_address": cart.user.address,
+      "user_address": `${cart.user.address} - ${cart.user.neigborghood.name}`,
     },
     "inserted_by": 1082
   }
