@@ -648,7 +648,7 @@ def generar_mensaje_pedido(data):
     if "order_notes" in data["pedido_temporal"]:
         user_data = data["pedido_temporal"]["order_notes"]
         mis_datos_message += "\n📝 *NOTAS PARA LA COCINA*\n"
-        mis_datos_message += f"{user_data}" 
+        mis_datos_message += f"{user_data}\n\n" 
     
 
     # Añadir el total de precio de entrega si existe
