@@ -73,13 +73,14 @@ onMounted(() => {
 
 
             <div class="foto">
-                <img class="foto-img"
+                <img v-if="!props.product.tag" class="foto-img"
                     :src="`https://backend.salchimonster.com/read-product-image/300/${props.product.product_name}`"
                     alt="">
 
+                <img v-else class="foto-img" src="/public//icons/logo.png" alt="">
 
-                <div style="display: flex;flex-direction: column; justify-content: ;">
-                    <div class="header">
+                <div style="display: flex;flex-direction: column;align-items: end;">
+                    <div>
                         <p v-if="props.product?.price" class="price">{{ formatPesos(props.product.price) }}</p>
                     </div>
 
@@ -151,6 +152,7 @@ onMounted(() => {
 
 .foto {
     display: flex;
+    justify-content: space-between;
 }
 
 .quantity {
@@ -231,6 +233,7 @@ onMounted(() => {
     width: 50%;
     object-fit: contain;
     mix-blend-mode: multiply;
+    border-radius: .5rem;
 }
 
 .trash {

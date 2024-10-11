@@ -170,7 +170,9 @@ const push = () => {
         <div class="carousel">
             <div v-for="categori in categories" :key="categori.id" class="grid-container"
                 :style="`transform: translateX(${current_pos}%);`">
-                <productCard :product="product" v-for="product in categori.products" :key="product.id"></productCard>
+                <productCard :product="product"
+                    v-for="product in categori.products.filter(p => p.tag === 'SALSA' || p.price > 0)" :key="product.id">
+                </productCard>
             </div>
         </div>
 
