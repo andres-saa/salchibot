@@ -6,7 +6,7 @@
 
       <div class="header">
         <i>🔥</i>
-        <img src="/public/icons/logo.png" alt="" />
+        <img src="/src/icons/logo.png" alt="" />
         <i>🔥</i>
       </div>
 
@@ -241,11 +241,16 @@ const send = async () => {
       "user_name": name.value,
       "user_phone": phone.value.toString(),
       "user_address": `${address.value} - ${selectedNeigborhood.value?.name}`,
+      "user_city": selectedCity.value.name,
+      "user_neigborhood": selectedNeigborhood.value.name,
+      "user_payment": selectedPaymentMethod.value.name
     },
     "inserted_by": 1082
   }
 
   console.log(temp_order)
+
+
 
 
   const user_data =

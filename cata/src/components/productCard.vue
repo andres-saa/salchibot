@@ -77,7 +77,7 @@ onMounted(() => {
                     :src="`https://backend.salchimonster.com/read-product-image/300/${props.product.product_name}`"
                     alt="">
 
-                <img v-else class="foto-img" src="/public//icons/logo.png" alt="">
+                <img v-else class="foto-img" src="/src/icons/logo.png" alt="">
 
                 <div style="display: flex;flex-direction: column;align-items: end;">
                     <div>
@@ -110,7 +110,7 @@ onMounted(() => {
             :class="cartStore.cart.products?.find(p => p?.product?.id == props.product?.id) ? 'quantity-selected' : ''">
             <button class="btn_quantity" @click="decrementQuantity" :disabled="quantity === 0">
 
-                <img v-if="quantity < 2" style="" class="trash" src="/public/icons/trash.svg" alt="">
+                <img v-if="quantity < 2" style="" class="trash" src="/src/icons/trash.svg" alt="">
                 <span v-else> <b>-</b> </span>
             </button>
             <input readonly v-model="quantity" class="input-quantity" type="text">

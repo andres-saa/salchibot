@@ -148,7 +148,7 @@ const push = () => {
 
         <div class="header">
             <button @click="moveCarousel(1)" style="width: 4rem; position: absolute;  left: 0" class="btn-left">
-                <img class="img_flecha" src="/public/icons/angles-left.png" alt="" />
+                <img class="img_flecha" src="/src/icons/angles-left.png" alt="" />
             </button>
 
             <div class="categorie-carousel">
@@ -160,7 +160,7 @@ const push = () => {
 
             <button style="position: absolute;height: 4rem; width: 4rem; right: 0" @click="moveCarousel(-1)"
                 class="btn-right">
-                <img class="img_flecha" src="/public/icons/angles-right.png" alt="" />
+                <img class="img_flecha" src="/src/icons/angles-right.png" alt="" />
             </button>
         </div>
 
@@ -176,7 +176,7 @@ const push = () => {
 
         <div class="bottom-bar">
             <button @click="borrar" v-if="cart.total > 0" id="trash">
-                <img src="/public/icons/trash.svg" alt="" />
+                <img src="/src/icons/trash.svg" alt="" />
             </button>
 
             <div>

@@ -640,11 +640,12 @@ def generar_mensaje_pedido(data):
         mis_datos_message += f"👤 Nombre: {user_data.get('user_name', 'Nombre no disponible')}\n"
         mis_datos_message += f"📞 Teléfono: {user_data.get('user_phone', 'Teléfono no disponible')}\n"
         mis_datos_message += f"🏠 Dirección: {user_data.get('user_address', 'Dirección no disponible')}\n"
-        mis_datos_message += f"🌆 Ciudad: Bogotá\n"
-        mis_datos_message += f"🏘️ Barrio: BOSQUES DE HAYUELOS\n"
-        mis_datos_message += f"💳 Método de Pago: TARJETA (DATAFONO)\n"
+        mis_datos_message += f"🌆 Ciudad: {user_data.get('user_city', 'ciudad no disponible')}\n"
+        mis_datos_message += f"🏘️ Barrio: {user_data.get('user_neigborhood', 'barrio no disponible')}\n"
+        mis_datos_message += f"💳 Método de Pago: {user_data.get('user_payment', 'barrio no disponible')}\n"
         
     
+
     if "order_notes" in data["pedido_temporal"]:
         user_data = data["pedido_temporal"]["order_notes"]
         mis_datos_message += "\n📝 *NOTAS PARA LA COCINA*\n"
