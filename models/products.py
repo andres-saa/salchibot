@@ -51,6 +51,10 @@ class Products:
     def create_temp_order(self, wsp_id: str, json_data: dict):
         
         # Convertir el JSON a texto
+        
+        self.deleteMyTempOrder(wsp_id)
+        
+        
         json_text = json.dumps(json_data)
         
         class Data(BaseModel):
