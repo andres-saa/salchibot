@@ -10,7 +10,7 @@ import router from '@/router'
 import { useRoute, useRouter } from 'vue-router'
 
 const cart = useCartStore()
-
+const route = useRoute()
 const current_pos = ref(0)
 
 const categories = ref([])
@@ -68,7 +68,7 @@ onMounted(async () => {
 
     const cambios = add['CAMBIOS']
 
-    console.log(cambios)
+
     const adiciones = add['ADICIONES']
     const salsas = add['SALSAS']
 
@@ -132,17 +132,12 @@ const borrar = () => {
 
 
 const push = () => {
-    if (!cart.cart.products.length > 0) {
+    if (!(cart.cart.products.length > 0)) {
         alert("no hay productos seleccionados")
         return
     }
-    router.push({
-        name: 'register',
-        params:
-        {
-            user_id: cart.user.user_wsp_id
-        }
-    })
+
+    window.location.href = `/register/${route.params.user_id}`
 }
 
 </script>

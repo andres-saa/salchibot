@@ -11,13 +11,13 @@
       </div>
 
       <div class="container-field">
-        <Select placeholder="📍 Selecciona una ciudad" v-model="cart.user.city" :options="cities" class="select"
+        <Select placeholder="📍 Selecciona una ciudad" v-model="selectedCity" :options="cities" class="select"
           optionLabel="city_name"></Select>
       </div>
       <div class="container-field">
-        <Select :disabled="!cart.user.city['city_name']" :options="neigborghoods"
+        <Select :disabled="!selectedCity['city_name']" :options="neigborghoods"
           filterPlaceholder=" 📍 Escribe el nombre de tu barrio" placeholder="📍 selecciona tu barrio" filter
-          v-model="cart.user.neigborghood" optionLabel="name" class="select"></Select>
+          v-model="selectedNeigborhood" optionLabel="name" class="select"></Select>
       </div>
       <div class="container-field">
         <Select optionLabel="name" v-model="selectedPaymentMethod" :options="paymentMethods"
@@ -47,12 +47,7 @@
 
 
       <Button @click="send" style="" size="large" class="submit-button" label="🔥 CONFIRMAR DATOS🔥"></Button>
-      <Button @click="() => router.push({
-        name: 'carta',
-        params: {
-          user_id: route.params.user_id
-        }
-      })" style="" size="large" class="submit-button" label="VOLVER AL MENU"></Button>
+      <Button @click="push()" style="" size="large" class="submit-button" label="VOLVER AL MENU"></Button>
 
 
 
@@ -79,6 +74,8 @@ const selectedPaymentMethod = ref({})
 const name = ref('')
 const address = ref('')
 const phone = ref()
+const selectedCity = ref({})
+const selectedNeigborhood = ref({})
 
 const cart = useCartStore()
 const order_notes = ref('')
@@ -97,7 +94,7 @@ onMounted(async () => {
   paymentMethods.value = await fetchService.get(`${URI}/payment_methods/`)
 })
 
-watch(() => cart.user.city, async (newval) => {
+watch(selectedCity, async (newval) => {
   if (newval.city_id) {
     updateNeigborhoods(newval.city_id)
   }
@@ -120,15 +117,15 @@ const send = async () => {
     alert('Por favor, completa el campo de dirección antes de finalizar.')
     return
   }
-  if (!cart.user.city['city_name']) {
+  if (!selectedCity.value?.['city_name']) {
     alert('Por favor, selecciona una ciudad antes de finalizar.')
     return
   }
-  if (!cart.user.neigborghood['name']) {
+  if (!selectedNeigborhood.value?.['name']) {
     alert('Por favor, selecciona un barrio antes de finalizar.')
     return
   }
-  if (!selectedPaymentMethod.value['name']) {
+  if (!selectedPaymentMethod.value?.['name']) {
     alert('Por favor, selecciona un método de pago antes de finalizar.')
     return
   }
@@ -235,15 +232,15 @@ const send = async () => {
   const temp_order = {
     "order_products": productsToSend,
     "order_aditionals": aditionalTosend,
-    "site_id": cart.user.neigborghood.site_id,
-    "delivery_person_id": cart.user.neigborghood.delivery_price,
+    "site_id": selectedNeigborhood.value.site_id,
+    "delivery_person_id": selectedNeigborhood.value.delivery_price,
     "payment_method_id": selectedPaymentMethod.value.id,
-    "delivery_price": cart.user.neigborghood.delivery_price,
+    "delivery_price": selectedNeigborhood.value.delivery_price,
     "order_notes": notesMessage,
     "user_data": {
       "user_name": name.value,
       "user_phone": phone.value.toString(),
-      "user_address": `${address.value} - ${cart.user.neigborghood.name}`,
+      "user_address": `${address.value} - ${selectedNeigborhood.value?.name}`,
     },
     "inserted_by": 1082
   }
@@ -256,8 +253,8 @@ const send = async () => {
     `*Nombre*: ${name.value}\n` +
     `*Teléfono*: ${phone.value}\n` +
     `*Dirección*: ${address.value}\n` +
-    `*Ciudad*: ${cart.user.city.city_name}\n` +
-    `*Barrio*: ${cart.user.neigborghood.name}\n` +
+    `*Ciudad*: ${selectedCity.value.city_name}\n` +
+    `*Barrio*: ${selectedNeigborhood.value.name}\n` +
     `*Método de Pago*: ${selectedPaymentMethod.value.name}\n\n` +
     `*Notas para la cocina*: ${notesMessage}`
   // Agregando el método de pago al mensaje
@@ -333,6 +330,13 @@ const get_user = async () => {
   }
 }
 
+
+
+
+const push = () => {
+
+  window.location.href = `/carta/${route.params.user_id}`
+}
 
 
 const data = ref()
