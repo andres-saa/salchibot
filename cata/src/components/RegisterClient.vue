@@ -241,7 +241,7 @@ const send = async () => {
       "user_name": name.value,
       "user_phone": phone.value.toString(),
       "user_address": `${address.value} - ${selectedNeigborhood.value?.name}`,
-      "user_city": selectedCity.value.name,
+      "user_city": selectedCity.value.city_name,
       "user_neigborhood": selectedNeigborhood.value.name,
       "user_payment": selectedPaymentMethod.value.name
     },
