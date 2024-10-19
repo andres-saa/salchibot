@@ -107,8 +107,8 @@ def computed_variables(user_id:str):
             "*Modelia*\n"
             "*Kennedy*\n"
             "*Suba*\n"
-            "*Montes*\n\n"
-            "*Chapinero*\n\n"
+            "*Montes*\n"
+            "*Chapinero*\n"
             "*Usaquen*\n\n"
             "⏰ Horario: Lunes a domingo 12:00 PM a 11:30 PM\n\n"
             
