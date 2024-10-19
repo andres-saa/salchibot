@@ -82,6 +82,7 @@ def computed_variables(user_id:str):
             "*Salchimonster Suba* - Carrera 92 # 147B-17\n"
             "*Salchimonster Kennedy* - Carrera 78B # 38 sur-79\n"
             "*Salchimonster Chapinero* - Cra 10 A # 70-24\n\n"
+            "*Salchimonster Usaquen* - Carrera 19 #150-69\n\n"
             
             "*JAMUNDÍ*\n"
             "En Jamundí tenemos esta sede:\n"
@@ -107,6 +108,8 @@ def computed_variables(user_id:str):
             "*Kennedy*\n"
             "*Suba*\n"
             "*Montes*\n\n"
+            "*Chapinero*\n\n"
+            "*Usaquen*\n\n"
             "⏰ Horario: Lunes a domingo 12:00 PM a 11:30 PM\n\n"
             
             "*🔥 SEDE MEDELLÍN LAURELES 🔥*\n"
