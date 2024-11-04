@@ -20,7 +20,7 @@
       <h2 style="font-weight: 300 !important; color: white;text-align: center;">Vamos a buscar tu sede mas cercana, calcular el valor de tu domicilio y confirmar el menu disponible en tu zona</h2>
    
       <div class="container-field">
-        <Select placeholder="📍 Selecciona una ciudad" v-model="cart.user.city" :options="cities" class="select"
+        <Select  placeholder="📍 Selecciona una ciudad" v-model="cart.user.city" :options="cities" class="select"
           optionLabel="city_name"></Select>
       </div>
       <div class="container-field">
