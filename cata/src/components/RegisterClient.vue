@@ -11,13 +11,13 @@
       </div>
 
       <div class="container-field">
-        <Select placeholder="📍 Selecciona una ciudad" v-model="selectedCity" :options="cities" class="select"
+        <Select placeholder="📍 Selecciona una ciudad" disabled v-model="cart.user.city" :options="cities" class="select"
           optionLabel="city_name"></Select>
       </div>
-      <div class="container-field">
-        <Select :disabled="!selectedCity['city_name']" :options="neigborghoods"
+      <div class="container-field"> 
+        <Select disabled  :options="neigborghoods"
           filterPlaceholder=" 📍 Escribe el nombre de tu barrio" placeholder="📍 selecciona tu barrio" filter
-          v-model="selectedNeigborhood" optionLabel="name" class="select"></Select>
+          v-model="cart.user.neigborghood" optionLabel="name" class="select"></Select>
       </div>
       <div class="container-field">
         <Select optionLabel="name" v-model="selectedPaymentMethod" :options="paymentMethods"
@@ -89,18 +89,43 @@ const updateNeigborhoods = async (city_id) => {
   neigborghoods.value = await fetchService.get(`${URI}/neighborhoods/by-city/${city_id}`)
 }
 
+
+
+
 onMounted(async () => {
+
+  const instagramScript = document.createElement('script');
+  instagramScript.src = "https://www.instagram.com/embed.js";
+  instagramScript.async = true;
+  document.body.appendChild(instagramScript);
+
   cities.value = await fetchService.get(`${URI}/cities`)
   paymentMethods.value = await fetchService.get(`${URI}/payment_methods/`)
+  if (cart.user.city) {
+    updateNeigborhoods(cart.user.city.city_id)
+  }
 })
 
-watch(selectedCity, async (newval) => {
-  if (newval.city_id) {
-    updateNeigborhoods(newval.city_id)
-  }
+watch(() => cart.user.city, async (newval) => {
 
-}, {
+    updateNeigborhoods(newval.city_id)
+    cart.user.neigborghood = {}
+
+
+},{
   deep: true
+})
+
+
+
+
+watch(() => cart.user.neigborghood, async (newval) => {
+
+cart.user.site = await fetchService.get(`${URI}/site/${newval.site_id}`)
+
+
+},{
+deep: true
 })
 
 const send = async () => {
@@ -117,11 +142,11 @@ const send = async () => {
     alert('Por favor, completa el campo de dirección antes de finalizar.')
     return
   }
-  if (!selectedCity.value?.['city_name']) {
+  if (!cart.user.city?.['city_name']) {
     alert('Por favor, selecciona una ciudad antes de finalizar.')
     return
   }
-  if (!selectedNeigborhood.value?.['name']) {
+  if (!cart.user.neigborghood?.['name']) {
     alert('Por favor, selecciona un barrio antes de finalizar.')
     return
   }
@@ -232,7 +257,7 @@ const send = async () => {
   const temp_order = {
     "order_products": productsToSend,
     "order_aditionals": aditionalTosend,
-    "site_id": selectedNeigborhood.value.site_id,
+    "site_id": cart.user.neigborghood.site_id,
     "delivery_person_id": selectedNeigborhood.value.delivery_price,
     "payment_method_id": selectedPaymentMethod.value.id,
     "delivery_price": selectedNeigborhood.value.delivery_price,
@@ -240,9 +265,9 @@ const send = async () => {
     "user_data": {
       "user_name": name.value,
       "user_phone": phone.value.toString(),
-      "user_address": `${address.value} - ${selectedNeigborhood.value?.name}`,
-      "user_city": selectedCity.value.city_name,
-      "user_neigborhood": selectedNeigborhood.value.name,
+      "user_address": `${address.value} - ${cart.user.neigborghood.name}`,
+      "user_city": cart.user.city.city_name,
+      "user_neigborhood": cart.user.neigborghood.name,
       "user_payment": selectedPaymentMethod.value.name
     },
     "inserted_by": 1082
@@ -258,8 +283,8 @@ const send = async () => {
     `*Nombre*: ${name.value}\n` +
     `*Teléfono*: ${phone.value}\n` +
     `*Dirección*: ${address.value}\n` +
-    `*Ciudad*: ${selectedCity.value.city_name}\n` +
-    `*Barrio*: ${selectedNeigborhood.value.name}\n` +
+    `*Ciudad*: ${cart.user.city.city_name}\n` +
+    `*Barrio*: ${cart.user.neigborghood.name}\n` +
     `*Método de Pago*: ${selectedPaymentMethod.value.name}\n\n` +
     `*Notas para la cocina*: ${notesMessage}`
   // Agregando el método de pago al mensaje

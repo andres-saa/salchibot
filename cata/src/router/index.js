@@ -9,6 +9,13 @@ const router = createRouter({
 
       component: () => import('../App.vue'),
       children: [
+
+        {
+          path: '/Ubicacion/:user_id',
+          name: 'Ubicacion',
+          component: () => import('../components/Ubicacion.vue')
+        },
+
         {
           path: '/register/:user_id',
           name: 'register',

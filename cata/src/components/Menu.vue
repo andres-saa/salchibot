@@ -8,7 +8,8 @@ import { formatPesos } from '@/services/services/formatoPesos'
 import { URI } from '@/services/services/conection'
 import router from '@/router'
 import { useRoute, useRouter } from 'vue-router'
-
+import Tag from 'primevue/tag'
+import Button from 'primevue/button'
 const cart = useCartStore()
 const route = useRoute()
 const current_pos = ref(0)
@@ -129,7 +130,7 @@ const borrar = () => {
 
 
 
-
+console.log(cart.user)
 
 const push = () => {
     if (!(cart.cart.products.length > 0)) {
@@ -140,14 +141,27 @@ const push = () => {
     window.location.href = `/register/${route.params.user_id}`
 }
 
+
 </script>
 
 <template>
     <div class="container">
         <div class="decoration-left"></div>
 
-        <div class="header">
-            <button @click="moveCarousel(1)" style="width: 4rem; position: absolute;  left: 0" class="btn-left">
+        <div class="header12" style="position: sticky   ;top: 0;z-index: 2000;">
+
+            <div  style="background-color: #000000;display: flex ;
+            padding:  .2rem .2rem;
+            justify-content: space-between; width: 100%;height: 2rem;">
+
+            <Tag class="indicador" :style="cart?.site_status.status == 'open'? 'background-color:yellow;color:black' : 'background-color:red;color:white'" style=" border-radius: .1rem;"> {{ cart?.site_status.status == 'open'? 'Abierto' : 'Cerrado' }} </Tag>
+            <p style="color: #fff;font-weight: bold;"><b>SEDE - {{ cart.user.site.site_name }}</b> </p>
+            <Button @click="router.push(`/Ubicacion/${route.params.user_id}`)" style="background-color: orange;color: black;padding: 0  1rem !important; border:none; border-radius: .1rem;cursor: pointer;" label="Cambiar ciudad"> </Button>
+
+
+            </div>
+            <div class="header">
+                <button @click="moveCarousel(1)" style="width: 4rem; position: absolute;  left: 0" class="btn-left">
                 <img class="img_flecha" src="/src/icons/angles-left.png" alt="" />
             </button>
 
@@ -162,6 +176,8 @@ const push = () => {
                 class="btn-right">
                 <img class="img_flecha" src="/src/icons/angles-right.png" alt="" />
             </button>
+            </div>
+           
         </div>
 
         <div class="carousel">
@@ -174,7 +190,7 @@ const push = () => {
             </div>
         </div>
 
-        <div class="bottom-bar">
+        <div class="bottom-bar" v-if="cart.site_status?.status == 'open'">
             <button @click="borrar" v-if="cart.total > 0" id="trash">
                 <img src="/src/icons/trash.svg" alt="" />
             </button>
@@ -182,6 +198,9 @@ const push = () => {
             <div>
                 <p style="font-size: .7rem;" v-if="cart.total < 1" class="advice">
                     Los productos se registran dando click en la foto
+
+
+            
                 </p>
             </div>
             <div class="price-container">
@@ -196,6 +215,12 @@ const push = () => {
 </template>
 
 <style scoped>
+
+
+
+
+
+
 .grid-container {
     display: grid;
     grid-template-columns: repeat(1, 1fr);
@@ -225,6 +250,33 @@ const push = () => {
 }
 
 
+
+
+.indicador{
+    animation: alternate .5s ease-in-out infinite;
+}
+
+@keyframes alternate {
+    0% {
+        opacity: 0;
+    }
+
+    25% {
+        opacity: 0.3;
+    }
+
+    50% {
+        opacity: 0.6;
+    }
+
+    75% {
+        opacity: 0.85;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
 
 
 
@@ -300,6 +352,24 @@ img {
     align-items: center;
 }
 
+
+.header2 {
+    display: flex;
+    position: sticky;
+    z-index: 100;
+    margin-bottom: 0.5rem;
+    width: 100%;
+    min-height: 4rem;
+    top: 0;
+    box-shadow: 0 0.5rem 0.5rem rgba(0, 0, 0, 0.404);
+    left: 0;
+    background-color: #ffffff;
+    overflow: hidden;
+    height: 3rem;
+    padding: 0rem 3rem;
+    align-items: center;
+}
+
 .category_name {
     color: #ff6200;
     font-weight: 900;
@@ -330,6 +400,8 @@ img {
     display: flex;
     align-items: center;
     justify-content: center;
+    height: 100%;
+    background-color: black;
 
 
 }
@@ -349,6 +421,7 @@ img {
     border-radius: 0.4rem;
     font-size: 1rem;
     padding: 1rem;
+    border: none;
 
 }
 
@@ -361,6 +434,7 @@ img {
     box-shadow: none;
     border-radius: 0.5rem;
     font-size: 1rem;
+    border: none;
     padding: 0.5rem;
 }
 
@@ -372,15 +446,5 @@ img {
 
 
 
-button {
-    background-color: rgb(0, 0, 0);
-    border: none;
-    height: 100%;
-    min-height: 3rem;
-    color: white;
-    font-weight: bold;
-    /* font-size: 4rem; */
-    box-shadow: 0 0 0.5rem black;
-    z-index: 100;
-}
+
 </style>
