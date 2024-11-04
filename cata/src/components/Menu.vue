@@ -10,6 +10,9 @@ import router from '@/router'
 import { useRoute, useRouter } from 'vue-router'
 import Tag from 'primevue/tag'
 import Button from 'primevue/button'
+
+
+
 const cart = useCartStore()
 const route = useRoute()
 const current_pos = ref(0)
@@ -57,7 +60,12 @@ const moveCarousel = (dir) => {
 onMounted(async () => {
 
 
+
     const route = useRoute()
+    if (!cart.user?.site?.site_name){
+        router.push(`/ubicacion/${route.params.user_id}`)
+    }
+
     const user_wsp_id = route.params.user_id
     // alert(user_wsp_id)
 
