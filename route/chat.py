@@ -704,7 +704,7 @@ def confirm_order(wsp_id:str,data):
         json_data["pedido_temporal"]['user_data'],
         json_data["pedido_temporal"]['site_id'],
         json_data["pedido_temporal"]['payment_method_id'],
-        json_data["pedido_temporal"]['delivery_person_id'],
+        4,
         json_data["pedido_temporal"]["order_notes"])
     
     
