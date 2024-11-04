@@ -118,7 +118,7 @@ def computed_variables(user_id:str):
             "⏰ Horario: Viernes a domingo 12:00 PM a 11:30 PM\n"
         ),
 
-        "carta":(f"https://bot.salchimonster.com/carta/{user_id} "),
+        "carta":(f"https://bot.salchimonster.com/ubicacion/{user_id} "),
         "registro":("https://bot.salchimonster.com/registro/"),
         "cambio_direccion":("https://bot.salchimonster.com/direccion/"),
         "nombre":f'*{get_my_self(user_id).capitalize()}*'
