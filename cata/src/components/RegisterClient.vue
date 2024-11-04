@@ -11,13 +11,13 @@
       </div>
 
       <div class="container-field">
-        <Select placeholder="📍 Selecciona una ciudad" disabled v-model="cart.user.city" :options="cities" class="select"
-          optionLabel="city_name"></Select>
+        <Select placeholder="📍 Selecciona una ciudad" disabled v-model="cart.user.city" :options="cities"
+          class="select" optionLabel="city_name"></Select>
       </div>
-      <div class="container-field"> 
-        <Select disabled  :options="neigborghoods"
-          filterPlaceholder=" 📍 Escribe el nombre de tu barrio" placeholder="📍 selecciona tu barrio" filter
-          v-model="cart.user.neigborghood" optionLabel="name" class="select"></Select>
+      <div class="container-field">
+        <Select disabled :options="neigborghoods" filterPlaceholder=" 📍 Escribe el nombre de tu barrio"
+          placeholder="📍 selecciona tu barrio" filter v-model="cart.user.neigborghood" optionLabel="name"
+          class="select"></Select>
       </div>
       <div class="container-field">
         <Select optionLabel="name" v-model="selectedPaymentMethod" :options="paymentMethods"
@@ -108,11 +108,11 @@ onMounted(async () => {
 
 watch(() => cart.user.city, async (newval) => {
 
-    updateNeigborhoods(newval.city_id)
-    cart.user.neigborghood = {}
+  updateNeigborhoods(newval.city_id)
+  cart.user.neigborghood = {}
 
 
-},{
+}, {
   deep: true
 })
 
@@ -121,11 +121,11 @@ watch(() => cart.user.city, async (newval) => {
 
 watch(() => cart.user.neigborghood, async (newval) => {
 
-cart.user.site = await fetchService.get(`${URI}/site/${newval.site_id}`)
+  cart.user.site = await fetchService.get(`${URI}/site/${newval.site_id}`)
 
 
-},{
-deep: true
+}, {
+  deep: true
 })
 
 const send = async () => {
@@ -258,7 +258,7 @@ const send = async () => {
     "order_products": productsToSend,
     "order_aditionals": aditionalTosend,
     "site_id": cart.user.neigborghood.site_id,
-    "delivery_person_id": selectedNeigborhood.value.delivery_price,
+    "delivery_person_id": 4,
     "payment_method_id": selectedPaymentMethod.value.id,
     "delivery_price": selectedNeigborhood.value.delivery_price,
     "order_notes": notesMessage,
