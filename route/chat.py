@@ -28,7 +28,7 @@ def build_json(order_products: list, order_aditionals: list, user, site_id: int,
     order = {
         "order_products": order_products,
         "site_id": site_id,
-        "delivery_person_id": 4,
+        "delivery_person_id": delivery_price,
         "payment_method_id": payment_method_id,
         "delivery_price": delivery_price,
         "order_notes": order_notes,
