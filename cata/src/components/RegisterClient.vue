@@ -260,7 +260,7 @@ const send = async () => {
     "site_id": cart.user.neigborghood.site_id,
     "delivery_person_id": 4,
     "payment_method_id": selectedPaymentMethod.value.id,
-    "delivery_price": selectedNeigborhood.value.delivery_price,
+    "delivery_price": cart.user.neigborghood.delivery_price,
     "order_notes": notesMessage,
     "user_data": {
       "user_name": name.value,
