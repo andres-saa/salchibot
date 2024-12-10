@@ -170,7 +170,7 @@ const send = async () => {
 
   // Productos normales
   const products = cart.cart.products.filter(p => !p.product.tag).forEach(p => {
-    productsMessage += `*${p.quantity}* - ${p.product.product_name}\n`
+    productsMessage += `*${p.quantity}* - ${p.product.productogeneral_descripcion}\n`
     productsToSend.push(
       {
         "product_instance_id": p.product.id,
@@ -230,6 +230,43 @@ const send = async () => {
   })
 
 
+const order_products = cart.cart.products.map(p => {
+
+const generalPrice = p.product.productogeneral_precio;
+            const presentationPrice = p.product.lista_presentacion?.[0]?.producto_precio;
+return { 
+
+
+  pedido_productoid: cart.getProductId(p.product),
+  pedido_cantidad: p.quantity,
+  pedido_precio: cart.getProductPrice(p.product) || 0,
+  pedido_escombo:p.product.productogeneral_escombo,
+  pedido_nombre_producto:p.product.productogeneral_descripcion,
+  lista_productocombo: p.product.lista_productobase?.map(p => 
+      {
+        return {
+          "pedido_productoid":parseInt(p.producto_id)  ,
+          "pedido_cantidad": parseInt(p.productocombo_cantidad),
+          "pedido_precio": parseInt(p.productocombo_precio),
+          "pedido_nombre":p.producto_descripcion
+        }
+       
+      }
+    
+  ),
+  // modificadorseleccionList:cart.cart.additions.filter( add => add.parent_id == p.product.producto_id)?.map( ad => {
+  //   return {
+  //     "modificadorseleccion_cantidad": ad.quantity,
+  //     "pedido_precio": ad.price,
+  //     "modificador_id": ad.group_id,
+  //     "modificadorseleccion_id": ad.id,
+  //     "modificador_nombre":ad.name,
+  //     "pedido_productoid":ad.parent_id
+  // }
+  // })  
+}
+});
+
 
 
 
@@ -254,6 +291,8 @@ const send = async () => {
 
   console.log(finalMessage)
 
+  
+
   const temp_order = {
     "order_products": productsToSend,
     "order_aditionals": aditionalTosend,
@@ -270,13 +309,10 @@ const send = async () => {
       "user_neigborhood": cart.user.neigborghood.name,
       "user_payment": selectedPaymentMethod.value.name
     },
-    "inserted_by": 1082
+    "inserted_by": 1082,
+    "pe_json": order_products,
+    "pe_site_id":cart.user.site.pe_site_id
   }
-
-  console.log(temp_order)
-
-
-
 
   const user_data =
     `*MIS DATOS*\n` +
@@ -347,7 +383,7 @@ const get_user = async () => {
         address: user[0].user_address || 'Dirección no disponible'
       }
 
-      cart.user = { ...temp_user }
+      // cart.user = { ...temp_user }
 
 
     } else {

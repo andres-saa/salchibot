@@ -159,14 +159,14 @@ class Products:
         query = self.db.build_delete_query('orders.temp_order',f"id_wsp_customer = '{customer_id}'")
         self.db.execute_query(query)
         
-    def insert_order(self, order_products: list, order_aditionals: list, user:dict, site_id: int, payment_method_id: int, delivery_price: int, order_notes: str):
+    def insert_order(self, order_products: list, order_aditionals: list, user:dict, site_id: int, payment_method_id: int, delivery_price: int, order_notes: str, pe_json:object, pe_site_id:int):
         # Definir la URL del endpoint
-        URI = 'https://backend.salchimonster.com/'
+        URI = 'http://localhost:8000/'
         url = f"{URI}/order"
 
         # Crear el cuerpo del pedido con la estructura correcta
         order = {
-            "order_products": order_products,
+            "order_products": [],
             "site_id": site_id,
             "delivery_person_id": 4,
             "payment_method_id": payment_method_id,
@@ -178,16 +178,19 @@ class Products:
                 "user_address": user['user_address']
             },
             "order_aditionals": order_aditionals,
-            "inserted_by":1082  # Agregar los adicionales
+            "inserted_by":1082,  # Agregar los adicionales
+            "pe_json":pe_json,
+            "pe_site_id":pe_site_id
         }
 
 
-        print(order)
+     
 
       
         response = requests.post(url, json=order)
 
 
+        print(response)
         if response.status_code == 200:
             print("Order placed successfully!")
             return response.json()

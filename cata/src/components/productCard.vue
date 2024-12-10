@@ -1,91 +1,92 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue';
 import { useCartStore } from '@/stores/cart';
-
 import { formatPesos } from '@/services/services/formatoPesos';
-// Definir el uso de la tienda de carrito
-const cartStore = useCartStore()
 
-// Props que recibe el componente
+const cartStore = useCartStore();
+
 const props = defineProps({
     product: {
         type: Object,
-        required: true
-    }
+        required: true,
+    },
 });
 
-// Estado local para manejar la selección del producto
 const selected = ref(false);
 
-// Computed para obtener la cantidad del producto en el carrito
 const quantity = computed(() => {
-    const productInCart = cartStore.cart.products.find(p => p.product.id === props.product.id);
+    const productInCart = cartStore.cart.products.find((p) => cartStore.getProductId(p.product)  === cartStore.getProductId(props.product));
     return productInCart ? productInCart.quantity : 0;
 });
 
-// Función para agregar una unidad del producto al carrito
+
+
+
+
+
+
+
 const addProductToCart = () => {
     cartStore.addProduct(props.product, 1);
-}
 
-// Función para eliminar todas las instancias del producto del carrito
+    console.log(cartStore.cart)
+}; 
+
 const removeAllProductFromCart = () => {
-    const productInCart = cartStore.cart.products.find(p => p.product.id === props.product.id);
-    if (productInCart) {
-        cartStore.removeProduct(props.product, productInCart.quantity);
-    }
-}
+    cartStore.removeProduct(props.product, quantity.value);
+};
 
-// Función para disminuir la cantidad de producto en el carrito
 const decrementQuantity = () => {
     if (quantity.value > 1) {
         cartStore.removeProduct(props.product, 1);
-        return
-    } if (quantity.value == 1) {
-        removeAllProductFromCart();
-        selected.value = !selected.value;
-    }
-}
-
-// Función para manejar el cambio de selección
-const toggleSelection = () => {
-    selected.value = !selected.value;
-    if (selected.value) {
-        addProductToCart(); // Agregar producto al seleccionarlo
     } else {
-        removeAllProductFromCart(); // Eliminar todas las instancias del producto al deseleccionarlo
+        removeAllProductFromCart();
+        selected.value = false;
     }
-}
+};
+
+const toggleSelection = () => {
+    
+    if (selected.value) {
+       
+        removeAllProductFromCart();
+    } else {
+        addProductToCart();
+    }
+    selected.value = !selected.value;
+};
 
 onMounted(() => {
-    cartStore.products?.find(p => p.product) ? selected.value = true : false
-})
-
-
+    const productInCart = cartStore.cart.products.find((p) => cartStore.getProductId(p.product)  === cartStore.getProductId(props.product));
+    if (productInCart) {
+        selected.value = true
+    }
+});
 </script>
+
 
 <template>
 
 
     <div class="container"
-        :class="cartStore.cart.products?.find(p => p?.product?.id == props.product?.id) ? 'selected' : ''">
+    :class="cartStore.cart.products?.find(p => cartStore.getProductId(p?.product)  == cartStore.getProductId(props.product))? 'selected' : ''">
         <div class="click-area" @click="toggleSelection">
 
 
             <div class="foto">
                 <img v-if="!props.product.tag" class="foto-img"
-                    :src="`https://backend.salchimonster.com/read-product-image/300/${props.product.product_name}`"
+                    :src="`https://img.restpe.com/${props.product.productogeneral_urlimagen}`"
                     alt="">
 
                 <img v-else class="foto-img" src="/src/icons/logo.png" alt="">
 
                 <div style="display: flex;flex-direction: column;align-items: end;">
                     <div>
-                        <p v-if="props.product?.price" class="price">{{ formatPesos(props.product.price) }}</p>
+                        <p  class="price">{{ formatPesos(props.product.productogeneral_precio || props.product?.lista_presentacion[0]?.producto_precio) }}</p>
                     </div>
 
                     <div>
-                        <p style="text-align: end;" class="name">{{ props.product.product_name }}</p>
+                        <p style="text-align: end;" class="name">{{ props.product.productogeneral_descripcion }}</p>
                     </div>
                 </div>
 
@@ -97,7 +98,7 @@ onMounted(() => {
 
 
                 <div>
-                    <p class="description">{{ props.product.product_description }}</p>
+                    <p class="description">{{ props.product.productogeneral_descripcionweb }}</p>
                 </div>
 
 
@@ -107,7 +108,7 @@ onMounted(() => {
 
         <!-- Botones para manejar la cantidad -->
         <div class="quantity"
-            :class="cartStore.cart.products?.find(p => p?.product?.id == props.product?.id) ? 'quantity-selected' : ''">
+            :class="cartStore.cart.products?.find(p => cartStore.getProductId(p?.product)  == cartStore.getProductId(props.product))? 'quantity-selected' : ''">
             <button class="btn_quantity" @click="decrementQuantity" :disabled="quantity === 0">
 
                 <img v-if="quantity < 2" style="" class="trash" src="/src/icons/trash.svg" alt="">

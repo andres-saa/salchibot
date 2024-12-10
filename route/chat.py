@@ -589,52 +589,21 @@ def extraer_productos(texto, wsp_id):
 
 
 def generar_mensaje_pedido(data):
-    
-# Inicializar secciones del mensaje
+    # Inicializar secciones del mensaje
     productos_message = ""
-    cambios_message = ""
-    salsas_message = ""
-    adiciones_message = ""
     mis_datos_message = ""
     total_final = 0  # Para calcular el total final
 
-    # Procesar productos
-    if "order_products" in data["pedido_temporal"]:
+    # Procesar productos desde el campo pedido_temporal["pe_json"]
+    if "pe_json" in data["pedido_temporal"]:
         productos_message += "Listo papi!!, seria asi, me digiste\n\n🍔 *PRODUCTOS*\n"
-        for product in data["pedido_temporal"]["order_products"]:
-            total_producto = product['quantity'] * product['price']
-            productos_message += f"🍽️ *{product['quantity']}* - {product['name']} = ${total_producto:,}\n"
+        for product in data["pedido_temporal"]["pe_json"]:
+            cantidad = product["pedido_cantidad"]
+            precio = float(product["pedido_precio"])
+            nombre_producto = product["pedido_nombre_producto"]
+            total_producto = cantidad * precio
+            productos_message += f"🍽️ *{cantidad}* - {nombre_producto} = ${total_producto:,.2f}\n"
             total_final += total_producto
-
-    # Procesar cambios
-    if "order_aditionals" in data["pedido_temporal"]:
-        cambios = [adicional for adicional in data["pedido_temporal"]["order_aditionals"] if adicional["tag"] == "CAMBIO"]
-        if cambios:
-            cambios_message += "\n🔄 *CAMBIOS*\n"
-            for cambio in cambios:
-                total_cambio = cambio['quantity'] * cambio['price']
-                cambios_message += f"🔄 *{cambio['quantity']}* - {cambio['name']} = ${total_cambio:,}\n"
-                total_final += total_cambio
-
-    # Procesar salsas
-    if "order_aditionals" in data["pedido_temporal"]:
-        salsas = [adicional for adicional in data["pedido_temporal"]["order_aditionals"] if adicional["tag"] == "SALSA"]
-        if salsas:
-            salsas_message += "\n🌶️ *SALSAS*\n"
-            for salsa in salsas:
-                total_salsa = salsa['quantity'] * salsa['price']
-                salsas_message += f"🌶️ *{salsa['quantity']}* - {salsa['name']} = ${total_salsa:,}\n"
-                total_final += total_salsa
-
-    # Procesar adiciones
-    if "order_aditionals" in data["pedido_temporal"]:
-        adiciones = [adicional for adicional in data["pedido_temporal"]["order_aditionals"] if adicional["tag"] == "ADICION"]
-        if adiciones:
-            adiciones_message += "\n➕ *ADICIONES*\n"
-            for adicion in adiciones:
-                total_adicion = adicion['quantity'] * adicion['price']
-                adiciones_message += f"🧀 *{adicion['quantity']}* - {adicion['name']} = ${total_adicion:,}\n"
-                total_final += total_adicion
 
     # Procesar mis datos
     if "user_data" in data["pedido_temporal"]:
@@ -643,34 +612,27 @@ def generar_mensaje_pedido(data):
         mis_datos_message += f"👤 Nombre: {user_data.get('user_name', 'Nombre no disponible')}\n"
         mis_datos_message += f"📞 Teléfono: {user_data.get('user_phone', 'Teléfono no disponible')}\n"
         mis_datos_message += f"🏠 Dirección: {user_data.get('user_address', 'Dirección no disponible')}\n"
-        mis_datos_message += f"🌆 Ciudad: {user_data.get('user_city', 'ciudad no disponible')}\n"
-        mis_datos_message += f"🏘️ Barrio: {user_data.get('user_neigborhood', 'barrio no disponible')}\n"
-        mis_datos_message += f"💳 Método de Pago: {user_data.get('user_payment', 'barrio no disponible')}\n"
-        
-    
+        mis_datos_message += f"🌆 Ciudad: {user_data.get('user_city', 'Ciudad no disponible')}\n"
+        mis_datos_message += f"🏘️ Barrio: {user_data.get('user_neigborhood', 'Barrio no disponible')}\n"
+        mis_datos_message += f"💳 Método de Pago: {user_data.get('user_payment', 'Método de pago no disponible')}\n"
 
+    # Procesar notas
     if "order_notes" in data["pedido_temporal"]:
-        user_data = data["pedido_temporal"]["order_notes"]
+        notas = data["pedido_temporal"]["order_notes"]
         mis_datos_message += "\n📝 *NOTAS PARA LA COCINA*\n"
-        mis_datos_message += f"{user_data}\n\n" 
-    
+        mis_datos_message += f"{notas}\n\n"
 
     # Añadir el total de precio de entrega si existe
     if "delivery_price" in data["pedido_temporal"]:
         total_final += data["pedido_temporal"]["delivery_price"]
         mis_datos_message += f"🚚 Precio del Domicilio: ${data['pedido_temporal']['delivery_price']:,}\n"
-        
-        
-    
 
     # Añadir el total final
-    total_message = f"\n💰 *TOTAL FINAL: ${total_final:,}*\n si todo es correcto escribe *confirmar* para salir volando con tu pedido o *cancelar* para ignorar este y hacer otro."
+    total_message = f"\n💰 *TOTAL FINAL: ${total_final:,.2f}*\nsi todo es correcto escribe *confirmar* para salir volando con tu pedido o *cancelar* para ignorar este y hacer otro."
 
     # Construir el mensaje final
-    final_message = productos_message + cambios_message + salsas_message + adiciones_message + mis_datos_message + total_message
+    final_message = productos_message + mis_datos_message + total_message
     return final_message
-
-
 
 def extraer_datos_usuario(cadena: str) -> dict:
     # Remueve los asteriscos y emojis
@@ -705,9 +667,10 @@ def confirm_order(wsp_id:str,data):
         json_data["pedido_temporal"]['site_id'],
         json_data["pedido_temporal"]['payment_method_id'],
         json_data["pedido_temporal"]['delivery_price'],
-        json_data["pedido_temporal"]["order_notes"])
-    
-    
+        json_data["pedido_temporal"]["order_notes"],
+        json_data["pedido_temporal"]["pe_json"],
+        json_data["pedido_temporal"]["pe_site_id"])
+
     if order_id:
         chatbot_instance.deleteMyTempOrder(wsp_id)
     return order_id
@@ -739,7 +702,7 @@ def chatbot(userInput: UserInput):
     
     if (my_current_order and userInput.answer.strip().lower().startswith('confirmar')):
         response = confirm_order(userInput.client_id,my_current_order)
-        output = replace_variables("Listo {nombre} Tu pedido ha sido resitrado exitoxamente con este codigo puedes rastrearlo en https://salchimonster.com/rastrear-pedido  *Tu codigo* " + response )
+        output = replace_variables(" {nombre} Tu pedido ha sido resitrado exitoxamente con este codigo puedes rastrearlo en https://salchimonster.com/rastrear-pedido  *Tu codigo* " + response )
         return {"response":f"Listo {output}"}
     
     

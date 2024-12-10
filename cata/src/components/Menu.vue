@@ -17,17 +17,16 @@ const cart = useCartStore()
 const route = useRoute()
 const current_pos = ref(0)
 
-const categories = ref([])
 
-const current_categorie = ref(categories.value[0])
+const current_categorie = ref(cart?.categories?.[0])
 
 const moveCarousel = (dir) => {
-    const maxPosition = (categories.value.length - 1) * -100
+    const maxPosition = (cart.categories.length - 1) * -100
 
     // Si estamos en el inicio y se intenta mover a la derecha
     if (current_pos.value < 0 && dir > 0) {
         current_pos.value += dir * 100
-        current_categorie.value = categories.value[Math.abs(current_pos.value / 100)]
+        current_categorie.value = cart.categories[Math.abs(current_pos.value / 100)]
 
         // Navegar al inicio de la página sin smooth
         window.scrollTo({
@@ -41,7 +40,7 @@ const moveCarousel = (dir) => {
     // Si estamos en la última posición y se intenta mover a la izquierda
     if (current_pos.value > maxPosition && dir < 0) {
         current_pos.value += dir * 100
-        current_categorie.value = categories.value[Math.abs(current_pos.value / 100)]
+        current_categorie.value = cart.categories[Math.abs(current_pos.value / 100)]
 
         // Navegar al inicio de la página sin smooth
         window.scrollTo({
@@ -54,11 +53,10 @@ const moveCarousel = (dir) => {
 
     // Si llegamos a un límite, reiniciar el carrusel
     current_pos.value = 0
-    current_categorie.value = categories.value[0]
+    current_categorie.value = cart.categories[0]
 }
 
 onMounted(async () => {
-
 
 
     const route = useRoute()
@@ -71,10 +69,27 @@ onMounted(async () => {
 
     cart.user.user_wsp_id = user_wsp_id
 
-    categories.value = await fetchService.get('https://chatbot.salchimonster.com/products/1')
-    current_categorie.value = categories.value[0] // Inicializar con la primera categoría
+
+    const temp_categories =  await fetchService.get('https://backend.salchimonster.com/get-categorized-products/6149/1') || []
+    // Filtrar y ordenar categorías
+    const filteredAndSortedCategories = temp_categories
+        ?.filter(c => codigos.includes(parseInt(c.categoria_id))) // Filtrar por codigos
+        .sort(
+            (a, b) =>
+                codigos.indexOf(parseInt(a.categoria_id)) - codigos.indexOf(parseInt(b.categoria_id)) // Ordenar por codigos
+        );
+
+    if (filteredAndSortedCategories?.length > 0) {
+        cart.categories = filteredAndSortedCategories; // Asignar solo si hay categorías válidas
+    }
+
+
+    console.log(cart.categories)
+    current_categorie.value = cart.categories[0] // Inicializar con la primera categoría
     const add = await fetchService.get(`${URI}/adicionales-unique-site/1`)
 
+
+    console.log(cart.categories)
     const cambios = add['CAMBIOS']
 
 
@@ -111,21 +126,38 @@ onMounted(async () => {
         }
     })
 
-    categories.value.push({
-        category_name: 'CAMBIOS',
-        products: formateCambios
-    })
+    // categories.value.push({
+    //     category_name: 'CAMBIOS',
+    //     products: formateCambios
+    // })
 
-    categories.value.push({
-        category_name: 'ADICIONES',
-        products: formateAdiciones
-    })
+    // categories.value.push({
+    //     category_name: 'ADICIONES',
+    //     products: formateAdiciones
+    // })
 
-    categories.value.push({
-        category_name: 'SALSAS',
-        products: formateSalsas
-    })
+    // categories.value.push({
+    //     category_name: 'SALSAS',
+    //     products: formateSalsas
+    // })
 })
+
+
+const codigos = [
+  
+    10, //COMBOS 2 PERSONAS
+    26, //COMBOS PERSONALES
+    // 25, //COMBOS 2X1 BURGER + PAPAS
+    8, //SALCHIPAPAS 2 PERSONAS
+    9, //SALCHIPAPAS PERSONALES
+    13, //PRODUCTO NUEVO
+    27, //POLLO
+   11,   //SHOWW
+    4, //BEBIDAS
+    5, //CERVEZAS
+    14,//ADICIONES SALCHIPAPAS
+]
+
 const borrar = () => {
     cart.cart = {
         products: [],
@@ -174,9 +206,9 @@ const push = () => {
             </button>
 
             <div class="categorie-carousel">
-                <p class="category_name" :style="`transform: translateX(${current_pos}%); `" :key="i.id"
-                    v-for="i in categories">
-                    {{ i.category_name }}
+                <p class="category_name" style="text-transform: uppercase;" :style="`transform: translateX(${current_pos}%); `" :key="i.id"
+                    v-for="i in cart.categories?.filter(c => codigos.includes(parseInt(c.categoria_id)))">
+                    {{ i.categoria_descripcion }}
                 </p>
             </div>
 
@@ -189,11 +221,11 @@ const push = () => {
         </div>
 
         <div class="carousel">
-            <div v-for="categori in categories" :key="categori.id" class="grid-container"
+            <div v-for="categori in cart.categories" :key="categori.id" class="grid-container"
                 :style="`transform: translateX(${current_pos}%);`">
                 <productCard :product="product"
-                    v-for="product in categori.products.filter(p => p.tag === 'SALSA' || p.price > 0)"
-                    :key="product.id">
+                    v-for="product in categori.products"
+                   >
                 </productCard>
             </div>
         </div>
@@ -214,7 +246,6 @@ const push = () => {
             <div class="price-container">
                 <span class="price">{{ formatPesos(cart.total) }}</span>
                 <button class="button" @click="push()" id="listo">
-
                     LISTO
                 </button>
             </div>
@@ -223,11 +254,6 @@ const push = () => {
 </template>
 
 <style scoped>
-
-
-
-
-
 
 .grid-container {
     display: grid;
