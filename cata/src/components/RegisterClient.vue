@@ -230,42 +230,41 @@ const send = async () => {
   })
 
 
-const order_products = cart.cart.products.map(p => {
+  const order_products = cart.cart.products.map(p => {
 
-const generalPrice = p.product.productogeneral_precio;
-            const presentationPrice = p.product.lista_presentacion?.[0]?.producto_precio;
-return { 
+    const generalPrice = p.product.productogeneral_precio;
+    const presentationPrice = p.product.lista_presentacion?.[0]?.producto_precio;
+    return {
 
 
-  pedido_productoid: cart.getProductId(p.product),
-  pedido_cantidad: p.quantity,
-  pedido_precio: cart.getProductPrice(p.product) || 0,
-  pedido_escombo:p.product.productogeneral_escombo,
-  pedido_nombre_producto:p.product.productogeneral_descripcion,
-  lista_productocombo: p.product.lista_productobase?.map(p => 
-      {
+      pedido_productoid: cart.getProductId(p.product),
+      pedido_cantidad: p.quantity,
+      pedido_precio: cart.getProductPrice(p.product) || 0,
+      pedido_escombo: p.product.productogeneral_escombo,
+      pedido_nombre_producto: p.product.productogeneral_descripcion,
+      lista_productocombo: p.product.lista_productobase?.map(p => {
         return {
-          "pedido_productoid":parseInt(p.producto_id)  ,
+          "pedido_productoid": parseInt(p.producto_id),
           "pedido_cantidad": parseInt(p.productocombo_cantidad),
           "pedido_precio": parseInt(p.productocombo_precio),
-          "pedido_nombre":p.producto_descripcion
+          "pedido_nombre": p.producto_descripcion
         }
-       
+
       }
-    
-  ),
-  // modificadorseleccionList:cart.cart.additions.filter( add => add.parent_id == p.product.producto_id)?.map( ad => {
-  //   return {
-  //     "modificadorseleccion_cantidad": ad.quantity,
-  //     "pedido_precio": ad.price,
-  //     "modificador_id": ad.group_id,
-  //     "modificadorseleccion_id": ad.id,
-  //     "modificador_nombre":ad.name,
-  //     "pedido_productoid":ad.parent_id
-  // }
-  // })  
-}
-});
+
+      ),
+      // modificadorseleccionList:cart.cart.additions.filter( add => add.parent_id == p.product.producto_id)?.map( ad => {
+      //   return {
+      //     "modificadorseleccion_cantidad": ad.quantity,
+      //     "pedido_precio": ad.price,
+      //     "modificador_id": ad.group_id,
+      //     "modificadorseleccion_id": ad.id,
+      //     "modificador_nombre":ad.name,
+      //     "pedido_productoid":ad.parent_id
+      // }
+      // })  
+    }
+  });
 
 
 
@@ -291,7 +290,7 @@ return {
 
   console.log(finalMessage)
 
-  
+
 
   const temp_order = {
     "order_products": productsToSend,
@@ -311,7 +310,8 @@ return {
     },
     "inserted_by": 1082,
     "pe_json": order_products,
-    "pe_site_id":cart.user.site.pe_site_id
+    "pe_site_id": cart.user.site.pe_site_id,
+    "total": parseInt(cart.total)
   }
 
   const user_data =
@@ -331,7 +331,7 @@ return {
   const encodedMessage = encodeURIComponent(finalMessage + user_data)
   const whatsappUrl = `https://wa.me/573053447255?text=${encodedMessage}`
   window.open(whatsappUrl, '_blank')
-  await fetchService.post(`https://chatbot.salchimonster.com/crete-temp-order/${wsp_id}`, temp_order)
+  await fetchService.post(`https://backend.salchimonster.com/crete-temp-order/${wsp_id}`, temp_order)
 
 
 }

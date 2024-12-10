@@ -60,7 +60,7 @@ onMounted(async () => {
 
 
     const route = useRoute()
-    if (!cart.user?.site?.site_name){
+    if (!cart.user?.site?.site_name) {
         router.push(`/ubicacion/${route.params.user_id}`)
     }
 
@@ -70,7 +70,7 @@ onMounted(async () => {
     cart.user.user_wsp_id = user_wsp_id
 
 
-    const temp_categories =  await fetchService.get('https://backend.salchimonster.com/get-categorized-products/6149/1') || []
+    const temp_categories = await fetchService.get('https://backend.salchimonster.com/get-categorized-products/6149/1') || []
     // Filtrar y ordenar categorías
     const filteredAndSortedCategories = temp_categories
         ?.filter(c => codigos.includes(parseInt(c.categoria_id))) // Filtrar por codigos
@@ -144,7 +144,7 @@ onMounted(async () => {
 
 
 const codigos = [
-  
+
     10, //COMBOS 2 PERSONAS
     26, //COMBOS PERSONALES
     // 25, //COMBOS 2X1 BURGER + PAPAS
@@ -152,7 +152,7 @@ const codigos = [
     9, //SALCHIPAPAS PERSONALES
     13, //PRODUCTO NUEVO
     27, //POLLO
-   11,   //SHOWW
+    11,   //SHOWW
     4, //BEBIDAS
     5, //CERVEZAS
     14,//ADICIONES SALCHIPAPAS
@@ -190,42 +190,46 @@ const push = () => {
 
         <div class="header12" style="position: sticky   ;top: 0;z-index: 2000;">
 
-            <div  style="background-color: #000000;display: flex ;
+            <div style="background-color: #000000;display: flex ;
             padding:  .2rem .2rem;
             justify-content: space-between; width: 100%;height: 2rem;">
 
-            <Tag class="indicador" :style="cart?.site_status.status == 'open'? 'background-color:yellow;color:black' : 'background-color:red;color:white'" style=" border-radius: .1rem;"> {{ cart?.site_status.status == 'open'? 'Abierto' : 'Cerrado' }} </Tag>
-            <p style="color: #fff;font-weight: bold;"><b>SEDE - {{ cart.user.site.site_name }}</b> </p>
-            <Button @click="router.push(`/Ubicacion/${route.params.user_id}`)" style="background-color: orange;color: black;padding: 0  1rem !important; border:none; border-radius: .1rem;cursor: pointer;" label="Cambiar ciudad"> </Button>
+                <Tag class="indicador"
+                    :style="cart?.site_status.status == 'open' ? 'background-color:yellow;color:black' : 'background-color:red;color:white'"
+                    style=" border-radius: .1rem;"> {{ cart?.site_status.status == 'open' ? 'Abierto' : 'Cerrado' }}
+                </Tag>
+                <p style="color: #fff;font-weight: bold;"><b>SEDE - {{ cart.user.site.site_name }}</b> </p>
+                <Button @click="router.push(`/Ubicacion/${route.params.user_id}`)"
+                    style="background-color: orange;color: black;padding: 0  1rem !important; border:none; border-radius: .1rem;cursor: pointer;"
+                    label="Cambiar ciudad"> </Button>
 
 
             </div>
             <div class="header">
                 <button @click="moveCarousel(1)" style="width: 4rem; position: absolute;  left: 0" class="btn-left">
-                <img class="img_flecha" src="/src/icons/angles-left.png" alt="" />
-            </button>
+                    <img class="img_flecha" src="/src/icons/angles-left.png" alt="" />
+                </button>
 
-            <div class="categorie-carousel">
-                <p class="category_name" style="text-transform: uppercase;" :style="`transform: translateX(${current_pos}%); `" :key="i.id"
-                    v-for="i in cart.categories?.filter(c => codigos.includes(parseInt(c.categoria_id)))">
-                    {{ i.categoria_descripcion }}
-                </p>
+                <div class="categorie-carousel">
+                    <p class="category_name" style="text-transform: uppercase;"
+                        :style="`transform: translateX(${current_pos}%); `" :key="i.id"
+                        v-for="i in cart.categories?.filter(c => codigos.includes(parseInt(c.categoria_id)))">
+                        {{ i.categoria_descripcion }}
+                    </p>
+                </div>
+
+                <button style="position: absolute;height: 4rem; width: 4rem; right: 0" @click="moveCarousel(-1)"
+                    class="btn-right">
+                    <img class="img_flecha" src="/src/icons/angles-right.png" alt="" />
+                </button>
             </div>
 
-            <button style="position: absolute;height: 4rem; width: 4rem; right: 0" @click="moveCarousel(-1)"
-                class="btn-right">
-                <img class="img_flecha" src="/src/icons/angles-right.png" alt="" />
-            </button>
-            </div>
-           
         </div>
 
         <div class="carousel">
             <div v-for="categori in cart.categories" :key="categori.id" class="grid-container"
                 :style="`transform: translateX(${current_pos}%);`">
-                <productCard :product="product"
-                    v-for="product in categori.products"
-                   >
+                <productCard :product="product" v-for="product in categori.products">
                 </productCard>
             </div>
         </div>
@@ -240,7 +244,7 @@ const push = () => {
                     Los productos se registran dando click en la foto
 
 
-            
+
                 </p>
             </div>
             <div class="price-container">
@@ -254,7 +258,6 @@ const push = () => {
 </template>
 
 <style scoped>
-
 .grid-container {
     display: grid;
     grid-template-columns: repeat(1, 1fr);
@@ -286,7 +289,7 @@ const push = () => {
 
 
 
-.indicador{
+.indicador {
     animation: alternate .5s ease-in-out infinite;
 }
 
@@ -477,8 +480,4 @@ img {
     font-weight: bold;
     min-width: max-content;
 }
-
-
-
-
 </style>

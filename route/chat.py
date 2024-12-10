@@ -669,7 +669,8 @@ def confirm_order(wsp_id:str,data):
         json_data["pedido_temporal"]['delivery_price'],
         json_data["pedido_temporal"]["order_notes"],
         json_data["pedido_temporal"]["pe_json"],
-        json_data["pedido_temporal"]["pe_site_id"])
+        json_data["pedido_temporal"]["pe_site_id"],
+        json_data["pedido_temporal"]["total"])
 
     if order_id:
         chatbot_instance.deleteMyTempOrder(wsp_id)
