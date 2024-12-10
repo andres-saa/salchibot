@@ -161,7 +161,7 @@ class Products:
         
     def insert_order(self, order_products: list, order_aditionals: list, user:dict, site_id: int, payment_method_id: int, delivery_price: int, order_notes: str, pe_json:object, pe_site_id:int):
         # Definir la URL del endpoint
-        URI = 'http://localhost:8000/'
+        URI = 'https://backend.salchimonster.com'
         url = f"{URI}/order"
 
         # Crear el cuerpo del pedido con la estructura correcta
