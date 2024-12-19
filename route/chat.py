@@ -702,11 +702,11 @@ def chatbot(userInput: UserInput):
         return {"response":f"listo vamos desde papi Explora nuestra carta automática aquí: https://bot.salchimonster.com/carta/{userInput.client_id}"}
     
     
-    if (my_current_order and userInput.answer.strip().lower().startswith('confir')):
-        response = confirm_order(userInput.client_id,my_current_order)
-        output = replace_variables("Tu pedido ha sido resitrado exitoxamente con este codigo puedes rastrearlo en https://salchimonster.com/rastrear-pedido  *Tu codigo* " + response )
-        return {"response":f"Listo {output}"}
-    
+    if my_current_order and re.match(r'^\s*confir', userInput.answer.strip(), re.IGNORECASE):
+        response = confirm_order(userInput.client_id, my_current_order)
+        output = replace_variables("Tu pedido ha sido registrado exitosamente con este código puedes rastrearlo en https://salchimonster.com/rastrear-pedido  *Tu código* " + response)
+        return {"response": f"Listo {output}"}
+        
     
     
     if my_current_order:
