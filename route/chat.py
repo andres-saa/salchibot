@@ -703,7 +703,7 @@ def chatbot(userInput: UserInput):
     
     if my_current_order and "confir" in userInput.answer.strip().lower() and not userInput.answer.strip().lower().startswith('confir'):
         response = confirm_order(userInput.client_id, my_current_order)
-        output = replace_variables(f" {nombre} Tu pedido ha sido registrado exitosamente con este código puedes rastrearlo en https://salchimonster.com/rastrear-pedido  *Tu código*: {response} ")
+        output = replace_variables(" {nombre} Tu pedido ha sido registrado exitosamente con este código puedes rastrearlo en https://salchimonster.com/rastrear-pedido  *Tu código*: {response} ")
         return {"response": f"Listo {output}"}
         
     
