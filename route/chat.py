@@ -697,28 +697,25 @@ def chatbot(userInput: UserInput):
     
     my_current_order = chatbot_instance.i_have_temp_order(userInput.client_id)
     
-    variaciones_cancelar = [
-        "cancelar", "CANCELAR", "Cancelar",
-        "cancela", "CANCELA", "Cancela",
-        "cancel", "CANCEL", "Cancel"
-    ]
+    variaciones_cancelar = ["cancelar", "cancela", "cancel"]
+    variaciones_confirmar = ["confirm", "confir", "confirma", "confirmar"]
 
-    variaciones_confirmar = [
-        "confirm", "CONFIRM", "Confirm",
-        "confir", "CONFIR", "Confir",
-        "confirma", "CONFIRMA", "Confirma",
-        "confirmar", "CONFIRMAR", "Confirmar"
-    ]
+    input_text = userInput.answer.strip().lower()
 
-    if my_current_order and any(userInput.answer.strip().startswith(word) for word in variaciones_cancelar):
+    if my_current_order and any(input_text.startswith(word) for word in variaciones_cancelar):
         chatbot_instance.deleteMyTempOrder(userInput.client_id)
-        return {"response": f"listo vamos desde papi Explora nuestra carta automática aquí: https://bot.salchimonster.com/carta/{userInput.client_id}"}
+        return {"response": f"Listo, vamos desde cero. Explora nuestra carta automática aquí: https://bot.salchimonster.com/carta/{userInput.client_id}"}
 
-    if my_current_order and any(userInput.answer.strip().startswith(word) for word in variaciones_confirmar):
-        response = confirm_order(userInput.client_id, my_current_order)
-        output = "Tu pedido ha sido registrado exitosamente. Con este código puedes rastrearlo en https://salchimonster.com/rastrear-pedido  *Tu código*: " + response
-        
-        return {"response": f"Listo {output}"}
+    if my_current_order and any(input_text.startswith(word) for word in variaciones_confirmar):
+        try:
+            response = confirm_order(userInput.client_id, my_current_order)
+            if response:
+                output = f"Tu pedido ha sido registrado exitosamente. Con este código puedes rastrearlo: https://salchimonster.com/rastrear-pedido  *Tu código*: {response}"
+                return {"response": f"Listo, {output}"}
+            else:
+                return {"response": "Hubo un problema al registrar tu pedido. Intenta de nuevo."}
+        except Exception as e:
+            return {"response": f"Error al confirmar el pedido: {str(e)}"}
     
     if my_current_order:
         return {"response":generar_mensaje_pedido(my_current_order[0])}
