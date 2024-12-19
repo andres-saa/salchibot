@@ -669,7 +669,9 @@ def confirm_order(wsp_id:str,data):
         json_data["pedido_temporal"]['delivery_price'],
         json_data["pedido_temporal"]["order_notes"],
         json_data["pedido_temporal"]["pe_json"],
-        json_data["pedido_temporal"]["pe_site_id"])
+        json_data["pedido_temporal"]["pe_site_id"],
+        json_data["pedido_temporal"]["total"]
+        )
 
     if order_id:
         chatbot_instance.deleteMyTempOrder(wsp_id)
@@ -702,7 +704,7 @@ def chatbot(userInput: UserInput):
     
     if (my_current_order and userInput.answer.strip().lower().startswith('confir')):
         response = confirm_order(userInput.client_id,my_current_order)
-        output = replace_variables(" {nombre} Tu pedido ha sido resitrado exitoxamente con este codigo puedes rastrearlo en https://salchimonster.com/rastrear-pedido  *Tu codigo* " + response )
+        output = replace_variables("Tu pedido ha sido resitrado exitoxamente con este codigo puedes rastrearlo en https://salchimonster.com/rastrear-pedido  *Tu codigo* " + response )
         return {"response":f"Listo {output}"}
     
     
