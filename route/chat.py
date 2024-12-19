@@ -697,18 +697,17 @@ def chatbot(userInput: UserInput):
     
     my_current_order = chatbot_instance.i_have_temp_order(userInput.client_id)
     
-    if (my_current_order and userInput.answer.lower().strip().startswith('cancelar')):
+    
+    
+    if my_current_order and re.match(r'^\s*cancelar', userInput.answer.strip(), re.IGNORECASE):
         chatbot_instance.deleteMyTempOrder(userInput.client_id)
-        return {"response":f"listo vamos desde papi Explora nuestra carta automática aquí: https://bot.salchimonster.com/carta/{userInput.client_id}"}
-    
-    
+        return {"response": f"Listo vamos desde papi. Explora nuestra carta automática aquí: https://bot.salchimonster.com/carta/{userInput.client_id}"}
+
     if my_current_order and re.match(r'^\s*confir', userInput.answer.strip(), re.IGNORECASE):
         response = confirm_order(userInput.client_id, my_current_order)
         output = replace_variables("Tu pedido ha sido registrado exitosamente con este código puedes rastrearlo en https://salchimonster.com/rastrear-pedido  *Tu código* " + response)
         return {"response": f"Listo {output}"}
         
-    
-    
     if my_current_order:
         return {"response":generar_mensaje_pedido(my_current_order[0])}
 
