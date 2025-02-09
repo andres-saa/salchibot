@@ -12,6 +12,7 @@ const pinia = createPinia()
 const app = createApp(App)
 pinia.use(piniaPluginPersistedstate)
 app.use(pinia)
+
 app.use(PrimeVue, {
   theme: {
     preset: Aura,

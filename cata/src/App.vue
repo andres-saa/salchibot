@@ -16,6 +16,7 @@ const cart = useCartStore()
 
 
 
+
  const fetchSiteStatus = async () => {
     if (cart.user?.site?.site_id ) {
       cart.site_status = await fetchService.get(`${URI}/site/${cart.user.site.site_id}/status`);

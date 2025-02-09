@@ -1,4 +1,5 @@
-import { defineStore } from 'pinia'
+
+import { defineStore } from "pinia"
 
 export const useCartStore = defineStore('cart-bot-2', {
   persist: {
@@ -15205,64 +15206,3 @@ export const useCartStore = defineStore('cart-bot-2', {
   },
   }
 })
-
-
-
-
-
-[
-  {
-    "pedido_productoid": "155",
-    "pedido_cantidad": 1,
-    "pedido_precio": "46000.00",
-    "pedido_escombo": "1",
-    "pedido_nombre_producto": "COMBO BACONMONSTER 2P + 2 BEBIDAS",
-    "lista_productocombo": [
-      {
-        "pedido_productoid": 29,
-        "pedido_cantidad": 1,
-        "pedido_precio": 40500,
-        "pedido_nombre": "Baconmonster 2 Personas"
-      },
-      {
-        "pedido_productoid": 13,
-        "pedido_cantidad": 1,
-        "pedido_precio": 5900,
-        "pedido_nombre": "Coca Cola Sabor Original 400 Ml"
-      },
-      {
-        "pedido_productoid": 23,
-        "pedido_cantidad": 1,
-        "pedido_precio": 5900,
-        "pedido_nombre": "Quatro 400 Ml"
-      }
-    ]
-  },
-  {
-    "pedido_productoid": "156",
-    "pedido_cantidad": 1,
-    "pedido_precio": "37500.00",
-    "pedido_escombo": "1",
-    "pedido_nombre_producto": "COMBO CLASICMONSTER 2P +  2 BEBIDAS",
-    "lista_productocombo": [
-      {
-        "pedido_productoid": 30,
-        "pedido_cantidad": 1,
-        "pedido_precio": 30900,
-        "pedido_nombre": "Clasicmonster 2 Personas"
-      },
-      {
-        "pedido_productoid": 13,
-        "pedido_cantidad": 1,
-        "pedido_precio": 5900,
-        "pedido_nombre": "Coca Cola Sabor Original 400 Ml"
-      },
-      {
-        "pedido_productoid": 23,
-        "pedido_cantidad": 1,
-        "pedido_precio": 5900,
-        "pedido_nombre": "Quatro 400 Ml"
-      }
-    ]
-  }
-]
