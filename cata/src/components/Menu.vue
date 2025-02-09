@@ -21,7 +21,7 @@ const current_pos = ref(0)
 const current_categorie = ref(cart?.categories?.[0])
 
 const moveCarousel = (dir) => {
-    const maxPosition = (cart.categories.length - 1) * -100
+    const maxPosition = (cart.categories.filter( c => codigos.includes(parseInt(c.categoria_id))).length - 1) * -100
 
     // Si estamos en el inicio y se intenta mover a la derecha
     if (current_pos.value < 0 && dir > 0) {
@@ -227,7 +227,7 @@ const push = () => {
         </div>
 
         <div class="carousel">
-            <div v-for="categori in cart.categories" :key="categori.id" class="grid-container"
+            <div v-for="categori in cart.categories.filter(c => codigos.includes( parseInt(c.categoria_id)) )" :key="categori.id" class="grid-container"
                 :style="`transform: translateX(${current_pos}%);`">
                 <productCard :product="product" v-for="product in categori.products">
                 </productCard>

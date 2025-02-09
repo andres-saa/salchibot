@@ -235,11 +235,10 @@ const send = async () => {
     const generalPrice = p.product.productogeneral_precio;
     const presentationPrice = p.product.lista_presentacion?.[0]?.producto_precio;
     return {
-
-
       pedido_productoid: cart.getProductId(p.product),
       pedido_cantidad: p.quantity,
       pedido_precio: cart.getProductPrice(p.product) || 0,
+      pedido_base_price:cart.getProductPrice(p.product) || 0,
       pedido_escombo: p.product.productogeneral_escombo,
       pedido_nombre_producto: p.product.productogeneral_descripcion,
       lista_productocombo: p.product.lista_productobase?.map(p => {
