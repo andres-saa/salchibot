@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted, ref } from 'vue'
+import { onBeforeMount, onMounted, ref } from 'vue'
 import productCard from './productCard.vue'
 import { fetchService } from '@/services/services/fetchService'
 
@@ -56,7 +56,7 @@ const moveCarousel = (dir) => {
     current_categorie.value = cart.categories[0]
 }
 
-onMounted(async () => {
+onBeforeMount(async () => {
 
 
     const route = useRoute()
@@ -68,9 +68,10 @@ onMounted(async () => {
     // alert(user_wsp_id)
 
     cart.user.user_wsp_id = user_wsp_id
+    const site_id = cart.user.site.pe_site_id
 
 
-    const temp_categories = await fetchService.get('https://backend.salchimonster.com/get-categorized-products/6149/1') || []
+    const temp_categories = await fetchService.get(`${URI}/get-categorized-products/6149/${site_id}`) || []
     // Filtrar y ordenar categorías
     const filteredAndSortedCategories = temp_categories
         ?.filter(c => codigos.includes(parseInt(c.categoria_id))) // Filtrar por codigos
@@ -229,7 +230,8 @@ const push = () => {
         <div class="carousel">
             <div v-for="categori in cart.categories.filter(c => codigos.includes( parseInt(c.categoria_id)) )" :key="categori.id" class="grid-container"
                 :style="`transform: translateX(${current_pos}%);`">
-                <productCard :product="product" v-for="product in categori.products">
+                <productCard :product="product" v-for="product in categori.products.filter(d => 
+                d.productogeneral_estado == 'Activo' &&   (d?.productogeneral_precio > 0 || d?.lista_presentacion?.[0].producto_precio > 0))">
                 </productCard>
             </div>
         </div>
