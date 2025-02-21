@@ -156,7 +156,14 @@ const codigos = [
     11,   //SHOWW
     4, //BEBIDAS
     5, //CERVEZAS
-    14,//ADICIONES SALCHIPAPAS
+    14,//ADICIONES SALCHIPAPAS,
+
+     
+    110, // SALCHIPAPA PARA 2 PERSONAS NJ
+    112, // SALCHIPAPAS PERSONALES NJ
+    113,  // PARA COMPARTIR
+    111, // BURGERMONSTER
+    109, // BEBIDAS
 ]
 
 const borrar = () => {
@@ -428,7 +435,7 @@ img {
 }
 
 .category_name {
-    padding: 0 1rem;
+    padding: 0 2rem;
     width: 100%;
 }
 
