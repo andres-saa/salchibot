@@ -44,7 +44,7 @@
       <!-- SELECT NEIGHBORHOOD (only shows if there's more than 1) -->
       <div
         class="container-field"
-        v-if="cart.user.city && neigborghoods.length > 1"
+        v-if="cart.user.city "
       >
         <Select
           :disabled="!cart.user.city"
@@ -142,14 +142,14 @@ const route = useRoute()
 const updateNeigborhoods = async (city_id) => {
   // Fetch neighborhoods by city
   neigborghoods.value = await fetchService.get(`${URI}/neighborhoods/by-city/${city_id}`)
+  console.log(neigborghoods.value)
 
   // If there's exactly one neighborhood, auto-select it
-  if (neigborghoods.value.length === 1) {
-    cart.user.neigborhood = neigborghoods.value[0]
-  } else {
-    // Otherwise, clear any previous selection
-    cart.user.neigborhood = {}
-  }
+
+  
+  cart.user.neigborhood = neigborghoods.value[0]
+ 
+ 
 }
 
 const navigate = () => {
