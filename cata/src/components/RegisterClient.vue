@@ -20,9 +20,15 @@
           class="select"></Select>
       </div>
       <div class="container-field">
-        <Select optionLabel="name" v-model="selectedPaymentMethod" :options="paymentMethods"
+        <Select optionLabel="name" v-model="selectedPaymentMethod" :options="
+                        cart.user.neigborghood.site_id === 33 
+                            ? paymentMethods.filter(option => [6, 8].includes(option.id))
+                            : paymentMethods
+                        "
           placeholder="💰Metodo de pago preferido" class="select"></Select>
       </div>
+
+
 
       <div class="container-field">
         <InputText v-model="name" placeholder="😊 Nombre" class="input"></InputText>
@@ -30,6 +36,13 @@
       <div class="container-field">
         <InputText v-model="address" placeholder="📍 Direccion" class="input"></InputText>
       </div>
+      <span>Placa de vehiculo(Si vas a venir a recoger)</span>
+
+      <div class="form-group">
+                    <InputText v-model="placa" id="phone_number" mask="999 999 9999"
+                        placeholder="Numero de placa" />
+                </div>
+                
       <div class="container-field">
         <InputNumber :useGrouping="false" v-model="phone" style="
             width: 30rem;
@@ -43,8 +56,33 @@
 
 
 
-      <Textarea v-model="order_notes" rows="3" style="" placeholder="📝Alguna notita para la cocina?"></Textarea>
 
+
+      <template v-if="placa">
+            <!-- Textarea SOLO LECTURA con el texto fijo y la placa -->
+            <Textarea
+                :value="'Voy a pasar a recoger, la placa de mi vehiculo es: ' + placa"
+                class="order-notes"
+                disabled
+            />
+            
+            <!-- Textarea EDITABLE para las notas adicionales -->
+            <Textarea
+                v-model="order_notes"
+                class="order-notes"
+                placeholder="Notas adicionales"
+            />
+            </template>
+
+            <!-- Si NO hay placa, solo muestras el textarea normal -->
+            <template v-else>
+            <Textarea
+                v-model="order_notes"
+                class="order-notes"
+                placeholder="Notas"
+            />
+            </template>
+        
 
       <Button @click="send" style="" size="large" class="submit-button" label="🔥 CONFIRMAR DATOS🔥"></Button>
       <Button @click="push()" style="" size="large" class="submit-button" label="VOLVER AL MENU"></Button>
@@ -76,7 +114,7 @@ const address = ref('')
 const phone = ref()
 const selectedCity = ref({})
 const selectedNeigborhood = ref({})
-
+const placa = ref('')
 const cart = useCartStore()
 const order_notes = ref('')
 
@@ -164,7 +202,17 @@ const send = async () => {
 
   const productsToSend = []
   const aditionalTosend = []
-  let notesMessage = order_notes.value.trim() ? `${order_notes.value}` : 'sin notas';
+
+
+  const baseNotes = order_notes.value ?? "";
+
+  // Verifica si existe `placa` antes de sumarla
+  let order_notes2 = baseNotes;
+  if (placa) {
+    order_notes2 +=`\n, Voy a pasar a recoger, la placa de mi vehiculo es: ' ${placa.value};` 
+  }
+
+  let notesMessage = order_notes2
 
 
 

@@ -44,7 +44,7 @@
       <!-- SELECT NEIGHBORHOOD (only shows if there's more than 1) -->
       <div
         class="container-field"
-        v-if="cart.user.city "
+        v-if="cart.user.city && cart.user.neigborghood.neighborhood_id !== 5881"
       >
         <Select
           :disabled="!cart.user.city"
@@ -60,7 +60,7 @@
 
       <!-- DISPLAY DELIVERY INFO IF AVAILABLE -->
       <div
-        v-if="cart.user?.neigborhood?.delivery_price"
+        v-if="cart.user?.neigborghood?.delivery_price"
         style="
           width: 100%;
           color: white;
@@ -75,8 +75,8 @@
       >
         <h2 style="font-weight: bold;">
           El domicilio a
-          {{ cart.user.neigborhood.name }} cuesta
-          {{ formatPesos(cart.user.neigborhood.delivery_price) }}.<br />
+          {{ cart.user.neigborghood.name }} cuesta
+          {{ formatPesos(cart.user.neigborghood.delivery_price) }}.<br />
           Tu pedido se despacha desde la sede
           {{ cart?.user?.site?.site_name }}.
           <span v-if="cart?.site_status?.status == 'open'">
@@ -139,21 +139,24 @@ const route = useRoute()
 /* ---------------------------
  * METHODS
  * ------------------------- */
-const updateNeigborhoods = async (city_id) => {
+const updateneigborghoods = async (city_id) => {
   // Fetch neighborhoods by city
-  neigborghoods.value = await fetchService.get(`${URI}/neighborhoods/by-city/${city_id}`)
+  const response = await fetchService.get(`${URI}/neighborhoods/by-city/${city_id}`)
+  neigborghoods.value = response
   console.log(neigborghoods.value)
 
   // If there's exactly one neighborhood, auto-select it
 
-  
-  cart.user.neigborhood = neigborghoods.value[0]
+
+    cart.user.neigborghood =  response[0]
+
+ 
  
  
 }
 
 const navigate = () => {
-  if (!cart.user.neigborhood?.name) {
+  if (!cart.user.neigborghood?.name) {
     alert('Por favor selecciona un barrio.')
     return
   }
@@ -171,7 +174,7 @@ onMounted(async () => {
 
   // Si ya hay una ciudad en el carrito y SÍ existe city_id
   if (cart.user.city?.city_id) {
-    await updateNeigborhoods(cart.user.city.city_id)
+    await updateneigborghoods(cart.user.city.city_id)
   }
 
   // Si ya hay una sede en el carrito
@@ -199,14 +202,14 @@ watch(
   () => cart.user.city,
   async (newVal) => {
     if (newVal?.city_id) {
-      await updateNeigborhoods(newVal.city_id)
+      await updateneigborghoods(newVal.city_id)
     }
   },
   { deep: true }
 )
 // Watch neighborhood -> update site info
 watch(
-  () => cart.user.neigborhood,
+  () => cart.user.neigborghood,
   async (newVal) => {
     if (newVal?.site_id) {
       cart.user.site = await fetchService.get(`${URI}/site/${newVal.site_id}`)
