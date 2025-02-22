@@ -165,16 +165,16 @@ const navigate = () => {
  * LIFECYCLE
  * ------------------------- */
 onMounted(async () => {
-  // Load cities & payment methods
+  // Carga ciudades y métodos de pago
   cities.value = await fetchService.get(`${URI}/cities`)
-  paymentMethods.value = await fetchService.get(`${URI}/payment_methods/`)
+  paymentMethods.value = await fetchService.get(`${URI}/payment_methods`)
 
-  // If a city is already selected (returning user, etc.), fetch neighborhoods
-  if (cart.user.city) {
+  // Si ya hay una ciudad en el carrito y SÍ existe city_id
+  if (cart.user.city?.city_id) {
     await updateNeigborhoods(cart.user.city.city_id)
   }
 
-  // If there's already a site stored, check its status
+  // Si ya hay una sede en el carrito
   if (cart.user?.site?.site_id) {
     cart.site_status = await fetchService.get(`${URI}/site/${cart.user.site.site_id}/status`)
   }
@@ -204,7 +204,6 @@ watch(
   },
   { deep: true }
 )
-
 // Watch neighborhood -> update site info
 watch(
   () => cart.user.neigborhood,
