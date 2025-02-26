@@ -670,7 +670,9 @@ def confirm_order(wsp_id:str,data):
         json_data["pedido_temporal"]["order_notes"],
         json_data["pedido_temporal"]["pe_json"],
         json_data["pedido_temporal"]["pe_site_id"],
-        json_data["pedido_temporal"]["total"]
+        json_data["pedido_temporal"]["total"],
+        json_data["pedido_temporal"]["order_type_id"],
+        json_data["pedido_temporal"]["placa"]
         )
 
     if order_id:

@@ -159,7 +159,7 @@ class Products:
         query = self.db.build_delete_query('orders.temp_order',f"id_wsp_customer = '{customer_id}'")
         self.db.execute_query(query)
         
-    def insert_order(self, order_products: list, order_aditionals: list, user:dict, site_id: int, payment_method_id: int, delivery_price: int, order_notes: str, pe_json:object, pe_site_id:int, total:int):
+    def insert_order(self, order_products: list, order_aditionals: list, user:dict, site_id: int, payment_method_id: int, delivery_price: int, order_notes: str, pe_json:object, pe_site_id:int, total:int, order_type_id:int, placa:str):
         # Definir la URL del endpoint
         URI = 'https://backend.salchimonster.com'
         url = f"{URI}/order"
@@ -181,7 +181,9 @@ class Products:
             "inserted_by":1082,  # Agregar los adicionales
             "pe_json":pe_json,
             "pe_site_id":pe_site_id,
-            "total":total
+            "total":total,
+            "order_type_id":order_type_id,
+            "placa":placa
         }
 
 
