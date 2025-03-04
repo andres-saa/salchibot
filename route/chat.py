@@ -120,7 +120,12 @@ def computed_variables(user_id:str):
             "*🔥 SEDE MEDELLÍN LAURELES 🔥*\n"
             "*Laureles*\n\n"
             "⏰ Horario: Lunes a jueves 5:00 PM a 11:30 PM\n"
-            "⏰ Horario: Viernes a domingo 12:00 PM a 11:30 PM\n"
+            "⏰ Horario: Viernes a domingo 12:00 PM a 11:30 PM\n\n"
+            
+            
+            "*🔥 SEDE NEW JERSEY EE.UU 🔥*\n"
+            "*New Jersey*\n\n"
+            "⏰ Horario: Lunes a Domingo 5:00 PM a 11:30 PM\n"
         ),
 
         "carta":(f"https://bot.salchimonster.com/ubicacion/{user_id} "),
