@@ -91,6 +91,11 @@ def computed_variables(user_id:str):
             "*MEDELLÍN*\n"
             "En Medellín tenemos esta sede:\n"
             "*Salchimonster Laureles* - Transversal 39 #74 B-14 Primer Piso\n"
+            
+             
+            "*NEW JERSEY EE.UU*\n"
+            "En New Jersey EE.UU tenemos esta sede:\n"
+            "*Salchimonster NEW jERSEY* - Transversal 39 #74 B-14 Primer Piso\n"
         ),
 
 
