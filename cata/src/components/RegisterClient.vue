@@ -98,6 +98,18 @@
         <div v-if="errors.phone" class="error">{{ errors.phone }}</div>
       </div>
 
+
+      <div class="container-field">
+        <InputText 
+          :useGrouping="false" 
+          v-model="email" 
+          style="width: 30rem; max-width: 100%; height: 3.5rem; " 
+          placeholder="Correo electrónico" 
+          class="input"
+        ></InputText>
+        <div v-if="errors.email" class="error">{{ errors.email }}</div>
+      </div>
+
       <!-- Textarea para notas y placa -->
       <template v-if="placa">
         <!-- Solo lectura: placa incluida -->
@@ -147,6 +159,7 @@ const paymentMethods = ref([])
 const selectedPaymentMethod = ref({})
 const name = ref('')
 const address = ref('')
+const email = ref('')
 const phone = ref()
 const placa = ref('')
 const order_notes = ref('')
@@ -159,6 +172,7 @@ const errors = ref({
   phone: '',
   address: '',
   city: '',
+  email:'',
   neighborhood: '',
   paymentMethod: '',
 })
@@ -185,6 +199,13 @@ const computedOrderTypes = computed(() => {
 watch(name, (newValue) => {
   errors.value.name = newValue ? '' : 'El nombre es obligatorio.'
 })
+
+watch(email, (newValue) => {
+  errors.value.email = newValue ? '' : 'El correo es obligatorio.'
+})
+
+
+
 watch(phone, (newValue) => {
   errors.value.phone = newValue ? '' : 'El teléfono es obligatorio.'
 })
@@ -243,6 +264,7 @@ const send = async () => {
   if (
     !name.value ||
     !phone.value ||
+    !email.value ||
     (( !cart.user.order_type || cart.user.order_type.id !== 2 ) && !address.value) ||
     !cart.user.city?.city_name ||
     !cart.user.neigborghood?.name ||
@@ -366,7 +388,8 @@ const send = async () => {
       "user_address": userAddress,
       "user_city": cart.user.city.city_name,
       "user_neigborhood": cart.user.neigborghood.name,
-      "user_payment": selectedPaymentMethod.value.name
+      "user_payment": selectedPaymentMethod.value.namej,
+      "email":email.value
     },
     "inserted_by": 1082,
     "pe_json": order_products,
@@ -379,6 +402,7 @@ const send = async () => {
     `*Nombre*: ${name.value}\n` +
     `*Teléfono*: ${phone.value}\n` +
     `*Dirección*: ${userAddress}\n` +
+    `*Correo electrónico*: ${email.value}\n` +
     `*Ciudad*: ${cart.user.city.city_name}\n` +
     `*Barrio*: ${cart.user.neigborghood.name}\n` +
     `*Método de Pago*: ${selectedPaymentMethod.value.name}\n\n` +
@@ -503,7 +527,7 @@ input {
 }
 
 .error {
-  color: red;
+  color: rgb(255, 255, 255);
   font-size: 0.9rem;
   margin-top: 0.3rem;
 }
