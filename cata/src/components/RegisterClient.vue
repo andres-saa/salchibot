@@ -55,20 +55,23 @@
         />
       </div>
 
-      <!-- Selección de método de pago -->
+
       <div class="container-field">
+
         <Select 
           optionLabel="name" 
           v-model="selectedPaymentMethod" 
           :options="cart.user.neigborghood.site_id === 33 
                       ? paymentMethods.filter(option => [6, 8].includes(option.id))
                       : cart.user.neigborghood.site_id !== 33 
-                      ? paymentMethods.filter(option => ![7].includes(option.id))
+                      ? paymentMethods.filter(option => ![7,6].includes(option.id))
                       : paymentMethods"
           placeholder="💰Metodo de pago preferido" 
           class="select"
         ></Select>
+
         <div v-if="errors.paymentMethod" class="error">{{ errors.paymentMethod }}</div>
+
       </div>
 
       <!-- Si el modo de entrega es 2 se muestra el campo para la placa -->
